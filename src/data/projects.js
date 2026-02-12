@@ -110,7 +110,7 @@ export const projects = [
       results:
         'Documented patterns and potential lag effects that can be explored more deeply with stronger models.',
       improvements:
-        'Add clearer model validation and broaden to include other energy products.',
+        'Add clearer model validation and broaden to include other energy products. ',
       techStack: 'Python (pandas), Excel',
     },
   },
