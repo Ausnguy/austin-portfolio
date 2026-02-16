@@ -199,9 +199,10 @@ Edit `index.html` `<title>` and add meta tags
 
 **Add resume**:
 1. Create/export resume as PDF
-2. Name it `resume.pdf`
-3. Place in `public/` folder
-4. Link works automatically
+2. Name it exactly `resume.pdf` (all lowercase)
+3. Place it in `public/` so the final path is `public/resume.pdf`
+4. Commit and push the PDF file with your code changes
+5. Link works automatically
 
 ---
 

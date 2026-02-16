@@ -8,6 +8,7 @@ import { skillsData } from '../data/skills';
 
 const Home = () => {
   const featuredProjects = getFeaturedProjects();
+  const resumeFileUrl = `${import.meta.env.BASE_URL}resume.pdf`;
   
   return (
     <div className="min-h-screen">
@@ -254,7 +255,7 @@ const Home = () => {
             </div>
           </div>
 
-          <a href="/resume.pdf" download className="btn">Download Resume</a>
+          <a href={resumeFileUrl} download="resume.pdf" className="btn">Download Resume</a>
         </motion.div>
       </section>
     </div>
