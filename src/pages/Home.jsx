@@ -251,7 +251,14 @@ const Home = () => {
             </div>
           </div>
 
-          <a href={resumeFileUrl} download="resume.pdf" className="btn">Download Resume</a>
+          <div className="flex flex-wrap items-center gap-4">
+            <a href={resumeFileUrl} target="_blank" rel="noopener noreferrer" className="btn">
+              View Resume
+            </a>
+            <a href={resumeFileUrl} download="resume.pdf" className="btn btn-outline">
+              Download Resume
+            </a>
+          </div>
         </motion.div>
       </section>
     </div>
