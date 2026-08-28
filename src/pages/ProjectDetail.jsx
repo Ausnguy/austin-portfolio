@@ -1,5 +1,145 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
+import workerSrc from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
+
+const PdfFirstPage = ({ src, poster }) => {
+  const canvasRef = useRef(null);
+  const pdfRef = useRef(null);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasRendered, setHasRendered] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    let loadingTask;
+    let isActive = true;
+
+    const loadPdf = async () => {
+      try {
+        loadingTask = pdfjsLib.getDocument({ url: src, disableWorker: true });
+        const pdf = await loadingTask.promise;
+        if (!isActive) {
+          pdf.destroy();
+          return;
+        }
+        pdfRef.current = pdf;
+        setTotalPages(pdf.numPages);
+      } catch (error) {
+        if (isActive) {
+          setHasError(true);
+          setIsLoading(false);
+        }
+      }
+    };
+
+    loadPdf();
+
+    return () => {
+      isActive = false;
+      loadingTask?.destroy();
+      pdfRef.current = null;
+    };
+  }, [src]);
+
+  useEffect(() => {
+    let renderTask;
+    let isActive = true;
+
+    const renderPage = async () => {
+      if (!pdfRef.current || !canvasRef.current) return;
+
+      try {
+        setIsLoading(true);
+        const page = await pdfRef.current.getPage(pageNumber);
+        const viewport = page.getViewport({ scale: 1 });
+        const canvas = canvasRef.current;
+        const nextCanvas = document.createElement('canvas');
+        nextCanvas.width = viewport.width;
+        nextCanvas.height = viewport.height;
+        renderTask = page.render({
+          canvasContext: nextCanvas.getContext('2d'),
+          viewport,
+        });
+        await renderTask.promise;
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        canvas.getContext('2d').drawImage(nextCanvas, 0, 0);
+        if (isActive) {
+          setHasRendered(true);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        if (isActive && error?.name !== 'RenderingCancelledException') {
+          setHasError(true);
+          setIsLoading(false);
+        }
+      }
+    };
+
+    renderPage();
+    return () => {
+      isActive = false;
+      renderTask?.cancel();
+    };
+  }, [pageNumber, totalPages]);
+
+  return (
+    <div className="relative aspect-[2160/1214] w-full bg-charcoal">
+      {!hasRendered && (
+        <img
+          src={`${import.meta.env.BASE_URL}${poster}`}
+          alt="First slide of the project PDF"
+          className="pointer-events-none absolute inset-0 h-full w-full object-contain"
+        />
+      )}
+      {isLoading && !hasError && (
+        <span className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-charcoal/80 px-3 py-1 font-mono text-xs uppercase tracking-wider text-cream">
+          Loading slide...
+        </span>
+      )}
+      {hasError && (
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-charcoal/80 px-3 py-1 text-center font-mono text-xs uppercase tracking-wider text-cream">
+          Use Download PDF to view the full deck
+        </div>
+      )}
+      <canvas
+        ref={canvasRef}
+        aria-label={`Slide ${pageNumber} of the project PDF`}
+        className={`pointer-events-none absolute inset-0 h-full w-full object-contain ${hasRendered && !hasError ? 'block' : 'hidden'}`}
+      />
+      {totalPages > 1 && !hasError && (
+        <div className="pointer-events-none absolute inset-0 z-20">
+          <button
+            type="button"
+            disabled={pageNumber === 1 || totalPages === 0}
+            onClick={() => setPageNumber((currentPage) => Math.max(1, currentPage - 1))}
+            aria-label="Previous slide"
+            className="pointer-events-auto absolute left-4 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center border-2 border-cream bg-charcoal/80 font-mono text-xl text-cream transition-opacity disabled:cursor-not-allowed disabled:opacity-30"
+          >
+            ←
+          </button>
+          <span className="absolute bottom-4 left-1/2 -translate-x-1/2 border border-cream/60 bg-charcoal/80 px-3 py-1 font-mono text-xs text-cream">
+            {pageNumber} / {totalPages}
+          </span>
+          <button
+            type="button"
+            disabled={pageNumber === totalPages || totalPages === 0}
+            onClick={() => setPageNumber((currentPage) => Math.min(totalPages, currentPage + 1))}
+            aria-label="Next slide"
+            className="pointer-events-auto absolute right-4 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center border-2 border-cream bg-charcoal/80 font-mono text-xl text-cream transition-opacity disabled:cursor-not-allowed disabled:opacity-30"
+          >
+            →
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
 import { getProjectBySlug } from '../data/projects';
 
 const ProjectDetail = () => {
@@ -85,7 +225,7 @@ const ProjectDetail = () => {
       </section>
       
       {/* Hero Image */}
-      <section className="max-w-7xl mx-auto px-6 py-8">
+      {!project.pdf && <section className="max-w-7xl mx-auto px-6 py-8">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -98,7 +238,32 @@ const ProjectDetail = () => {
             className="w-full aspect-video object-cover"
           />
         </motion.div>
-      </section>
+
+      </section>}
+
+      {project.pdf && (
+        <section className="max-w-7xl mx-auto px-6 pb-16">
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_180px] lg:items-start">
+            <div className="overflow-hidden border-2 border-charcoal bg-white">
+              <PdfFirstPage
+                src={`${import.meta.env.BASE_URL}${project.pdf}`}
+                poster={project.pdfPoster}
+              />
+            </div>
+            <aside className="lg:pt-1">
+              <div className="section-num mb-3">/ PROJECT PDF</div>
+              <h2 className="font-sans text-2xl font-bold mb-4">{project.title}</h2>
+              <a
+                href={`${import.meta.env.BASE_URL}${project.pdf}`}
+                download
+                className="btn inline-block w-full text-center"
+              >
+                Download PDF
+              </a>
+            </aside>
+          </div>
+        </section>
+      )}
       
       {/* Case Study Content */}
       {caseStudy && (

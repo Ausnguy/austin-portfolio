@@ -30,7 +30,7 @@ const Home = () => {
                 MIS student who turns messy data into clear answers.
               </p>
               <p className="font-mono text-sm text-slate mb-8">
-                Currently: University of Houston '27 → Incoming at HPE, ToolAndMore LLC
+                Currently: University of Houston '27 → Building analytics, ML, and BI projects
               </p>
             </div>
             <div className="flex items-center gap-4 flex-wrap">
@@ -76,15 +76,11 @@ const Home = () => {
                 good analytics beats good hunches every time.
               </p>
               <p className="font-serif text-lg leading-relaxed">
-                <p className="font-serif text-lg leading-relaxed">
-  Spent summer 2025 working on analytics projects at USI Insurance Services. 
-  I’ll be joining HPE as a Compensation Analyst Intern in Summer 2026.
-</p>
-
-<p className="font-serif text-lg leading-relaxed">
-  Currently building ML models and data dashboards.
-</p>
-
+                Spent summer 2025 working on analytics projects at USI Insurance Services,
+                and I am joining HPE as a Compensation Analyst Intern in Summer 2026.
+              </p>
+              <p className="font-serif text-lg leading-relaxed">
+                Currently building ML models and data dashboards.
               </p>
               <div className="grid grid-cols-3 gap-4 pt-4">
                 <div>
@@ -232,7 +228,7 @@ const Home = () => {
           <div className="section-num">/ 05</div>
           <h2 className="font-sans text-5xl font-bold mb-6">Let's work together</h2>
           <p className="font-serif text-xl mb-8 leading-relaxed">
-            Looking for summer 2026 internships in data analytics, BI, or data science. 
+            I am interested in analytics, business intelligence, and data science projects.
             Also happy to chat about ML projects or e-commerce analytics.
           </p>
 

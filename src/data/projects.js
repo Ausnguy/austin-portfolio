@@ -11,8 +11,7 @@ export const projects = [
     tags: ['Machine Learning', 'Web App'],
     tools: ['Python', 'PyTorch', 'Flask', 'React'],
     featured: true,
-    image:
-      'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&auto=format&fit=crop',
+    image: '/austin-portfolio/Mnist.png',
     links: {
       github: null, // add your real repo link when ready
       demo: null,   // add your real deployed link when ready
@@ -40,7 +39,9 @@ export const projects = [
     tags: ['Analytics', 'AI Infrastructure'],
     tools: ['Python', 'Pandas', 'Matplotlib'],
     featured: true,
-    image: 'https://i.imgur.com/k8t3aow.png',
+    image: '/austin-portfolio/bny-first-slide.png',
+    pdf: 'bny-ai-optimization.pdf',
+    pdfPoster: 'bny-first-slide.png',
     links: {
       github: null,
       demo: null,
@@ -97,6 +98,8 @@ export const projects = [
     tools: ['Python', 'Excel'],
     featured: true,
     image: 'https://download.logo.wine/logo/BP/BP-Logo.wine.png',
+    pdf: 'bp-energy-policy.pdf',
+    pdfPoster: 'bp-first-slide.png',
     links: {
       github: null,
       demo: null,
