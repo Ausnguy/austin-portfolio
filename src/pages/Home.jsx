@@ -102,7 +102,7 @@ const Home = () => {
       </section>
 
       {/* Experience Section */}
-      <section id="work" className="bg-white border-y-2 border-charcoal py-16 my-16">
+      <section id="work" className="scroll-mt-20 bg-white border-y-2 border-charcoal py-16 my-16">
         <div className="max-w-7xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0 }}
@@ -125,7 +125,7 @@ const Home = () => {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="max-w-7xl mx-auto px-6 py-16">
+      <section id="projects" className="scroll-mt-20 max-w-7xl mx-auto px-6 py-16">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -217,7 +217,7 @@ const Home = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="max-w-7xl mx-auto px-6 py-20">
+      <section id="contact" className="scroll-mt-20 max-w-7xl mx-auto px-6 py-20">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}

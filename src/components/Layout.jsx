@@ -9,19 +9,24 @@ const Layout = ({ children }) => {
     const handleScroll = () => {
       const sections = document.querySelectorAll('section[id]');
       let current = '';
-      
+
       sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (window.scrollY >= (sectionTop - 100)) {
+        const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+        if (window.scrollY + 140 >= sectionTop) {
           current = section.getAttribute('id');
         }
       });
+
+      const isAtPageBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+      if (isAtPageBottom && sections.length > 0) {
+        current = sections[sections.length - 1].getAttribute('id');
+      }
       
       setActiveSection(current);
     };
-    
+
     window.addEventListener('scroll', handleScroll);
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   
@@ -29,7 +34,16 @@ const Layout = ({ children }) => {
     if (location.pathname !== '/') return;
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      setActiveSection(id);
+      element.scrollIntoView({ behavior: 'auto', block: 'start' });
+    }
+  };
+
+  const goHome = (event) => {
+    if (location.pathname === '/') {
+      event.preventDefault();
+      setActiveSection('');
+      window.scrollTo({ top: 0, behavior: 'auto' });
     }
   };
   
@@ -48,19 +62,20 @@ const Layout = ({ children }) => {
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-cream border-b-2 border-charcoal">
         <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
-          <Link to="/" className="font-sans font-bold text-lg hover:text-rust transition-colors">
+          <Link to="/" onClick={goHome} className="font-sans font-bold text-lg hover:text-rust transition-colors">
             AN
           </Link>
           
           <div className="flex items-center gap-8">
             <Link
               to="/"
+              onClick={goHome}
               className={`font-mono text-xs uppercase tracking-wider relative pb-0.5 transition-colors ${
-                isActive('/') ? 'text-charcoal' : 'text-slate hover:text-charcoal'
+                isActive('/') && !activeSection ? 'text-charcoal' : 'text-slate hover:text-charcoal'
               }`}
             >
               Home
-              {isActive('/') && (
+              {isActive('/') && !activeSection && (
                 <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-rust"></span>
               )}
             </Link>

@@ -6,7 +6,7 @@
 
 @layer base {
   * {
-    @apply scroll-smooth;
+    box-sizing: border-box;
   }
   
   body {
