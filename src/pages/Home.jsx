@@ -12,46 +12,47 @@ const Home = () => {
   
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-6 pt-20 pb-24">
-        <div className="max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="section-num">/ PORTFOLIO 2026</div>
-            <h1 className="font-sans text-6xl md:text-7xl font-bold mb-6 leading-[0.9]">
-              <span className="offset-header" data-text="Austin">Austin</span><br />
-              <span className="offset-header" data-text="Nguyen">Nguyen</span>
-            </h1>
-            <div className="max-w-2xl">
-              <p className="font-serif text-2xl mb-3 leading-relaxed">
-                MIS student who turns messy data into clear answers.
-              </p>
-              <p className="font-mono text-sm text-slate mb-8">
-                Currently: University of Houston '27 → Building analytics, ML, and BI projects
-              </p>
-            </div>
-            <div className="flex items-center gap-4 flex-wrap">
-              <a href="#projects" className="btn">View Work</a>
-              <a href="#contact" className="btn btn-outline">Get in Touch</a>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Floating info card */}
-        <motion.div 
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="absolute top-24 right-6 hidden lg:block"
+      {/* Hero / Contact Section */}
+      <section id="contact" className="scroll-mt-20 max-w-7xl mx-auto px-6 pt-20 pb-14">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="max-w-5xl"
         >
-          <div className="bg-white border-2 border-charcoal p-6 max-w-xs">
-            <div className="font-mono text-xs text-slate mb-2">CURRENTLY BUILDING</div>
-            <div className="font-sans font-semibold mb-2">  Handwriting Recognition Model</div>
-            <div className="font-serif text-sm italic">   Teaching a model to read handwritten numbers
-</div>
+          <div className="section-num">/ PORTFOLIO 2026</div>
+
+          <h1 className="font-sans text-5xl sm:text-6xl md:text-7xl font-bold leading-[0.9] mb-6">
+            <span className="offset-header" data-text="Austin">Austin</span><br />
+            <span className="offset-header" data-text="Nguyen">Nguyen</span>
+          </h1>
+
+          <p className="font-serif text-xl sm:text-2xl mb-3 leading-relaxed max-w-3xl">
+            MIS student who turns messy data into clear answers.
+          </p>
+
+          <p className="font-mono text-sm text-slate mb-8 leading-relaxed max-w-3xl">
+            Currently: University of Houston '27 → Building analytics, ML, and BI projects
+          </p>
+
+          <div className="flex flex-wrap items-center gap-4 mb-8">
+            <a
+              href="https://www.linkedin.com/in/austin-nguyen-business/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-outline inline-flex items-center gap-2"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
+                <path d="M6.94 8.5A1.5 1.5 0 1 1 6.94 5.5a1.5 1.5 0 0 1 0 3Zm-1.25 1.61h2.5v8.39h-2.5v-8.39Zm4.4 0h2.4v1.15h.03c.33-.63 1.14-1.3 2.35-1.3 2.52 0 2.98 1.66 2.98 3.81v4.73h-2.5v-4.43c0-1.06-.02-2.42-1.47-2.42-1.48 0-1.7 1.15-1.7 2.34v4.51h-2.5v-8.39Z"/>
+              </svg>
+              LinkedIn
+            </a>
+            <a href={resumeFileUrl} target="_blank" rel="noopener noreferrer" className="btn">
+              View Resume
+            </a>
+            <a href="mailto:ausnguybusiness@gmail.com" className="btn btn-outline">
+              Email Me
+            </a>
           </div>
         </motion.div>
       </section>
@@ -66,7 +67,7 @@ const Home = () => {
         >
           <div className="grid lg:grid-cols-5 gap-12">
             <div className="lg:col-span-2">
-              <div className="section-num">/ 01</div>
+              <div className="section-num">/ 02</div>
               <h2 className="font-sans text-4xl font-bold mb-6">Background</h2>
             </div>
             <div className="lg:col-span-3 space-y-6">
@@ -111,7 +112,7 @@ const Home = () => {
             transition={{ duration: 0.6 }}
           >
             <div className="mb-12">
-              <div className="section-num">/ 02</div>
+              <div className="section-num">/ 03</div>
               <h2 className="font-sans text-4xl font-bold">Experience</h2>
             </div>
 
@@ -133,7 +134,7 @@ const Home = () => {
           transition={{ duration: 0.6 }}
         >
           <div className="mb-12">
-            <div className="section-num">/ 03</div>
+            <div className="section-num">/ 04</div>
             <h2 className="font-sans text-4xl font-bold mb-4">Selected Projects</h2>
             <p className="font-mono text-sm text-slate max-w-2xl">
               Mix of ML research, web apps, and dashboards. Focus on practical impact over technical complexity.
@@ -163,7 +164,7 @@ const Home = () => {
           >
             <div className="grid lg:grid-cols-2 gap-12">
               <div>
-                <div className="section-num">/ 04</div>
+                <div className="section-num">/ 05</div>
                 <h2 className="font-sans text-4xl font-bold mb-8">Skills</h2>
                 
                 <div className="space-y-6">
@@ -217,41 +218,48 @@ const Home = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="scroll-mt-20 max-w-7xl mx-auto px-6 py-20">
+      <section className="max-w-7xl mx-auto px-6 py-16">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="max-w-3xl"
         >
-          <div className="section-num">/ 05</div>
-          <h2 className="font-sans text-5xl font-bold mb-6">Let's work together</h2>
-          <p className="font-serif text-xl mb-8 leading-relaxed">
+          <div className="mb-6">
+            <div className="section-num">/ 06</div>
+            <h2 className="font-sans text-4xl sm:text-5xl font-bold leading-tight">Let's work together</h2>
+          </div>
+
+          <p className="font-serif text-lg sm:text-xl mb-8 leading-relaxed max-w-4xl">
             I am interested in analytics, business intelligence, and data science projects.
             Also happy to chat about ML projects or e-commerce analytics.
           </p>
 
-          <div className="grid sm:grid-cols-2 gap-6 mb-12">
-            <a href="mailto:ausnguybusiness@gmail.com" className="bg-white border-2 border-charcoal p-6 hover:bg-sand transition-colors">
-              <div className="font-mono text-xs mb-2 text-slate">EMAIL</div>
-              <div className="font-sans font-semibold">ausnguybusiness@gmail.com</div>
+          <div className="grid gap-4 sm:grid-cols-2 max-w-4xl">
+            <a href="https://www.linkedin.com/in/austin-nguyen-business/" target="_blank" rel="noopener noreferrer" className="bg-white border-2 border-charcoal p-5 hover:bg-sand transition-colors">
+              <div className="font-mono text-[10px] sm:text-xs mb-2 text-slate uppercase">LinkedIn</div>
+              <div className="font-sans font-semibold inline-flex items-center gap-2 text-sm sm:text-base">
+                <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
+                  <path d="M6.94 8.5A1.5 1.5 0 1 1 6.94 5.5a1.5 1.5 0 0 1 0 3Zm-1.25 1.61h2.5v8.39h-2.5v-8.39Zm4.4 0h2.4v1.15h.03c.33-.63 1.14-1.3 2.35-1.3 2.52 0 2.98 1.66 2.98 3.81v4.73h-2.5v-4.43c0-1.06-.02-2.42-1.47-2.42-1.48 0-1.7 1.15-1.7 2.34v4.51h-2.5v-8.39Z"/>
+                </svg>
+                /in/austin-nguyen-business
+              </div>
             </a>
-            <a href="https://www.linkedin.com/in/austin-nguyen-business/" target="_blank" rel="noopener noreferrer" className="bg-white border-2 border-charcoal p-6 hover:bg-sand transition-colors">
-              <div className="font-mono text-xs mb-2 text-slate">LINKEDIN</div>
-              <div className="font-sans font-semibold">/in/austin-nguyen-business</div>
+            <a href="mailto:ausnguybusiness@gmail.com" className="bg-white border-2 border-charcoal p-5 hover:bg-sand transition-colors">
+              <div className="font-mono text-[10px] sm:text-xs mb-2 text-slate uppercase">Email</div>
+              <div className="font-sans font-semibold text-sm sm:text-base">ausnguybusiness@gmail.com</div>
             </a>
-            <a href="https://github.com/Ausnguy" target="_blank" rel="noopener noreferrer" className="bg-white border-2 border-charcoal p-6 hover:bg-sand transition-colors">
-              <div className="font-mono text-xs mb-2 text-slate">GITHUB</div>
-              <div className="font-sans font-semibold">@Ausnguy</div>
+            <a href="https://github.com/Ausnguy" target="_blank" rel="noopener noreferrer" className="bg-white border-2 border-charcoal p-5 hover:bg-sand transition-colors">
+              <div className="font-mono text-[10px] sm:text-xs mb-2 text-slate uppercase">GitHub</div>
+              <div className="font-sans font-semibold text-sm sm:text-base">@Ausnguy</div>
             </a>
-            <div className="bg-white border-2 border-charcoal p-6">
-              <div className="font-mono text-xs mb-2 text-slate">LOCATION</div>
-              <div className="font-sans font-semibold">Houston, TX</div>
+            <div className="bg-white border-2 border-charcoal p-5">
+              <div className="font-mono text-[10px] sm:text-xs mb-2 text-slate uppercase">Location</div>
+              <div className="font-sans font-semibold text-sm sm:text-base">Houston, TX</div>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4 mt-10">
             <a href={resumeFileUrl} target="_blank" rel="noopener noreferrer" className="btn">
               View Resume
             </a>
@@ -261,6 +269,7 @@ const Home = () => {
           </div>
         </motion.div>
       </section>
+
     </div>
   );
 };
