@@ -24,6 +24,12 @@ const results = [
   { id: 'J3', area: 'Academics', value: profile.gpa, label: 'GPA at UH Bauer, on the Dean’s List since Fall 2023', link: '/skills', linkText: 'Education', formula: '=GPA("UH Bauer")' },
 ];
 
+const currentStatus = [
+  { id: 'A2', label: 'School', value: 'MIS at UH Bauer, May 2027', formula: '=SCHOOL("University of Houston")' },
+  { id: 'E2', label: 'Now', value: 'Data Analyst Intern at HPE', formula: '=NOW("Hewlett Packard Enterprise")' },
+  { id: 'I2', label: 'Based in', value: profile.location, formula: '=LOCATION("Houston, TX")' },
+];
+
 const toMonth = (ym) => {
   const [y, m] = ym.split('-').map(Number);
   return y * 12 + m - 1;
@@ -129,19 +135,23 @@ const Home = () => {
         </Cell>
       </Row>
 
-      {/* Row 2: where I am right now */}
+      {/* Row 2: where I am right now. Three cells on wider screens, one compact list on phones. */}
       <Row>
-        <Cell id="A2" span="col-span-12 sm:col-span-4" formula='=SCHOOL("University of Houston")' className="!py-4">
-          <div className="text-[13px] text-muted">School</div>
-          <div className="mt-0.5 font-semibold text-ink">MIS at UH Bauer, May 2027</div>
-        </Cell>
-        <Cell id="E2" span="col-span-12 sm:col-span-4" formula='=NOW("Hewlett Packard Enterprise")' className="!py-4">
-          <div className="text-[13px] text-muted">Now</div>
-          <div className="mt-0.5 font-semibold text-ink">Data Analyst Intern at HPE</div>
-        </Cell>
-        <Cell id="I2" span="col-span-12 sm:col-span-4" formula='=LOCATION("Houston, TX")' className="!py-4">
-          <div className="text-[13px] text-muted">Based in</div>
-          <div className="mt-0.5 font-semibold text-ink">{profile.location}</div>
+        {currentStatus.map((item) => (
+          <Cell key={item.id} id={item.id} span="hidden sm:block sm:col-span-4" formula={item.formula} className="!py-4">
+            <div className="text-[13px] text-muted">{item.label}</div>
+            <div className="mt-0.5 font-semibold text-ink">{item.value}</div>
+          </Cell>
+        ))}
+        <Cell id="A2" span="col-span-12 sm:hidden" formula={currentStatus[0].formula} className="!py-3">
+          <dl className="divide-y divide-grid">
+            {currentStatus.map((item) => (
+              <div key={item.id} className="flex items-baseline justify-between gap-4 py-1.5">
+                <dt className="text-[13px] text-muted">{item.label}</dt>
+                <dd className="text-[14.5px] font-semibold text-ink text-right">{item.value}</dd>
+              </div>
+            ))}
+          </dl>
         </Cell>
       </Row>
 
@@ -223,9 +233,10 @@ const Home = () => {
             {skillGroups.map(({ group, skills }) => (
               <div key={group}>
                 <div className="text-[13px] text-muted">{group}</div>
-                <div className="mt-1.5 flex flex-wrap gap-1.5">
+                <div className="hidden sm:flex mt-1.5 flex-wrap gap-1.5">
                   {skills.map((s) => <span key={s} className="chip">{s}</span>)}
                 </div>
+                <p className="sm:hidden mt-0.5 text-[14.5px] text-ink">{skills.join(', ')}</p>
               </div>
             ))}
           </div>

@@ -149,12 +149,14 @@ const formatMetric = (m) =>
   `${m.value.toLocaleString('en-US', { minimumFractionDigits: m.decimals ?? 0, maximumFractionDigits: m.decimals ?? 0 })}${m.suffix ?? ''}`;
 
 // One labelled row of the case study: the section name in the first cell, the content beside it.
+// On phones the heading sits inside the content cell, so no grid line splits them.
 const CaseRow = ({ n, label, formula, children }) => (
   <Row>
-    <Cell id={`A${n}`} span="col-span-12 lg:col-span-3" formula={formula} className="!pb-2 lg:!pb-6">
+    <Cell id={`A${n}`} span="hidden lg:block lg:col-span-3" formula={formula}>
       <h2 className="font-sans text-lg font-bold text-ink">{label}</h2>
     </Cell>
-    <Cell id={`D${n}`} span="col-span-12 lg:col-span-9" formula={formula} className="!pt-0 lg:!pt-6">
+    <Cell id={`D${n}`} span="col-span-12 lg:col-span-9" formula={formula}>
+      <h2 className="lg:hidden mb-3 font-sans text-lg font-bold text-ink">{label}</h2>
       {children}
     </Cell>
   </Row>

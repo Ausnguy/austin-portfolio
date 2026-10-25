@@ -23,7 +23,7 @@ const ProjectFilters = ({
       />
 
       {/* Categories */}
-      <div className="flex flex-wrap gap-1.5 lg:flex-1" role="group" aria-label="Filter by category">
+      <div className="-mx-4 px-4 sm:mx-0 sm:px-0 flex flex-nowrap sm:flex-wrap gap-1.5 overflow-x-auto [scrollbar-width:none] lg:flex-1" role="group" aria-label="Filter by category">
         {categories.map((category) => {
           const selected = selectedCategory === category;
           return (
@@ -32,7 +32,7 @@ const ProjectFilters = ({
               type="button"
               aria-pressed={selected}
               onClick={() => onCategoryChange(category)}
-              className={`h-9 px-3 rounded text-sm font-medium border transition-[transform,background-color,color,border-color] duration-150 ease-out active:scale-[0.97] ${
+              className={`shrink-0 h-9 px-3 rounded text-sm font-medium border transition-[transform,background-color,color,border-color] duration-150 ease-out active:scale-[0.97] ${
                 selected
                   ? 'bg-accent text-white border-accent'
                   : 'bg-paper text-ink-soft border-grid hover:border-muted hover:text-ink'

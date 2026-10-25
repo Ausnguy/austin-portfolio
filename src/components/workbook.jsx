@@ -38,7 +38,8 @@ const LETTERS = 'ABCDEFGHIJKL'.split('');
 // A sheet: column letters across the top, then rows numbered down the left gutter.
 export const Sheet = ({ children, className = '' }) => (
   <div className={`sheet ${className}`}>
-    <div className="grid grid-cols-[2.25rem_minmax(0,1fr)] sm:grid-cols-[2.75rem_minmax(0,1fr)] border-b border-grid bg-head" aria-hidden="true">
+    {/* Column letters; phones skip them (and the row numbers) to give content the full width. */}
+    <div className="hidden sm:grid grid-cols-[2.75rem_minmax(0,1fr)] border-b border-grid bg-head" aria-hidden="true">
       <div className="border-r border-grid" />
       <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-12">
         {LETTERS.map((letter, i) => (

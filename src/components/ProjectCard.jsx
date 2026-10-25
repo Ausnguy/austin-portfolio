@@ -29,9 +29,9 @@ const ProjectCard = ({ project, compact = false }) => {
       to={`/projects/${project.slug}`}
       onMouseEnter={playPreview}
       onMouseLeave={stopPreview}
-      className="group flex h-full flex-col"
+      className="group flex h-full flex-row gap-3.5 md:flex-col md:gap-0"
     >
-      <div className="media-frame aspect-video">
+      <div className="media-frame w-28 shrink-0 self-start aspect-[4/3] md:w-auto md:self-auto md:aspect-video">
         {project.videoLoop ? (
           <video
             ref={videoRef}
@@ -56,18 +56,18 @@ const ProjectCard = ({ project, compact = false }) => {
         )}
       </div>
 
-      <div className="pt-3.5 flex flex-1 flex-col">
+      <div className="min-w-0 md:pt-3.5 flex flex-1 flex-col">
         <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[13px] text-muted">
           <span className="font-semibold text-accent-ink">{project.category}</span>
           {project.date && <span>{project.date}</span>}
           <StatusBadge status={project.status} />
         </div>
-        <h3 className={`mt-1.5 font-sans font-bold leading-snug text-ink decoration-accent decoration-2 underline-offset-4 group-hover:underline ${compact ? 'text-[17px]' : 'text-xl'}`}>
+        <h3 className={`mt-1 md:mt-1.5 font-sans font-bold leading-snug text-ink decoration-accent decoration-2 underline-offset-4 group-hover:underline text-[16px] ${compact ? 'md:text-[17px]' : 'md:text-xl'}`}>
           {project.title}
         </h3>
-        {project.highlight && <p className="mt-2 text-[14.5px] font-semibold leading-snug text-ink">{project.highlight}</p>}
-        {!compact && <p className="mt-1.5 text-[15px] leading-relaxed text-ink-soft">{project.description}</p>}
-        <p className="mt-auto pt-3 font-mono text-[12.5px] text-muted">{project.tools.join(', ')}</p>
+        {project.highlight && <p className="mt-1 md:mt-2 text-[13.5px] md:text-[14.5px] font-semibold leading-snug text-ink-soft md:text-ink">{project.highlight}</p>}
+        {!compact && <p className="hidden md:block mt-1.5 text-[15px] leading-relaxed text-ink-soft">{project.description}</p>}
+        <p className="hidden md:block mt-auto pt-3 font-mono text-[12.5px] text-muted">{project.tools.join(', ')}</p>
       </div>
     </Link>
   );

@@ -108,7 +108,7 @@
 
   .sheet-row {
     counter-increment: row;
-    @apply grid grid-cols-[2.25rem_minmax(0,1fr)] sm:grid-cols-[2.75rem_minmax(0,1fr)] border-b border-grid;
+    @apply grid grid-cols-1 sm:grid-cols-[2.75rem_minmax(0,1fr)] border-b border-grid;
   }
 
   .sheet-row > .gutter::before {
@@ -116,7 +116,7 @@
   }
 
   .gutter {
-    @apply bg-head border-r border-grid font-mono text-[12px] text-muted flex justify-center pt-3 select-none;
+    @apply hidden sm:flex bg-head border-r border-grid font-mono text-[12px] text-muted justify-center pt-3 select-none;
   }
 
   .cell {
