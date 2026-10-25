@@ -24,6 +24,22 @@ const results = [
   { id: 'J3', area: 'Academics', value: profile.gpa, label: 'GPA at UH Bauer, on the Dean’s List since Fall 2023', link: '/skills', linkText: 'Education', formula: '=GPA("UH Bauer")' },
 ];
 
+// The hero's receipts: each one is something shipped, linked to where it's shown.
+const proof = [
+  { text: 'Building a real-time internet routing pipeline on Kafka, Spark Structured Streaming and PostgreSQL', to: '/projects/interdomain' },
+  { text: 'My CaseQuest team’s from-scratch failure model warned before 90 of 91 equipment failures', to: '/projects/casequest-2026' },
+  { text: 'Built and own an automated Power BI compensation pipeline at HPE', to: '/experience' },
+  { text: 'This site runs a language model in your browser, with a filter that stops it making things up', to: '/ask' },
+];
+
+// What went into building this site, for the "This site is a project too" row.
+const siteBuild = [
+  { id: 'A8', title: 'Local LLM', body: 'Qwen3 0.6B runs in a Web Worker through transformers.js, on WebGPU with a WebAssembly fallback. No server, no API key.', formula: '=MODEL("Qwen3-0.6B", "in-browser")' },
+  { id: 'D8', title: 'Hallucination filter', body: 'Every generated sentence is checked against the facts; unsupported names, numbers or claims are dropped before you see them.', formula: '=FILTER(sentences, SUPPORTED(facts))' },
+  { id: 'G8', title: 'Generated 3D', body: 'The company models, logos and project thumbnails are built in code with React Three Fiber and drei.', formula: '=RENDER(scene, "R3F")' },
+  { id: 'J8', title: 'Fast and accessible', body: 'Lighthouse on the live site: Performance 94, Accessibility 100, Best Practices 100, SEO 100.', formula: '=LIGHTHOUSE("live")' },
+];
+
 const currentStatus = [
   { id: 'A2', label: 'School', value: 'MIS at UH Bauer, May 2027', formula: '=SCHOOL("University of Houston")' },
   { id: 'E2', label: 'Now', value: 'Data Analyst Intern at HPE', formula: '=NOW("Hewlett Packard Enterprise")' },
@@ -108,13 +124,20 @@ const Home = () => {
             Austin Nguyen
           </h1>
           <p className="mt-5 text-xl sm:text-2xl leading-snug text-ink max-w-2xl">
-            I build data systems end to end: the pipeline, the model, the dashboard and the app on top.
+            I ship data systems end to end: streaming pipelines, ML models, BI at enterprise scale, and the apps on top.
           </p>
-          <p className="mt-3 body-copy max-w-2xl">
-            Most recently my team shipped Parvius, a failure-prediction model, a 3D operations console and a
-            field engineer phone app sharing one live state, for CaseQuest 2026. This site even runs a language model
-            in your browser so you can question my resume.
-          </p>
+          <ul className="mt-5 max-w-2xl divide-y divide-grid border-y border-grid">
+            {proof.map((item, i) => (
+              <li key={item.text}>
+                <Link to={item.to} className="group flex items-baseline gap-3 py-2.5">
+                  <span className="font-mono text-[12px] text-accent-ink">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="flex-1 text-[15px] sm:text-[15.5px] leading-snug text-ink group-hover:underline decoration-accent decoration-2 underline-offset-4">
+                    {item.text}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
           <div className="mt-7 flex flex-wrap gap-2.5">
             <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">View resume</a>
             <a href={`mailto:${profile.email}`} className="btn btn-secondary">Email me</a>
@@ -287,7 +310,25 @@ const Home = () => {
         </Cell>
       </Row>
 
-      {/* Row 8: contact */}
+      {/* Row 8: the site itself as a project */}
+      <Row>
+        <Cell id="A8h" formula='=HYPERLINK("https://github.com/Ausnguy/austin-portfolio")' className="!pb-3">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h2 className="font-sans text-xl font-bold text-ink">This site is a project too</h2>
+            <a href="https://github.com/Ausnguy/austin-portfolio" target="_blank" rel="noopener noreferrer" className="link text-sm">Read the code</a>
+          </div>
+        </Cell>
+      </Row>
+      <Row>
+        {siteBuild.map((item) => (
+          <Cell key={item.id} id={item.id} span="col-span-12 sm:col-span-6 lg:col-span-3" formula={item.formula}>
+            <h3 className="font-sans text-[16px] font-bold text-ink">{item.title}</h3>
+            <p className="mt-1.5 text-[14px] leading-relaxed text-ink-soft">{item.body}</p>
+          </Cell>
+        ))}
+      </Row>
+
+      {/* Row 9: contact */}
       <Row>
         <Cell id="A8" formula={`=HYPERLINK("mailto:${profile.email}")`} className="lg:!p-10">
           <h2 className="font-sans text-3xl sm:text-4xl font-bold tracking-tight text-ink">Let’s build something.</h2>
