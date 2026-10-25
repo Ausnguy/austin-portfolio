@@ -84,6 +84,16 @@ const Skills = () => {
           <div className="mt-2 flex flex-wrap gap-1.5">
             {profile.coursework.map((c) => <span key={c} className="chip">{c}</span>)}
           </div>
+
+          <h3 className="mt-6 font-sans text-[15px] font-bold text-ink">Certifications</h3>
+          <ul className="mt-2 divide-y divide-grid border-y border-grid">
+            {profile.certifications.map((c) => (
+              <li key={c.name} className="flex items-baseline justify-between gap-3 py-2.5 text-[15px]">
+                <span className="font-medium text-ink">{c.name}</span>
+                <span className="text-[13px] text-muted">{c.issuer}</span>
+              </li>
+            ))}
+          </ul>
         </Cell>
       </Row>
 

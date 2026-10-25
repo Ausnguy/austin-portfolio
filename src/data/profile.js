@@ -13,6 +13,11 @@ export const profile = {
   gpa: '3.95',
   deansList: 'Fall 2023 – Fall 2026',
   coursework: ['Data Programming', 'Database Management Systems', 'Systems Analysis & Design', 'Business Statistics'],
+  certifications: [
+    { name: 'Databricks Fundamentals', issuer: 'Databricks' },
+    { name: 'SQL (Intermediate)', issuer: 'HackerRank' },
+    { name: 'Programming in Python', issuer: 'HPE' },
+  ],
   scholarships: ['Ted Bauer Scholarship', 'Lockheed Martin Vocational Scholarship', 'George Foundation Scholarship'],
   facts: [
     'Austin Nguyen is a Management Information Systems (MIS) student at the University of Houston, C. T. Bauer College of Business, earning a B.B.A. and graduating in May 2027.',
@@ -20,6 +25,7 @@ export const profile = {
     'Austin’s relevant coursework: Data Programming, Database Management Systems, Systems Analysis & Design, and Business Statistics.',
     'Austin’s scholarships: the Ted Bauer Scholarship, the Lockheed Martin Vocational Scholarship, and the George Foundation Scholarship.',
     'Austin is based in Houston, Texas.',
+    'Austin’s certifications: Databricks Fundamentals, SQL (Intermediate) from HackerRank, and Programming in Python from HPE.',
     'Austin is currently a Data Analyst Intern on the Compensation & Equity team at Hewlett Packard Enterprise (HPE).',
     'Austin was 1 of 35 participants selected from 500+ applicants for Bloomberg’s Decoded: Data program in August 2026.',
     'Austin builds data systems end to end: data pipelines, machine learning models, dashboards and the apps around them.',

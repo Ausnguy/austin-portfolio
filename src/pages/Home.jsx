@@ -22,7 +22,7 @@ const results = [
     id: 'A3',
     skill: 'Data engineering',
     headline: 'Streaming pipeline on live internet routing data',
-    proof: { value: '6', unit: 'stages', note: 'RIPE feed → Kafka → Spark → PostgreSQL → API → dashboard' },
+    proof: { value: '8.7K', unit: 'events/sec', note: 'streamed live from 23 locations; dashboard queries cut from 13–27 s to 44–62 ms' },
     tools: ['Kafka', 'Spark', 'PostgreSQL', 'FastAPI'],
     status: 'In progress, V1 live',
     link: '/projects/interdomain',
@@ -63,7 +63,7 @@ const results = [
 
 // The hero's receipts: each one is something shipped, linked to where it's shown.
 const proof = [
-  { text: 'Building a real-time internet routing pipeline on Kafka, Spark Structured Streaming and PostgreSQL', to: '/projects/interdomain' },
+  { text: 'Built a real-time routing pipeline handling ~8.7K events/sec, cutting dashboard queries from 13–27 s to 44–62 ms', to: '/projects/interdomain' },
   { text: 'My CaseQuest team’s from-scratch failure model warned before 90 of 91 equipment failures', to: '/projects/casequest-2026' },
   { text: 'Built and own an automated Power BI compensation pipeline at HPE', to: '/experience' },
   { text: 'Deployed an AI assistant for this site on Cloudflare, with a filter that stops it making things up', to: '/ask' },
@@ -172,7 +172,7 @@ const Home = () => {
   const spotlight = getSpotlightProject();
   const others = getFeaturedProjects().filter((p) => p !== spotlight);
   const baseUrl = import.meta.env.BASE_URL;
-  const resumeUrl = `${baseUrl}resume.pdf`;
+  const resumeUrl = `${baseUrl}resume.pdf?v=2`;
 
   return (
     <Sheet>

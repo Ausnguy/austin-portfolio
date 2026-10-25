@@ -10,7 +10,8 @@ export const stack = [
     tools: [
       { name: 'Kafka', uses: [{ where: 'interdomain', did: 'Event bus for live route updates, keyed by peer ASN' }] },
       { name: 'Spark Structured Streaming', uses: [{ where: 'interdomain', did: '5-minute sliding windows with a 2-minute watermark to flag route instability' }] },
-      { name: 'PostgreSQL', uses: [{ where: 'interdomain', did: 'Stores route events with native CIDR/INET types and indexes' }] },
+      { name: 'PostgreSQL', uses: [{ where: 'interdomain', did: 'Stores route events with CIDR/INET types, indexes and time-partitioned tables' }] },
+      { name: 'Batch ingestion & pre-aggregation', uses: [{ where: 'interdomain', did: 'Cleared a 19.6M-message backlog; dashboard queries went from 13–27 s to 44–62 ms' }] },
       { name: 'SQL', uses: [{ where: 'interdomain', did: 'Analytics queries for active ASNs, update volume and withdrawals' }] },
       { name: 'Docker Compose', uses: [{ where: 'interdomain', did: 'Runs Postgres, Kafka and Spark together locally' }] },
       { name: 'Power Query + SharePoint', uses: [{ where: 'exp:HPE', did: 'Automated pipeline that consolidates Workday exports for reporting' }] },
@@ -29,6 +30,7 @@ export const stack = [
       { name: 'PyTorch', uses: [{ where: 'mnist-digit-recognition', did: 'Neural network digit classifier, ~96–98% test accuracy' }] },
       { name: 'NumPy', uses: [{ where: 'casequest-2026', did: 'Logistic regression written from scratch (Newton’s method, ridge)', team: true }] },
       { name: 'Decision trees & random forests', uses: [{ where: 'exp:CMU Tepper Summit', did: 'Customer churn prediction models in Python' }] },
+      { name: 'scikit-learn + XGBoost', uses: [{ where: 'exp:HPE', did: 'Forecasting pipeline that backtests 8 statistical and ML models across 14 fiscal quarters' }] },
       { name: 'Model routing', uses: [{ where: 'ai-efficiency-modeling', did: 'Sent simple requests to lightweight models: ~70% less modeled energy' }] },
     ],
   },
@@ -96,7 +98,7 @@ export const stack = [
 ];
 
 // On the resume but not shown in a project on this site yet.
-export const resumeOnly = ['Java', 'R', 'scikit-learn', 'Flask', 'Jupyter', 'Azure', 'Agile', 'SLURM/HPC'];
+export const resumeOnly = ['Java', 'R', 'JavaScript', 'AWS', 'DynamoDB', 'Linux', 'Agile', 'SLURM/HPC'];
 
 // Turns a `where` key into a label and a link for the page.
 export const resolveWhere = (where) => {

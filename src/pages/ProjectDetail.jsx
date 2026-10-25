@@ -162,6 +162,14 @@ const CaseRow = ({ n, label, formula, children }) => (
   </Row>
 );
 
+// Metric cells always fill the row: 2x2 on phones, one row from desktop width.
+const metricSpan = (i, n) => {
+  if (n === 4) return 'col-span-6 lg:col-span-3';
+  if (n === 3) return 'col-span-12 sm:col-span-4';
+  if (i === n - 1 && n % 2 === 1) return 'col-span-12 lg:col-span-4';
+  return 'col-span-6 lg:col-span-2';
+};
+
 const ProjectDetail = () => {
   const { slug } = useParams();
   const project = getProjectBySlug(slug);
@@ -293,7 +301,7 @@ const ProjectDetail = () => {
             <Cell
               key={m.label}
               id={`${String.fromCharCode(65 + i * 2)}3`}
-              span={i === project.metrics.length - 1 && project.metrics.length % 2 === 1 ? 'col-span-12 lg:col-span-4' : 'col-span-6 lg:col-span-2'}
+              span={metricSpan(i, project.metrics.length)}
               formula={`=METRIC("${m.label}")`}
             >
               <div className="font-sans text-2xl sm:text-3xl font-bold tracking-tight text-ink whitespace-nowrap">{formatMetric(m)}</div>

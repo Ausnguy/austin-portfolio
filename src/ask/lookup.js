@@ -119,6 +119,14 @@ export const lookupExtra = (question) => {
     };
   }
 
+  if (/\b(certif\w*|credentials?|certs?)\b/i.test(q)) {
+    return {
+      term: 'certifications',
+      answer: `Austin holds ${profile.certifications.length} certifications: ${profile.certifications.map((c) => `${c.name} (${c.issuer})`).join(', ')}.`,
+      facts: profile.facts.filter((f) => f.includes('certifications')).map((text) => ({ ref: 'Summary!Certifications', text })),
+    };
+  }
+
   if (ABOUT.test(q)) {
     const hit = PROJECT_KEYS.find(([re]) => re.test(q));
     const project = hit && projects.find((p) => p.slug === hit[1]);

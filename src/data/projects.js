@@ -9,19 +9,29 @@ export const projects = [
     tldr: [
       'Routing changes can take parts of the internet offline, and the raw BGP feed is a firehose that is hard to watch live.',
       'A Python, Kafka, Spark, PostgreSQL, FastAPI and React pipeline for live internet routing data.',
-      'Version 1 runs end to end with a live dashboard; the Kafka and Spark streaming layer is in progress.',
+      'Version 1 runs end to end at about 8.7K events per second, with dashboard queries cut from 13–27 s to 44–62 ms; the Kafka and Spark layer is still being built out.',
     ],
     decisions: [
       {
         title: 'Ship a working V1 before the big data stack',
         why: 'V1 is RIPE RIS Live to Python to PostgreSQL to FastAPI. Kafka, Spark/Databricks, Delta Lake, dbt and Airflow are added only after that works end to end.',
       },
+      {
+        title: 'Batch, pre-aggregate and partition when traffic outgrew V1',
+        why: 'Sustained high-volume traffic built a 19.6M-message backlog. 5K-record batch ingestion, pre-aggregated minute-level metrics and time-partitioned storage cleared it.',
+      },
     ],
     title: 'Interdomain: Real-Time BGP Routing Observability',
     shortTitle: 'Interdomain',
     status: 'wip',
     date: 'Oct 2026 – present',
-    highlight: 'Streams live internet routing updates through Kafka and Spark into PostgreSQL',
+    highlight: 'Handles ~8.7K live events/sec; dashboard queries cut from 13–27 s to 44–62 ms',
+    metrics: [
+      { display: '~8.7K', label: 'streaming events per second (about 33K records per second)' },
+      { display: '23', label: 'worldwide monitoring locations feeding the stream' },
+      { display: '19.6M', label: 'message backlog eliminated by batching and pre-aggregation' },
+      { display: '>99%', label: 'lower dashboard query latency, from 13–27 s to 44–62 ms' },
+    ],
     description:
       'A real-time platform that watches the internet’s routing table change, stores every route announcement and withdrawal, and flags anomalies like withdrawal spikes.',
     category: 'Data Engineering',
@@ -31,9 +41,9 @@ export const projects = [
     image: '/austin-portfolio/thumbs/interdomain.png',
     pipeline: [
       { name: 'RIPE RIS Live', detail: 'Public stream of BGP updates from route collectors worldwide' },
-      { name: 'Python ingestion', detail: 'WebSocket client normalizes each update into route events' },
+      { name: 'Python ingestion', detail: 'WebSocket client normalizes updates into route events and writes them in 5K-record batches' },
       { name: 'Kafka', detail: 'bgp-updates topic, keyed by peer ASN' },
-      { name: 'Spark + PostgreSQL', detail: 'Sliding-window instability checks; events stored with CIDR/INET types' },
+      { name: 'Spark + PostgreSQL', detail: 'Sliding-window instability checks; minute-level pre-aggregation and time-partitioned storage' },
       { name: 'FastAPI', detail: 'Health, metrics, recent routes, withdrawals, active ASNs' },
       { name: 'React dashboard', detail: 'Updates per minute, top ASNs, withdrawals, live/stale/offline' },
     ],
@@ -48,7 +58,7 @@ export const projects = [
       approach:
         'A Python WebSocket client subscribes to RIPE RIS Live, the public stream of BGP updates from route collectors around the world, and normalizes each message into route-level events: announcement or withdrawal, prefix, peer ASN, AS path and next hop. Events flow through a Kafka topic keyed by peer ASN. A consumer writes them to PostgreSQL using native CIDR and INET types with indexes on time, event type and ASN, while a Spark Structured Streaming job reads the same topic, explodes each update into individual route events and watches 5-minute sliding windows with a 2-minute watermark for route instability. A FastAPI service serves ingestion health, summary metrics, activity, recent routes, withdrawals and the most active ASNs to a React dashboard.',
       results:
-        'Version 1 runs end to end: live ingestion from RIPE RIS, storage in PostgreSQL, the analytics API and a dashboard showing updates per minute, the most active peer ASNs, recent withdrawals and whether ingestion is live, stale or offline. A tested rule flags withdrawal spikes when at least 40% of 20 or more events are withdrawals. The Kafka and Spark streaming layer is in place and still being built out.',
+        'Version 1 runs end to end: live ingestion from RIPE RIS, PostgreSQL storage, the analytics API and a dashboard. It processes about 8.7K streaming events per second (about 33K records per second) from 23 monitoring locations. When sustained traffic built a 19.6M-message backlog, 5K-record batch ingestion, pre-aggregated minute-level metrics and time-partitioned storage cleared it and cut dashboard query latency by more than 99%, from 13–27 s to 44–62 ms. A tested rule flags withdrawal spikes when at least 40% of 20 or more events are withdrawals. The Kafka and Spark streaming layer is in place and still being built out.',
       improvements:
         'Next is Databricks and Delta Lake, dbt and Airflow on top of the stream, plus more reliability checks from the roadmap: abnormal update volume, rapidly changing AS paths, duplicate and malformed records, stale ingestion, source disconnects and consumer lag.',
       techStack: {
@@ -207,7 +217,7 @@ export const projects = [
     ],
     title: 'Handwriting Recognition (MNIST)',
     shortTitle: 'MNIST classifier',
-    date: 'Jan 2026 – present',
+    date: 'Jan – Feb 2026',
     highlight: '~96–98% test accuracy on 10,000 held-out images',
     description: 'A PyTorch neural network that classifies handwritten digits, with an interactive draw-a-digit web demo in progress',
     category: 'Web',
