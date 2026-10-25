@@ -11,7 +11,10 @@ const STOP = new Set(
 const COMMON_CAPS = new Set(['Austin', 'Austin’s', "Austin's", 'Nguyen', 'The', 'It', 'Its', 'This', 'That', 'These', 'In', 'At', 'On', 'For', 'With', 'As', 'A', 'An', 'Yes', 'No', 'He', 'She', 'His', 'Her', 'They', 'Their', 'Both', 'And', 'But', 'From', 'To', 'By']);
 
 // Achievement and leadership words are claims in themselves; they must appear in the fact.
-const CLAIMS = /\b(led|leads?|leader|leadership|founded|founder|co-?founded|won|wins?|winner|awarded|award|first|best|top|managed|manager|head|chief|ceo|cto|senior|expert|champion|placed|ranked|sole|only|invented|pioneered)\b/gi;
+const CLAIMS = /\b(led|leads?|leader|leadership|founded|founder|co-?founded|won|wins?|winner|awarded|award|first|best|top|managed|manager|head|chief|ceo|cto|senior|expert|champion|placed|ranked|sole|only|invented|pioneered|impressive|most|greatest|great|excellent|amazing|leading|strongest|favou?rite|renowned|expert|skilled|passionate)\b/gi;
+
+// Filler that sounds like detail but says nothing; a sentence containing it is dropped.
+const VAGUE = /\b(and (?:other|more) (?:technologies|tools|things|features)|etc\b|and so on|a variety of|various (?:technologies|tools))/i;
 
 const stem = (w) => w.replace(/(ing|ed|es|s)$/, '');
 const words = (text) =>
@@ -43,7 +46,7 @@ const dePronoun = (s) =>
 
 const supportedBy = (sentence, fact) => {
   const ws = words(sentence);
-  if (ws.length === 0 || loops(ws)) return false;
+  if (ws.length === 0 || loops(ws) || VAGUE.test(sentence)) return false;
   const factText = `${fact.label} ${fact.text}`;
   const factWords = new Set(words(factText));
   const overlap = ws.filter((w) => factWords.has(w)).length / ws.length;

@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Sheet, Row, Cell, useSheet } from '../components/workbook';
 import { search, factCount } from '../ask/retrieve';
 import { groundAnswer } from '../ask/ground';
-import { lookupIntent, lookupSkill } from '../ask/lookup';
+import { lookupExtra, lookupIntent, lookupSkill } from '../ask/lookup';
 import { askHosted } from '../ask/hosted';
 import { MODEL_LABEL } from '../ask/constants';
 import { profile } from '../data/profile';
@@ -32,7 +32,7 @@ const Ask = () => {
     setQuestion('');
     // Skill questions ("Does Austin know X?") and the common ones (projects, experience, school,
     // contact) are answered exactly from the data, no model needed.
-    const lookup = lookupSkill(text) ?? lookupIntent(text);
+    const lookup = lookupSkill(text) ?? lookupExtra(text) ?? lookupIntent(text);
     if (lookup) {
       setEntries((prev) => [...prev, { id: Date.now(), q: text, facts: lookup.facts, mode: 'lookup', term: lookup.term, answer: lookup.answer, done: true }]);
       return;

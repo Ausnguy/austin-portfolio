@@ -89,3 +89,51 @@ export const lookupIntent = (question) => {
 
   return null;
 };
+
+// "Tell me about Parvius" and "what's your best project?": answered from the project data, never opinion.
+const PROJECT_KEYS = [
+  [/\b(parvius|casequest|case quest)\b/i, 'casequest-2026'],
+  [/\binterdomain\b/i, 'interdomain'],
+  [/\b(mnist|digit)\b/i, 'mnist-digit-recognition'],
+  [/\b(bny|efficiency)\b/i, 'ai-efficiency-modeling'],
+  [/\b(toolandmore|amazon)\b/i, 'sales-analytics-dashboard'],
+  [/\b(bp|fed|oil)\b/i, 'fed-oil-price-analysis'],
+];
+const ABOUT = /\b(tell me about|what is|what's|whats|explain|describe|about|overview of)\b/i;
+const SUPERLATIVE = /\b(most impressive|best|favou?rite|proudest|greatest|top|standout|strongest)\b.*\b(project|thing|work|built|build|made)\b/i;
+
+export const lookupExtra = (question) => {
+  const q = question.trim();
+
+  if (SUPERLATIVE.test(q)) {
+    const lead = projects.find((p) => p.spotlight);
+    const other = projects.find((p) => p.status === 'wip');
+    return {
+      term: 'featured',
+      answer: `The workbook doesn’t rank Austin’s projects, but it leads with ${lead.shortTitle}: ${lead.highlight}.`,
+      facts: [lead, other].filter(Boolean).map((p) => ({
+        ref: `Projects!${p.shortTitle.replace(/\W+/g, '_')}`,
+        label: p.shortTitle,
+        text: `${p.title}: ${p.highlight}.`,
+      })),
+    };
+  }
+
+  if (ABOUT.test(q)) {
+    const hit = PROJECT_KEYS.find(([re]) => re.test(q));
+    const project = hit && projects.find((p) => p.slug === hit[1]);
+    if (project) {
+      return {
+        term: project.shortTitle,
+        answer: `${project.title}${project.date ? `, ${project.date}` : ''}: ${project.description.replace(/\.+$/, '')}.`,
+        facts: (project.tldr ?? [project.highlight]).map((text) => ({
+          ref: `Projects!${project.shortTitle.replace(/\W+/g, '_')}`,
+          label: project.shortTitle,
+          text,
+        })),
+      };
+    }
+  }
+
+  return null;
+};
