@@ -163,7 +163,7 @@ const CaseRow = ({ n, label, formula, children }) => (
 const ProjectDetail = () => {
   const { slug } = useParams();
   const project = getProjectBySlug(slug);
-  useSheet('A1', project ? `=PROJECT("${project.shortTitle}")` : '=NA()');
+  useSheet('A1', project ? `=PROJECT("${project.shortTitle}")` : '=NA()', project ? project.title : 'Project not found');
 
   if (!project) {
     return (

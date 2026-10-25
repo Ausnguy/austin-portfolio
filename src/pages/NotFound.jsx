@@ -4,7 +4,7 @@ import { SHEETS } from '../components/Layout';
 
 const NotFound = () => {
   const { pathname } = useLocation();
-  useSheet('A1', `=INDIRECT("${pathname}")`);
+  useSheet('A1', `=INDIRECT("${pathname}")`, 'Page not found');
 
   return (
     <Sheet>

@@ -36,7 +36,7 @@ const Projects = () => {
   }, [selectedCategory, searchQuery, sortBy]);
 
   const formula = `=FILTER(projects, category="${selectedCategory}"${searchQuery ? `, SEARCH("${searchQuery}")` : ''})`;
-  useSheet('A1', '=FILTER(projects, category="All")');
+  useSheet('A1', '=FILTER(projects, category="All")', 'Projects');
 
   return (
     <Sheet>

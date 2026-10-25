@@ -3,7 +3,7 @@ import { skillGroups, getGroupEvidence } from '../data/skills';
 import { profile } from '../data/profile';
 
 const Skills = () => {
-  useSheet('A1', '=STACK()');
+  useSheet('A1', '=STACK()', 'Skills & Education');
 
   return (
     <Sheet>

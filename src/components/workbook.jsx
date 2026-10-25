@@ -22,12 +22,15 @@ export const WorkbookProvider = ({ children }) => {
 
 export const useWorkbook = () => useContext(WorkbookContext);
 
-// Called once per page to set what the formula bar shows before anything is clicked.
-export const useSheet = (ref, formula) => {
+// Called once per page: sets what the formula bar shows before anything is clicked, and the tab title.
+export const useSheet = (ref, formula, title) => {
   const { resetSheet } = useWorkbook();
   useEffect(() => {
     resetSheet(ref, formula);
   }, [ref, formula, resetSheet]);
+  useEffect(() => {
+    document.title = title ? `${title} | Austin Nguyen` : 'Austin_Nguyen.xlsx | Austin Nguyen';
+  }, [title]);
 };
 
 const LETTERS = 'ABCDEFGHIJKL'.split('');

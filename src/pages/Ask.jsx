@@ -68,7 +68,7 @@ const ModelStatus = ({ model }) => {
 };
 
 const Ask = () => {
-  useSheet('A1', '=ASK("anything about Austin")');
+  useSheet('A1', '=ASK("anything about Austin")', 'Ask Austin');
   const model = useLocalModel();
   const [params, setParams] = useSearchParams();
   const [question, setQuestion] = useState('');
