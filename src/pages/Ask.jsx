@@ -17,17 +17,6 @@ export const SUGGESTIONS = [
   'How do I contact Austin?',
 ];
 
-const Sources = ({ facts }) => (
-  <div className="mt-3 flex flex-wrap items-center gap-1.5">
-    <span className="text-[12.5px] text-muted mr-1">Sources</span>
-    {[...new Map(facts.map((f) => [f.ref, f])).values()].map((f) => (
-      <span key={f.ref} title={f.text} className="font-mono text-[12px] px-1.5 py-0.5 rounded-sm bg-head border border-grid text-ink-soft">
-        {f.ref}
-      </span>
-    ))}
-  </div>
-);
-
 const Ask = () => {
   useSheet('A1', '=ASK("anything about Austin")', 'Ask Austin');
   const [params, setParams] = useSearchParams();
@@ -91,7 +80,7 @@ const Ask = () => {
           <h1 className="sheet-title">Ask Austin</h1>
           <p className="body-copy mt-2 max-w-2xl">
             Ask about Austin’s projects, skills, experience or education. Answers come only from the {factCount} facts in
-            this workbook, and every answer shows the cells it used.
+            this workbook, and every answer is checked against them.
           </p>
           <p className="mt-3 text-[13px] text-muted max-w-2xl">
             Written answers come from {MODEL_LABEL} and are checked against the workbook before you see them. Your question is
@@ -156,7 +145,6 @@ const Ask = () => {
                 </ul>
               )}
               {entry.note && <p className="mt-2 text-sm text-muted">{entry.note}</p>}
-              {entry.facts.length > 0 && <Sources facts={entry.facts.slice(0, entry.mode === 'ai' ? 4 : 3)} />}
             </Cell>
           </Row>
         ))}
