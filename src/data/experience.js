@@ -1,28 +1,35 @@
 // Experience Data
 // To add new experience: Copy an object below, update fields, and it will automatically appear on the site.
+// start/end are 'YYYY-MM' and drive the timeline chart; end: null means current.
 
 export const experiences = [
   {
     id: 1,
     company: 'Hewlett Packard Enterprise (HPE)',
+    shortName: 'HPE',
     role: 'Data Analyst Intern – Compensation & Equity',
     period: 'May 2026 – Present',
+    start: '2026-05',
+    end: null,
     location: 'Spring, TX',
     description: 'Building analytics pipelines and reporting tools for compensation and equity operations',
     highlights: [
-      'Built an automated BI pipeline that combined 5+ Workday HR and compensation datasets using Power Query, SharePoint, Power BI, and DAX, cutting 10–12 hours of manual work from each reporting cycle',
-      'Created Power BI dashboards and reusable DAX measures for pay guidelines, salary ranges, equity budgets, employee data, and compensation calculations',
-      'Made the reports easier to trust and maintain by defining KPI logic, standardizing Workday exports, validating records, and documenting the transformation and refresh process',
+      'Built and own an automated BI pipeline (Power Query, SharePoint, Power BI, DAX) that replaced manual compensation reporting.',
+      'Turned scattered Workday exports into one source of truth for pay guidelines, salary ranges and equity budgets.',
+      'Kept it reliable with normalized data, key-based joins, duplicate detection, standardized KPI logic and GitHub version control.',
     ],
-    skills: ['Power Query', 'SharePoint', 'Power BI', 'DAX', 'Compensation Analytics'],
+    skills: ['Power Query', 'SharePoint', 'Power BI', 'DAX', 'Workday', 'Git & GitHub'],
     type: 'Internship',
   },
 
   {
     id: 5,
     company: 'Bloomberg',
+    shortName: 'Bloomberg Decoded: Data',
     role: 'Decoded: Data',
     period: 'August 2026',
+    start: '2026-08',
+    end: '2026-08',
     location: 'Princeton, NJ',
     description: 'Selected for Bloomberg\'s competitive Decoded: Data program',
     highlights: [
@@ -34,27 +41,32 @@ export const experiences = [
     type: 'Program',
   },
 
-{
-  id: 2,
-  company: 'USI Insurance Services',
-  role: 'Data Analytics Intern – Employee Benefits',
-  period: 'June 2025 – July 2025',
-  location: 'Houston, TX',
-  description: 'Worked on healthcare and underwriting analytics projects',
-  highlights: [
-    'Analyzed $1M+ in healthcare claims data using Excel',
-    'Identified cost-saving trends across 10+ employer client plans',
-    'Performed QA checks on 5,000+ row datasets improving reporting accuracy by 95%+',
-  ],
-  skills: ['Excel', 'Healthcare Analytics', 'Data Analysis', 'Reporting'],
-  type: 'Internship',
-},
+  {
+    id: 2,
+    company: 'USI Insurance Services',
+    shortName: 'USI Insurance',
+    role: 'Data Analytics Intern – Employee Benefits',
+    period: 'June 2025 – July 2025',
+    start: '2025-06',
+    end: '2025-07',
+    location: 'Houston, TX',
+    description: 'Worked on healthcare and underwriting analytics projects',
+    highlights: [
+      'Analyzed $1M+ in healthcare claims data using Excel, performing cost trend, utilization, and benchmarking analysis to identify patterns and support renewal strategies for 10+ employer clients.',
+      'Standardized and validated 5,000+ row healthcare datasets through data cleaning, field normalization, reconciliation, and QA checks, improving consistency for downstream analysis and annual client renewals.',
+    ],
+    skills: ['Excel', 'Healthcare Analytics', 'Data Cleaning', 'Data Validation'],
+    type: 'Internship',
+  },
 
   {
     id: 6,
     company: 'Carnegie Mellon University - Tepper School of Business',
+    shortName: 'CMU Tepper Summit',
     role: 'Business Analytics Summer Summit',
     period: 'May 2025',
+    start: '2025-05',
+    end: '2025-05',
     location: 'Pittsburgh, PA',
     description: 'Applied analytics and machine learning to business and public-sector datasets',
     highlights: [
@@ -69,8 +81,11 @@ export const experiences = [
   {
     id: 4,
     company: 'Costco Wholesale',
+    shortName: 'Costco',
     role: 'Major Sales Associate',
     period: 'November 2024 – May 2026',
+    start: '2024-11',
+    end: '2026-05',
     location: 'Houston, TX',
     description: 'Customer service and sales support in high-volume retail environment',
     highlights: [
@@ -81,18 +96,20 @@ export const experiences = [
     skills: ['Sales', 'Customer Service', 'Training'],
     type: 'Part-time',
   },
+
   {
     id: 3,
     company: 'ToolAndMore LLC',
+    shortName: 'ToolAndMore',
     role: 'Owner & Operator',
     period: 'November 2023 – April 2024',
+    start: '2023-11',
+    end: '2024-04',
     location: 'Houston, TX',
     description: 'Amazon FBA e-commerce business specializing in tools and hardware',
     highlights: [
-      'Generated $75K+ revenue in first year',
-      'Maintained 30%+ profit margins through pricing analysis',
-      'Analyzed sales data to optimize sourcing decisions',
-      'Managed inventory, logistics, and product strategy',
+      'Generated $75K+ revenue in the first year by launching and scaling an Amazon e-commerce business focused on power tools, hardware, and niche high-margin products.',
+      'Maintained 30%+ profit margins by conducting ROI, profitability, sourcing, and pricing analysis to evaluate product economics, guide purchasing decisions, and optimize inventory restocking.',
     ],
     skills: ['Pricing Analytics', 'E-commerce', 'Sales Data'],
     type: 'Entrepreneurship',

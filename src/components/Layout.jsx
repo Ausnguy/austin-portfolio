@@ -1,5 +1,14 @@
-import { Link, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import { useState } from 'react';
+import { useWorkbook } from './workbook';
+
+export const SHEETS = [
+  { to: '/', label: 'Summary', end: true },
+  { to: '/projects', label: 'Projects' },
+  { to: '/experience', label: 'Experience' },
+  { to: '/skills', label: 'Skills & Education' },
+  { to: '/ask', label: 'Ask Austin' },
+];
 
 const ThemeToggle = () => {
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
@@ -21,15 +30,15 @@ const ThemeToggle = () => {
       onClick={toggle}
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       title={isDark ? 'Light mode' : 'Dark mode'}
-      className="w-8 h-8 grid place-items-center border-2 border-charcoal text-charcoal hover:bg-sand transition-colors"
+      className="w-9 h-9 grid place-items-center rounded text-white/90 hover:text-white hover:bg-white/10 transition-colors"
     >
       {isDark ? (
-        <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+        <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="2">
           <circle cx="12" cy="12" r="4" />
           <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
         </svg>
       ) : (
-        <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4" fill="currentColor">
+        <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[18px] w-[18px]" fill="currentColor">
           <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
         </svg>
       )}
@@ -37,165 +46,111 @@ const ThemeToggle = () => {
   );
 };
 
-const Layout = ({ children }) => {
-  const location = useLocation();
-  const [activeSection, setActiveSection] = useState('');
-  
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = document.querySelectorAll('section[id]');
-      let current = '';
-
-      sections.forEach(section => {
-        const sectionTop = section.getBoundingClientRect().top + window.scrollY;
-        if (window.scrollY + 140 >= sectionTop) {
-          current = section.getAttribute('id');
-        }
-      });
-
-      const isAtPageBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
-      if (isAtPageBottom && sections.length > 0) {
-        current = sections[sections.length - 1].getAttribute('id');
-      }
-      
-      setActiveSection(current);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-  
-  const scrollToSection = (id) => {
-    if (location.pathname !== '/') return;
-    const element = document.getElementById(id);
-    if (element) {
-      setActiveSection(id);
-      element.scrollIntoView({ behavior: 'auto', block: 'start' });
-    }
-  };
-
-  const goHome = (event) => {
-    if (location.pathname === '/') {
-      event.preventDefault();
-      setActiveSection('');
-      window.scrollTo({ top: 0, behavior: 'auto' });
-    }
-  };
-  
-  const isActive = (path, section = null) => {
-    if (section && location.pathname === '/') {
-      return activeSection === section;
-    }
-    return location.pathname === path;
-  };
-  
+const FormulaBar = () => {
+  const { active } = useWorkbook();
   return (
-    <div className="min-h-screen relative">
-      {/* Grid background */}
-      <div className="grid-bg fixed inset-0 pointer-events-none"></div>
-      
+    <div className="flex items-stretch h-9 bg-paper border-b border-grid text-[13.5px]">
+      <div className="w-16 sm:w-20 shrink-0 flex items-center px-3 border-r border-grid font-mono text-muted">
+        {active.ref}
+      </div>
+      <div className="px-3 flex items-center border-r border-grid font-serif italic text-muted select-none" aria-hidden="true">
+        fx
+      </div>
+      <div className="min-w-0 flex-1 flex items-center px-3 font-mono text-ink truncate" title={active.formula}>
+        <span className="truncate">{active.formula}</span>
+      </div>
+    </div>
+  );
+};
+
+const Layout = ({ children }) => {
+  const resumeUrl = `${import.meta.env.BASE_URL}resume.pdf`;
+
+  return (
+    <div className="min-h-screen flex flex-col pb-[4.75rem]">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:px-4 focus:py-2 focus:bg-charcoal focus:text-cream font-mono text-xs uppercase"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:px-4 focus:py-2 focus:rounded focus:bg-paper focus:text-ink text-sm font-semibold"
       >
         Skip to content
       </a>
 
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-cream border-b-2 border-charcoal">
-        <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
-          <Link to="/" onClick={goHome} className="font-sans font-bold text-lg hover:text-rust transition-colors">
-            AN
-          </Link>
-          
-          <div className="flex items-center gap-4 sm:gap-8">
-            <Link
-              to="/"
-              onClick={goHome}
-              className={`font-mono text-xs uppercase tracking-wider relative pb-0.5 transition-colors ${
-                isActive('/') && !activeSection ? 'text-charcoal' : 'text-slate hover:text-charcoal'
-              }`}
-            >
-              Home
-              {isActive('/') && !activeSection && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-rust"></span>
-              )}
+      <header className="sticky top-0 z-40">
+        {/* Title bar */}
+        <div className="bg-[#107C41] text-white">
+          <div className="page h-12 px-3 sm:px-4 flex items-center gap-4">
+            <Link to="/" className="flex items-center gap-2 font-semibold text-[16px] whitespace-nowrap">
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5">
+                <rect x="2" y="3" width="20" height="18" rx="2" fill="#fff" />
+                <path d="M2 9h20M2 15h20M9 3v18M15 3v18" stroke="#107C41" strokeWidth="1.6" />
+              </svg>
+              <span>Austin_Nguyen<span className="text-white/70">.xlsx</span></span>
             </Link>
-            
-            {location.pathname === '/' && (
-              <>
-                <button
-                  onClick={() => scrollToSection('work')}
-                  className={`font-mono text-xs uppercase tracking-wider relative pb-0.5 transition-colors ${
-                    isActive(null, 'work') ? 'text-charcoal' : 'text-slate hover:text-charcoal'
-                  }`}
+            <nav aria-label="Sheets" className="hidden md:flex items-center gap-1 text-[14.5px]">
+              {SHEETS.map((sheet) => (
+                <NavLink
+                  key={sheet.to}
+                  to={sheet.to}
+                  end={sheet.end}
+                  className={({ isActive }) =>
+                    `px-2.5 h-8 inline-flex items-center rounded transition-colors ${
+                      isActive ? 'bg-white/15 text-white font-semibold' : 'text-white/80 hover:text-white hover:bg-white/10'
+                    }`
+                  }
                 >
-                  Work
-                  {isActive(null, 'work') && (
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-rust"></span>
-                  )}
-                </button>
-                
-                <button
-                  onClick={() => scrollToSection('projects')}
-                  className={`font-mono text-xs uppercase tracking-wider relative pb-0.5 transition-colors ${
-                    isActive(null, 'projects') ? 'text-charcoal' : 'text-slate hover:text-charcoal'
-                  }`}
-                >
-                  Projects
-                  {isActive(null, 'projects') && (
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-rust"></span>
-                  )}
-                </button>
-                
-                <button
-                  onClick={() => scrollToSection('contact')}
-                  className={`font-mono text-xs uppercase tracking-wider relative pb-0.5 transition-colors ${
-                    isActive(null, 'contact') ? 'text-charcoal' : 'text-slate hover:text-charcoal'
-                  }`}
-                >
-                  Contact
-                  {isActive(null, 'contact') && (
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-rust"></span>
-                  )}
-                </button>
-              </>
-            )}
-            
-            {location.pathname === '/projects' && (
-              <Link
-                to="/projects"
-                className={`font-mono text-xs uppercase tracking-wider relative pb-0.5 transition-colors ${
-                  isActive('/projects') ? 'text-charcoal' : 'text-slate hover:text-charcoal'
-                }`}
+                  {sheet.label}
+                </NavLink>
+              ))}
+            </nav>
+            <div className="ml-auto flex items-center gap-1.5">
+              <ThemeToggle />
+              <a
+                href={resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="h-8 px-3 inline-flex items-center rounded bg-white text-[#0B5A2F] text-sm font-semibold hover:bg-white/90 transition-colors"
               >
-                Projects
-                {isActive('/projects') && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-rust"></span>
-                )}
-              </Link>
-            )}
-
-            <ThemeToggle />
+                Resume
+              </a>
+            </div>
           </div>
         </div>
-      </nav>
-      
-      {/* Main Content */}
-      <main id="main" className="relative">
+        <div className="page border-x border-grid">
+          <FormulaBar />
+        </div>
+      </header>
+
+      <main id="main" className="page w-full flex-1">
         {children}
       </main>
-      
-      {/* Footer */}
-      <footer className="border-t-2 border-charcoal py-8 bg-cream relative">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex justify-between items-center">
-            <div className="font-mono text-xs">© 2026 Austin Nguyen</div>
-            <div className="font-mono text-xs text-slate">Built with React, Vite and Framer Motion</div>
+
+      {/* Sheet tabs and status bar, pinned like Excel's */}
+      <div className="fixed bottom-0 inset-x-0 z-40 bg-head border-t border-grid">
+        <nav aria-label="Sheet tabs" className="page flex overflow-x-auto">
+          {SHEETS.map((sheet) => (
+            <NavLink
+              key={sheet.to}
+              to={sheet.to}
+              end={sheet.end}
+              className={({ isActive }) =>
+                `shrink-0 h-10 px-4 inline-flex items-center text-[14px] border-r border-grid transition-colors ${
+                  isActive
+                    ? 'bg-paper text-accent-ink font-semibold shadow-[inset_0_-3px_0_rgb(var(--accent))]'
+                    : 'text-ink-soft hover:text-ink hover:bg-paper/60'
+                }`
+              }
+            >
+              {sheet.label}
+            </NavLink>
+          ))}
+        </nav>
+        <div className="bg-[#107C41] text-white/90 text-[12px]">
+          <div className="page h-7 px-3 sm:px-4 flex items-center justify-between">
+            <span>Ready</span>
+            <span>© 2026 Austin Nguyen</span>
           </div>
         </div>
-      </footer>
+      </div>
     </div>
   );
 };

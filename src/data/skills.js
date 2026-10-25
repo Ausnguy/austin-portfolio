@@ -1,33 +1,29 @@
 // Skills Data
-// To add new skills: Add to the appropriate category array
+// To add a skill: add it to a group below. "Used in" on the site is worked out automatically
+// by matching the skill name against experience `skills` and project `tools`.
 
-export const skillsData = {
-  'Data & Analytics': [
-    { name: 'Python', level: 85 },
-    { name: 'SQL', level: 80 },
-    { name: 'Excel', level: 95 },
-    { name: 'Power BI', level: 82 },
-    { name: 'Tableau', level: 65 },
-    { name: 'R', level: 60 },
-  ],
-  'Machine Learning': [
-    { name: 'PyTorch', level: 65 },
-    { name: 'scikit-learn', level: 80 },
-    { name: 'Pandas', level: 85 },
-    { name: 'NumPy', level: 80 },
-  ],
-  'Web Development': [
-    { name: 'HTML/CSS', level: 75 },
-    { name: 'JavaScript', level: 65 },
-    { name: 'React', level: 60 },
-    { name: 'Flask', level: 70 },
-  ],
-  'Tools': [
-    { name: 'Git', level: 70 },
-    { name: 'Jupyter', level: 85 },
-    { name: 'VS Code', level: 90 },
-    { name: 'Azure', level: 50 },
-  ],
+import { experiences } from './experience';
+import { projects } from './projects';
+
+export const skillGroups = [
+  { group: 'Languages', skills: ['SQL', 'Python', 'R', 'Java'] },
+  { group: 'Python libraries', skills: ['Pandas', 'NumPy', 'Matplotlib', 'PyTorch', 'scikit-learn'] },
+  { group: 'BI & analytics', skills: ['Power BI', 'DAX', 'Tableau', 'Excel', 'KPI reporting'] },
+  { group: 'Data processing & ETL', skills: ['Power Query', 'SharePoint', 'Data Cleaning', 'Data Validation', 'Data Transformation'] },
+  { group: 'Web', skills: ['HTML/CSS', 'JavaScript', 'React', 'Flask'] },
+  { group: 'Tools & practices', skills: ['Git & GitHub', 'Jupyter', 'VS Code', 'Azure', 'Agile', 'SLURM/HPC'] },
+];
+
+const same = (a, b) => a.toLowerCase() === b.toLowerCase();
+
+// Where a group's skills show up in experience and projects, newest first, without duplicates.
+export const getGroupEvidence = (skills) => {
+  const used = [];
+  experiences.forEach((exp) => {
+    if (exp.skills.some((s) => skills.some((k) => same(s, k)))) used.push(exp.shortName);
+  });
+  projects.forEach((project) => {
+    if (project.tools.some((t) => skills.some((k) => same(t, k)))) used.push(project.shortTitle);
+  });
+  return [...new Set(used)];
 };
-
-// Level is percentage (0-100)

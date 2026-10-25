@@ -9,35 +9,27 @@ export default {
     extend: {
       // Colors are CSS variables (see index.css) so dark mode swaps the whole palette.
       colors: {
-        cream: 'rgb(var(--cream) / <alpha-value>)',
-        charcoal: 'rgb(var(--charcoal) / <alpha-value>)',
-        slate: 'rgb(var(--slate) / <alpha-value>)',
-        sage: 'rgb(var(--sage) / <alpha-value>)',
-        rust: 'rgb(var(--rust) / <alpha-value>)',
-        sand: 'rgb(var(--sand) / <alpha-value>)',
-        white: 'rgb(var(--paper) / <alpha-value>)',
+        paper: 'rgb(var(--paper) / <alpha-value>)',
+        head: 'rgb(var(--head) / <alpha-value>)',
+        grid: 'rgb(var(--grid) / <alpha-value>)',
+        ink: 'rgb(var(--ink) / <alpha-value>)',
+        'ink-soft': 'rgb(var(--ink-soft) / <alpha-value>)',
+        muted: 'rgb(var(--muted) / <alpha-value>)',
+        accent: 'rgb(var(--accent) / <alpha-value>)',
+        'accent-ink': 'rgb(var(--accent-ink) / <alpha-value>)',
+        'accent-wash': 'rgb(var(--accent-wash) / <alpha-value>)',
+        // Backdrop behind video and slides; dark in both themes.
+        stage: '#10161D',
+      },
+      fontFamily: {
+        sans: ['"IBM Plex Sans"', 'system-ui', 'sans-serif'],
+        mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+      },
+      maxWidth: {
+        page: '80rem',
       },
       transitionTimingFunction: {
         out: 'cubic-bezier(0.23, 1, 0.32, 1)',
-      },
-      fontFamily: {
-        sans: ['Space Grotesk', 'system-ui', 'sans-serif'],
-        serif: ['Newsreader', 'Georgia', 'serif'],
-        mono: ['IBM Plex Mono', 'monospace'],
-      },
-      animation: {
-        'fade-in': 'fadeIn 0.6s ease-out',
-        'slide-up': 'slideUp 0.6s ease-out',
-      },
-      keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        slideUp: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
       },
     },
   },

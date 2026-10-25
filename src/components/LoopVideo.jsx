@@ -42,7 +42,7 @@ const LoopVideo = ({ src, poster, label, to, className = '' }) => {
           type="button"
           onClick={() => setPaused((p) => !p)}
           aria-label={paused ? 'Play preview' : 'Pause preview'}
-          className="absolute bottom-3 left-3 w-8 h-8 grid place-items-center bg-cream/90 text-charcoal border-2 border-charcoal hover:bg-sand transition-colors"
+          className="absolute bottom-3 left-3 w-9 h-9 grid place-items-center rounded-md bg-stage/80 text-white backdrop-blur hover:bg-stage transition-colors"
         >
           {paused ? (
             <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5 fill-current"><path d="M7 4.5v15l12-7.5-12-7.5Z" /></svg>

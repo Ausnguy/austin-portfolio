@@ -3,9 +3,62 @@
 
 export const projects = [
   {
+    id: 6,
+    slug: 'interdomain',
+    title: 'Interdomain: Real-Time BGP Routing Observability',
+    shortTitle: 'Interdomain',
+    status: 'wip',
+    date: 'Oct 2026 – present',
+    highlight: 'Streams live internet routing updates through Kafka and Spark into PostgreSQL',
+    description:
+      'A real-time platform that watches the internet’s routing table change, stores every route announcement and withdrawal, and flags anomalies like withdrawal spikes.',
+    category: 'Data Engineering',
+    tags: ['Streaming', 'Data Engineering', 'Networking', 'Work in progress'],
+    tools: ['Python', 'Kafka', 'Spark', 'PostgreSQL', 'FastAPI', 'Docker', 'React'],
+    featured: true,
+    image: '/austin-portfolio/thumbs/interdomain.png',
+    links: {
+      github: 'https://github.com/Ausnguy/Interdomain',
+      demo: null,
+      caseStudy: true,
+    },
+    caseStudy: {
+      problem:
+        'BGP is how the networks that make up the internet tell each other which addresses they can reach. When routes get withdrawn or start flapping, parts of the internet can go dark, but the raw update feed is a firehose that is hard to watch in real time.',
+      approach:
+        'A Python WebSocket client subscribes to RIPE RIS Live, the public stream of BGP updates from route collectors around the world, and normalizes each message into route-level events: announcement or withdrawal, prefix, peer ASN, AS path and next hop. Events flow through a Kafka topic keyed by peer ASN. A consumer writes them to PostgreSQL using native CIDR and INET types with indexes on time, event type and ASN, while a Spark Structured Streaming job reads the same topic, explodes each update into individual route events and watches 5-minute sliding windows with a 2-minute watermark for route instability. A FastAPI service serves ingestion health, summary metrics, activity, recent routes, withdrawals and the most active ASNs to a React dashboard.',
+      results:
+        'Version 1 runs end to end: live ingestion from RIPE RIS, storage in PostgreSQL, the analytics API and a dashboard showing updates per minute, the most active peer ASNs, recent withdrawals and whether ingestion is live, stale or offline. A tested rule flags withdrawal spikes when at least 40% of 20 or more events are withdrawals. The Kafka and Spark streaming layer is in place and still being built out.',
+      improvements:
+        'Next is Databricks and Delta Lake, dbt and Airflow on top of the stream, plus more reliability checks from the roadmap: abnormal update volume, rapidly changing AS paths, duplicate and malformed records, stale ingestion, source disconnects and consumer lag.',
+      techStack: {
+        Ingestion: [
+          'Python WebSocket client for RIPE RIS Live',
+          'Apache Kafka (KRaft mode) via confluent-kafka, keyed by peer ASN',
+        ],
+        'Stream processing': [
+          'Spark Structured Streaming (PySpark, Spark 4.2) with sliding windows and watermarks',
+          'Python anomaly rules with pytest tests',
+        ],
+        'Storage & API': [
+          'PostgreSQL 17 with CIDR/INET types and indexes, psycopg 3',
+          'FastAPI and Uvicorn, with an ingestion health endpoint',
+        ],
+        'Dashboard & ops': [
+          'React 19, Recharts and Vite',
+          'Docker Compose for Postgres, Kafka and Spark',
+        ],
+      },
+    },
+  },
+
+  {
     id: 5,
     slug: 'casequest-2026',
     title: 'Parvius: Parts Readiness System (CaseQuest 2026)',
+    shortTitle: 'Parvius (CaseQuest)',
+    date: 'Oct 2026',
+    highlight: 'Model warned before 90 of 91 equipment failures on unseen data',
     description:
       'A failure-prediction model, a 3D operations console and a field engineer phone app that share one live state, built for a ConocoPhillips-sponsored case competition.',
     category: 'Full-Stack',
@@ -19,7 +72,7 @@ export const projects = [
     videoLoopPoster: 'casequest/loop-poster.jpg',
     videoPoster: 'casequest/poster.jpg',
     videoCaption: '45-second walkthrough: a failure alert, the 3D console, stock-gated dispatch and the engineer’s phone.',
-    event: 'CaseQuest 2026 · University of Houston · Oct 23–24, 2026',
+    event: 'CaseQuest 2026, University of Houston, Oct 23–24, 2026',
     team: ['Austin Nguyen', 'Aayan Khan', 'Nick Shahbazian', 'Sidra Shaikh', 'Wali Lambert'],
     links: {
       github: 'https://github.com/Ausnguy/CaseQuest-2026',
@@ -99,13 +152,16 @@ export const projects = [
   {
     id: 1,
     slug: 'mnist-digit-recognition',
-    title: 'Handwriting Recognition Web Demo (MNIST)',
-    description: 'In progress — interactive web demo that predicts digits you draw on a canvas',
+    title: 'Handwriting Recognition (MNIST)',
+    shortTitle: 'MNIST classifier',
+    date: 'Jan 2026 – present',
+    highlight: '~96–98% test accuracy on 10,000 held-out images',
+    description: 'A PyTorch neural network that classifies handwritten digits, with an interactive draw-a-digit web demo in progress',
     category: 'Web',
     tags: ['Machine Learning', 'Web App'],
     tools: ['Python', 'PyTorch', 'Flask', 'React'],
     featured: true,
-    image: '/austin-portfolio/Mnist.png',
+    image: '/austin-portfolio/thumbs/mnist-digit-recognition.png',
     links: {
       github: null, // add your real repo link when ready
       demo: null,   // add your real deployed link when ready
@@ -115,9 +171,9 @@ export const projects = [
       problem:
         'Build a simple, interactive ML demo that shows how a model can turn messy input into a usable prediction.',
       approach:
-        'Training a neural network in PyTorch on the MNIST dataset. Building a Flask API for inference and a React UI with a canvas so users can draw digits and get predictions in real time.',
+        'Trained a deep neural network in PyTorch on the 70,000-image MNIST dataset, with a reproducible preprocessing and inference pipeline for 28×28 grayscale images so every evaluation runs the same way. Next is a Flask API for inference and a React canvas so people can draw a digit and get a prediction in real time.',
       results:
-        'Work in progress — model training and web demo integration in progress.',
+        'The model reaches about 96–98% accuracy on the 10,000-image test set. The interactive web demo is still in progress.',
       improvements:
         'Add confidence scores, improve preprocessing for messy handwriting, and expand to letters/symbols.',
       techStack: 'PyTorch, Flask, React, Python',
@@ -128,12 +184,15 @@ export const projects = [
     id: 2,
     slug: 'ai-efficiency-modeling',
     title: 'AI Efficiency Modeling (BNY Mellon Project)',
-    description: 'Analysis and recommendations to reduce GPU runtime and improve AI system efficiency',
+    shortTitle: 'BNY AI efficiency',
+    date: 'May 2025',
+    highlight: '~70% less modeled energy use, latency 611 ms → 276 ms',
+    description: 'A distributed inference strategy that cuts the modeled energy use and latency of AI workloads',
     category: 'Research',
     tags: ['Analytics', 'AI Infrastructure'],
     tools: ['Python', 'Pandas', 'Matplotlib'],
     featured: true,
-    image: '/austin-portfolio/bny-first-slide.png',
+    image: '/austin-portfolio/thumbs/ai-efficiency-modeling.png',
     pdf: 'bny-ai-optimization.pdf',
     pdfPoster: 'bny-first-slide.png',
     links: {
@@ -147,7 +206,7 @@ export const projects = [
       approach:
         'Reviewed AI infrastructure patterns and built a lightweight Python logging/middleware approach to track compute activity and spot inefficiencies. Summarized recommendations and expected impact.',
       results:
-        'Produced a set of optimization recommendations with estimated reductions in energy/compute usage and measurable efficiency gains.',
+        'Routing simpler requests to lightweight models reduced modeled AI energy consumption by about 70%. Evaluating model-routing and caching strategies cut modeled inference latency by about 55%, from 611 ms to 276 ms.',
       improvements:
         'Would validate the estimates with additional runtime benchmarks and expand logging coverage across more workloads.',
       techStack: 'Python (pandas, matplotlib), Jupyter Notebooks',
@@ -158,12 +217,15 @@ export const projects = [
     id: 3,
     slug: 'sales-analytics-dashboard',
     title: 'E-Commerce Sales Analytics (ToolAndMore)',
+    shortTitle: 'ToolAndMore analytics',
+    date: 'Nov 2023 – Apr 2024',
+    highlight: '$75K+ first-year revenue at 30%+ margins',
     description: 'Dashboards and analysis used to track sales, inventory, and profitability',
     category: 'Dashboard',
     tags: ['Business Intelligence', 'Analytics'],
     tools: ['Power BI', 'Excel', 'Python'],
     featured: true,
-    image: 'https://1000logos.net/wp-content/uploads/2016/10/Amazon-logo-meaning.jpg',
+    image: '/austin-portfolio/thumbs/sales-analytics-dashboard.png',
     links: {
       github: null,
       demo: null,
@@ -175,7 +237,7 @@ export const projects = [
       approach:
         'Tracked sales and ROI trends over time and built dashboards to monitor performance. Used analysis to guide pricing and sourcing decisions.',
       results:
-        'Improved decision-making around pricing and sourcing and supported higher margins through data-driven adjustments.',
+        'Generated $75K+ revenue in the first year while keeping profit margins above 30%, using ROI, profitability, sourcing and pricing analysis to decide what to buy and when to restock.',
       improvements:
         'Add competitor price tracking and forecasting to better plan inventory buys.',
       techStack: 'Power BI, Excel, Python',
@@ -186,12 +248,14 @@ export const projects = [
     id: 4,
     slug: 'fed-oil-price-analysis',
     title: 'Fed & Oil Price Analysis (BP Project)',
+    shortTitle: 'BP Fed & oil',
+    highlight: 'Lag analysis of interest rates against oil prices',
     description: 'Explored how changes in interest rates relate to oil price movements over time',
     category: 'Research',
     tags: ['Economics', 'Time Series'],
     tools: ['Python', 'Excel'],
     featured: true,
-    image: 'https://download.logo.wine/logo/BP/BP-Logo.wine.png',
+    image: '/austin-portfolio/thumbs/fed-oil-price-analysis.png',
     pdf: 'bp-energy-policy.pdf',
     pdfPoster: 'bp-first-slide.png',
     links: {
@@ -213,7 +277,7 @@ export const projects = [
   },
 ];
 
-export const categories = ['All', 'Full-Stack', 'Research', 'Web', 'Dashboard', 'Data'];
+export const categories = ['All', 'Full-Stack', 'Data Engineering', 'Research', 'Web', 'Dashboard'];
 
 export const getProjectBySlug = (slug) => {
   return projects.find((p) => p.slug === slug);

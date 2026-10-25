@@ -1,27 +1,28 @@
 import { useState, useMemo } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
 import ProjectCard from '../components/ProjectCard';
 import ProjectFilters from '../components/ProjectFilters';
+import { Sheet, Row, Cell, useSheet } from '../components/workbook';
 import { getProjectsByCategory } from '../data/projects';
-import { EASE_OUT } from '../lib/motion';
 
 const Projects = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('newest');
-  
+
   const filteredProjects = useMemo(() => {
     let result = getProjectsByCategory(selectedCategory);
-    
-    if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+
+    if (q) {
       result = result.filter(project =>
-        project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+        project.title.toLowerCase().includes(q) ||
+        project.description.toLowerCase().includes(q) ||
+        project.tags.some(tag => tag.toLowerCase().includes(q)) ||
+        project.tools.some(tool => tool.toLowerCase().includes(q))
       );
     }
-    
-    result = [...result].sort((a, b) => {
+
+    return [...result].sort((a, b) => {
       switch (sortBy) {
         case 'featured':
           return b.featured - a.featured;
@@ -32,79 +33,65 @@ const Projects = () => {
           return b.id - a.id;
       }
     });
-    
-    return result;
   }, [selectedCategory, searchQuery, sortBy]);
-  
+
+  const formula = `=FILTER(projects, category="${selectedCategory}"${searchQuery ? `, SEARCH("${searchQuery}")` : ''})`;
+  useSheet('A1', '=FILTER(projects, category="All")');
+
   return (
-    <div className="min-h-screen">
-      {/* Hero */}
-      <section className="bg-white border-b-2 border-charcoal py-16">
-        <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="section-num">/ ALL WORK</div>
-            <h1 className="font-sans text-5xl md:text-6xl font-bold mb-4">
-              Projects
-            </h1>
-            <p className="font-serif text-xl max-w-3xl">
-              Data analytics, machine learning, full-stack and business intelligence projects.
-              Each one taught me something about making data useful.
-            </p>
-          </motion.div>
-        </div>
-      </section>
-      
-      {/* Filters and Projects */}
-      <section className="max-w-7xl mx-auto px-6 py-16">
-        <ProjectFilters
-          selectedCategory={selectedCategory}
-          onCategoryChange={setSelectedCategory}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          sortBy={sortBy}
-          onSortChange={setSortBy}
-        />
-        
-        <div className="mt-8 mb-4">
-          <p className="font-mono text-xs text-slate">
+    <Sheet>
+      <Row>
+        <Cell id="A1" formula={formula}>
+          <h1 className="sheet-title">Projects</h1>
+          <p className="body-copy mt-2 max-w-2xl">
+            Data engineering, machine learning, full-stack and BI work. Search by name or tool, or filter by category.
+          </p>
+        </Cell>
+      </Row>
+      <Row>
+        <Cell id="A2" formula={formula} className="!py-4">
+          <ProjectFilters
+            selectedCategory={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            sortBy={sortBy}
+            onSortChange={setSortBy}
+          />
+          <p className="mt-3 text-[13px] text-muted" aria-live="polite">
             {filteredProjects.length} {filteredProjects.length === 1 ? 'project' : 'projects'}
           </p>
-        </div>
-        
+        </Cell>
+      </Row>
+      <Row>
         {filteredProjects.length > 0 ? (
-          <div className="grid lg:grid-cols-2 gap-8">
-            {/* Cards bridge filter changes instead of popping in and out. */}
-            <AnimatePresence mode="popLayout" initial={false}>
-              {filteredProjects.map((project, index) => (
-                <motion.div
-                  key={project.id}
-                  layout
-                  initial={{ opacity: 0, transform: 'scale(0.97)' }}
-                  animate={{ opacity: 1, transform: 'scale(1)' }}
-                  exit={{ opacity: 0, transform: 'scale(0.97)' }}
-                  transition={{ duration: 0.2, ease: EASE_OUT }}
-                >
-                  <ProjectCard project={project} index={index} />
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
+          <>
+            {filteredProjects.map((project, i) => (
+              <Cell
+                key={project.id}
+                id={`${'AEI'[i % 3]}${3 + Math.floor(i / 3)}`}
+                span="col-span-12 md:col-span-6 lg:col-span-4"
+                formula={`=PROJECT("${project.shortTitle}")`}
+              >
+                <ProjectCard project={project} />
+              </Cell>
+            ))}
+            {filteredProjects.length % 3 !== 0 && (
+              <Cell
+                id="Z3"
+                span={`hidden lg:block ${filteredProjects.length % 3 === 1 ? 'lg:col-span-8' : 'lg:col-span-4'}`}
+                formula=""
+              />
+            )}
+          </>
         ) : (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-20"
-          >
-            <div className="font-sans text-2xl font-bold mb-2">No projects found</div>
-            <p className="font-serif text-slate">Try adjusting your filters</p>
-          </motion.div>
+          <Cell id="A3" formula='=IFERROR(FILTER(...), "No matches")' className="text-center !py-16">
+            <p className="font-sans text-xl font-bold text-ink">No projects match</p>
+            <p className="mt-2 text-ink-soft">Try a different search or pick another category.</p>
+          </Cell>
         )}
-      </section>
-    </div>
+      </Row>
+    </Sheet>
   );
 };
 
