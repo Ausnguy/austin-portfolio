@@ -1,15 +1,21 @@
 // Exact answers for "does Austin know / use X?" questions: search the facts for X instead of asking
 // the model, so the answer is right by construction.
 import facts from './knowledge';
+import { projects } from '../data/projects';
+import { experiences } from '../data/experience';
+import { profile } from '../data/profile';
 
 const ASKS_ABOUT_SKILL =
   /\b(?:know|knows|use|uses|used|using|code in|program in|work(?:ed)? with|familiar with|experience (?:with|in)|skilled in|good at)\s+(.+?)\s*\??$/i;
+
+// "What experience does Austin have with Kafka?" puts words between the verb and the skill.
+const ASKS_ABOUT_SKILL_LOOSE = /\b(?:experience|familiar|comfortable)\b.*?\b(?:with|in)\s+(.+?)\s*\??$/i;
 
 const escape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 // Returns { term, answer, facts } for a skill question, or null if the question isn't one.
 export const lookupSkill = (question) => {
-  const match = question.trim().match(ASKS_ABOUT_SKILL);
+  const match = question.trim().match(ASKS_ABOUT_SKILL) ?? question.trim().match(ASKS_ABOUT_SKILL_LOOSE);
   if (!match) return null;
   const raw = match[1].replace(/^(?:the|a|an|any)\s+/i, '').replace(/[.!]+$/, '').trim();
   // Short names like R are written in capitals; normalize so "r" finds the skill, not a stray letter.
@@ -32,4 +38,50 @@ export const lookupSkill = (question) => {
       ? `Yes. ${term} shows up in ${listed}.`
       : `Yes. ${term} is on Austin’s skills list.`,
   };
+};
+
+// Exact answers for the questions people ask most, built straight from the data files.
+
+const NAMED_PROJECT = /\b(parvius|casequest|interdomain|mnist|bny|bp|toolandmore|amazon)\b/i;
+const ref = (sheet, name) => `${sheet}!${name.replace(/\W+/g, '_')}`;
+
+export const lookupIntent = (question) => {
+  const q = question.trim();
+
+  if (/\b(what|which)\b.*\b(built|build|made|make|shipped|projects?|worked on)\b/i.test(q) && !NAMED_PROJECT.test(q)) {
+    return {
+      term: 'projects',
+      answer: `Austin has ${projects.length} projects in the workbook:`,
+      facts: projects.map((p) => ({
+        ref: ref('Projects', p.shortTitle),
+        text: `${p.title}${p.date ? ` (${p.date})` : ''}${p.status === 'wip' ? ', in progress' : ''}: ${p.highlight}.`,
+      })),
+    };
+  }
+
+  if (/\b(where|which|what)\b.*\b(work|worked|intern|interned|internships?|jobs?|companies|experience)\b/i.test(q) && !NAMED_PROJECT.test(q)) {
+    return {
+      term: 'experience',
+      answer: `Austin’s experience, newest first:`,
+      facts: [...experiences].sort((a, b) => b.start.localeCompare(a.start)).map((e) => ({ ref: ref('Experience', e.shortName), text: `${e.role} at ${e.company} (${e.period}). ${e.summary}` })),
+    };
+  }
+
+  if (/\b(school|college|university|study|studies|studying|major|degree|gpa|graduat\w*|education)\b/i.test(q)) {
+    return {
+      term: 'education',
+      answer: `${profile.degree} at the ${profile.school}, graduating ${profile.graduation}, with a ${profile.gpa} GPA.`,
+      facts: profile.facts.slice(0, 4).map((text, i) => ({ ref: `Summary!A${i + 1}`, text })),
+    };
+  }
+
+  if (/\b(contact|reach|email|hire|get in touch|linkedin)\b/i.test(q)) {
+    return {
+      term: 'contact',
+      answer: `Email ${profile.email}, or find Austin on LinkedIn and GitHub.`,
+      facts: profile.facts.filter((f) => f.startsWith('To contact')).map((text) => ({ ref: 'Summary!Contact', text })),
+    };
+  }
+
+  return null;
 };

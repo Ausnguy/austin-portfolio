@@ -4,7 +4,7 @@ import { Sheet, Row, Cell, useSheet } from '../components/workbook';
 import { search, factCount } from '../ask/retrieve';
 import { buildMessages } from '../ask/prompt';
 import { groundAnswer } from '../ask/ground';
-import { lookupSkill } from '../ask/lookup';
+import { lookupIntent, lookupSkill } from '../ask/lookup';
 import { useLocalModel, MODEL_NAME, MODEL_DOWNLOAD_MB } from '../ask/model';
 import { profile } from '../data/profile';
 
@@ -81,8 +81,9 @@ const Ask = () => {
     const text = q.trim();
     if (!text || busy) return;
     setQuestion('');
-    // "Does Austin know X?" is answered exactly from the data, no model needed.
-    const lookup = lookupSkill(text);
+    // Skill questions ("Does Austin know X?") and the common ones (projects, experience, school,
+    // contact) are answered exactly from the data, no model needed.
+    const lookup = lookupSkill(text) ?? lookupIntent(text);
     if (lookup) {
       setEntries((prev) => [...prev, { id: Date.now(), q: text, facts: lookup.facts, mode: 'lookup', term: lookup.term, answer: lookup.answer, done: true }]);
       return;
