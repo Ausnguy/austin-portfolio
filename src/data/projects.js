@@ -5,6 +5,18 @@ export const projects = [
   {
     id: 6,
     slug: 'interdomain',
+    role: 'Solo project',
+    tldr: [
+      'Routing changes can take parts of the internet offline, and the raw BGP feed is a firehose that is hard to watch live.',
+      'A Python, Kafka, Spark, PostgreSQL, FastAPI and React pipeline for live internet routing data.',
+      'Version 1 runs end to end with a live dashboard; the Kafka and Spark streaming layer is in progress.',
+    ],
+    decisions: [
+      {
+        title: 'Ship a working V1 before the big data stack',
+        why: 'V1 is RIPE RIS Live to Python to PostgreSQL to FastAPI. Kafka, Spark/Databricks, Delta Lake, dbt and Airflow are added only after that works end to end.',
+      },
+    ],
     title: 'Interdomain: Real-Time BGP Routing Observability',
     shortTitle: 'Interdomain',
     status: 'wip',
@@ -63,6 +75,26 @@ export const projects = [
   {
     id: 5,
     slug: 'casequest-2026',
+    role: 'Team of 5',
+    tldr: [
+      'Lone Mesa Energy lost about 6,599 hours to unplanned stops in 2025, and 24% of it was machines waiting for spare parts.',
+      'A failure-prediction model, a 3D operations console and an engineer phone app that share one live state.',
+      'The model warned before 90 of 91 mechanical failures on unseen data; the parts program is modeled at about 968 hours a year saved.',
+    ],
+    decisions: [
+      {
+        title: 'Predict 3 days out from a 2-day window',
+        why: 'The data set the window: 91% of mechanical failures show vibration above 1.3× normal two days out, and only 1% three days out.',
+      },
+      {
+        title: 'One alert level, not two',
+        why: 'A lower “watch” band was tried and dropped, because its days failed less often than average.',
+      },
+      {
+        title: 'Score only on readings already received',
+        why: 'Late-arriving readings are excluded, so every score is what a planner could really have seen that day. A test checks this.',
+      },
+    ],
     title: 'Parvius: Parts Readiness System (CaseQuest 2026)',
     shortTitle: 'Parvius (CaseQuest)',
     date: 'Oct 2026',
@@ -167,6 +199,12 @@ export const projects = [
   {
     id: 1,
     slug: 'mnist-digit-recognition',
+    role: 'Solo project',
+    tldr: [
+      'Show how a model can turn messy handwritten input into a usable prediction.',
+      'A PyTorch neural network with a reproducible preprocessing and inference pipeline for 28×28 images.',
+      'About 96–98% accuracy on the 10,000-image test set; the draw-a-digit web demo is in progress.',
+    ],
     title: 'Handwriting Recognition (MNIST)',
     shortTitle: 'MNIST classifier',
     date: 'Jan 2026 – present',
@@ -198,6 +236,11 @@ export const projects = [
   {
     id: 2,
     slug: 'ai-efficiency-modeling',
+    tldr: [
+      'AI workloads are expensive to run in compute and energy.',
+      'A distributed inference strategy that routes simpler requests to lightweight models, plus caching.',
+      'About 70% less modeled energy use, and modeled latency down from 611 ms to 276 ms.',
+    ],
     title: 'AI Efficiency Modeling (BNY Mellon Project)',
     shortTitle: 'BNY AI efficiency',
     date: 'May 2025',
@@ -231,6 +274,12 @@ export const projects = [
   {
     id: 3,
     slug: 'sales-analytics-dashboard',
+    role: 'Owner & operator',
+    tldr: [
+      'An Amazon store needs fast visibility into what sells, what is stuck and where profit comes from.',
+      'Sales and ROI tracking with dashboards that guided pricing, sourcing and restocking.',
+      '$75K+ revenue in the first year at 30%+ profit margins.',
+    ],
     title: 'E-Commerce Sales Analytics (ToolAndMore)',
     shortTitle: 'ToolAndMore analytics',
     date: 'Nov 2023 – Apr 2024',
@@ -262,6 +311,11 @@ export const projects = [
   {
     id: 4,
     slug: 'fed-oil-price-analysis',
+    tldr: [
+      'Can changes in Fed policy help explain movements in oil prices?',
+      'Historical rate and price data with time-series exploration and lag comparisons in Python and Excel.',
+      'Documented patterns and possible lag effects to explore with stronger models.',
+    ],
     title: 'Fed & Oil Price Analysis (BP Project)',
     shortTitle: 'BP Fed & oil',
     highlight: 'Lag analysis of interest rates against oil prices',

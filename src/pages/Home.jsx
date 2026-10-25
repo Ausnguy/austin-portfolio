@@ -42,8 +42,9 @@ const siteBuild = [
 
 const currentStatus = [
   { id: 'A2', label: 'School', value: 'MIS at UH Bauer, May 2027', formula: '=SCHOOL("University of Houston")' },
-  { id: 'E2', label: 'Now', value: 'Data Analyst Intern at HPE', formula: '=NOW("Hewlett Packard Enterprise")' },
-  { id: 'I2', label: 'Based in', value: profile.location, formula: '=LOCATION("Houston, TX")' },
+  { id: 'D2', label: 'Now', value: 'Data Analyst Intern at HPE', formula: '=NOW("Hewlett Packard Enterprise")' },
+  { id: 'G2', label: 'Building', value: 'Interdomain, a real-time BGP pipeline', formula: '=BUILDING("Interdomain")', to: '/projects/interdomain' },
+  { id: 'J2', label: 'Based in', value: profile.location, formula: '=LOCATION("Houston, TX")' },
 ];
 
 const toMonth = (ym) => {
@@ -161,9 +162,13 @@ const Home = () => {
       {/* Row 2: where I am right now. Three cells on wider screens, one compact list on phones. */}
       <Row>
         {currentStatus.map((item) => (
-          <Cell key={item.id} id={item.id} span="hidden sm:block sm:col-span-4" formula={item.formula} className="!py-4">
+          <Cell key={item.id} id={item.id} span="hidden sm:block sm:col-span-6 lg:col-span-3" formula={item.formula} className="!py-4">
             <div className="text-[13px] text-muted">{item.label}</div>
-            <div className="mt-0.5 font-semibold text-ink">{item.value}</div>
+            {item.to ? (
+              <Link to={item.to} className="mt-0.5 block font-semibold text-ink underline decoration-accent/40 decoration-2 underline-offset-4 hover:decoration-accent">{item.value}</Link>
+            ) : (
+              <div className="mt-0.5 font-semibold text-ink">{item.value}</div>
+            )}
           </Cell>
         ))}
         <Cell id="A2" span="col-span-12 sm:hidden" formula={currentStatus[0].formula} className="!py-3">
@@ -171,7 +176,9 @@ const Home = () => {
             {currentStatus.map((item) => (
               <div key={item.id} className="flex items-baseline justify-between gap-4 py-1.5">
                 <dt className="text-[13px] text-muted">{item.label}</dt>
-                <dd className="text-[14.5px] font-semibold text-ink text-right">{item.value}</dd>
+                <dd className="text-[14.5px] font-semibold text-ink text-right">
+                  {item.to ? <Link to={item.to} className="underline decoration-accent/40 decoration-2 underline-offset-4">{item.value}</Link> : item.value}
+                </dd>
               </div>
             ))}
           </dl>

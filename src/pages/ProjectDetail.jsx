@@ -191,6 +191,7 @@ const ProjectDetail = () => {
       ? 'The project deck. Use the arrows to page through the slides.'
       : project.title;
   const facts = [
+    project.role && ['Role', project.role],
     project.event && ['Event', project.event],
     project.team && ['Team', project.team.join(', ')],
     ['Category', project.category],
@@ -237,6 +238,18 @@ const ProjectDetail = () => {
           </dl>
         </Cell>
       </Row>
+
+      {/* TL;DR: the whole project in three cells */}
+      {project.tldr && (
+        <Row>
+          {['Problem', 'What was built', 'Result'].map((label, i) => (
+            <Cell key={label} id={`${'AEI'[i]}2`} span="col-span-12 md:col-span-4" formula={`=TLDR(${i + 1})`} className={i === 2 ? 'bg-accent-wash/40' : ''}>
+              <div className="text-[12.5px] font-semibold text-accent-ink">{label}</div>
+              <p className={`mt-1 text-[15px] leading-snug ${i === 2 ? 'font-semibold text-ink' : 'text-ink-soft'}`}>{project.tldr[i]}</p>
+            </Cell>
+          ))}
+        </Row>
+      )}
 
       {/* Main figure */}
       {(project.video || project.pdf || project.image) && (
@@ -302,6 +315,20 @@ const ProjectDetail = () => {
           {project.pipeline && (
             <CaseRow n={n++} label="How it fits together" formula="=FLOW(pipeline)">
               <Pipeline steps={project.pipeline} />
+            </CaseRow>
+          )}
+          {project.decisions && (
+            <CaseRow n={n++} label="Key decisions" formula="=DECISIONS()">
+              <ol className="grid sm:grid-cols-2 gap-px bg-grid border border-grid">
+                {project.decisions.map((d, i) => (
+                  <li key={d.title} className="bg-paper p-4 sm:[&:last-child:nth-child(odd)]:col-span-2">
+                    <div className="font-mono text-[11px] text-muted">Decision {i + 1}</div>
+                    <h3 className="mt-0.5 font-sans text-[16px] font-bold leading-snug text-ink">{d.title}</h3>
+                    <p className="mt-1.5 text-[14.5px] leading-relaxed text-ink-soft">{d.why}</p>
+                    {d.alternative && <p className="mt-1.5 text-[14px] leading-relaxed text-muted">Alternative considered: {d.alternative}</p>}
+                  </li>
+                ))}
+              </ol>
             </CaseRow>
           )}
           <CaseRow n={n++} label="Results" formula="=RESULTS()">
