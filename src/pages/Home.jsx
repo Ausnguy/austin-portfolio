@@ -6,7 +6,7 @@ import { Sheet, Row, Cell, useSheet } from '../components/workbook';
 import { GitHubIcon, LinkedInIcon } from '../components/icons';
 import { getFeaturedProjects, getSpotlightProject } from '../data/projects';
 import { experiences } from '../data/experience';
-import { stack, resolveWhere } from '../data/stack';
+import { stack } from '../data/stack';
 import { profile } from '../data/profile';
 
 const ExperienceChart3D = lazy(() => import('../components/ExperienceChart3D'));
@@ -118,6 +118,27 @@ const WhenNear = ({ children, fallback }) => {
   return <div ref={ref} className="h-full">{near ? children : fallback}</div>;
 };
 
+const ResultBody = ({ r }) => (
+  <>
+    <div className="flex items-center justify-between gap-2">
+      <span className="text-[12.5px] font-semibold text-accent-ink">{r.skill}</span>
+      {r.status && <span className="text-[11.5px] font-medium text-[#7A5B00] dark:text-[#F2D27A]">{r.status}</span>}
+    </div>
+    <h3 className="mt-2 font-sans text-[17px] font-bold leading-snug text-ink">{r.headline}</h3>
+    <div className="mt-3 rounded-sm bg-head/70 px-3 py-2.5">
+      <div className="font-sans text-[1.7rem] font-bold tracking-tight leading-none text-ink">
+        {r.proof.value}
+        {r.proof.unit && <span className="ml-1.5 text-[15px] font-semibold text-ink-soft">{r.proof.unit}</span>}
+      </div>
+      <p className="mt-1.5 text-[13px] leading-snug text-ink-soft">{r.proof.note}</p>
+    </div>
+    <div className="mt-3 flex flex-wrap gap-1.5">
+      {r.tools.map((t) => <span key={t} className="chip">{t}</span>)}
+    </div>
+    <Link to={r.link} className="mt-auto pt-4 text-[13.5px] link self-start">{r.linkText}</Link>
+  </>
+);
+
 const AskTeaser = () => {
   const navigate = useNavigate();
   const [q, setQ] = useState('');
@@ -222,26 +243,21 @@ const Home = () => {
         </Cell>
       </Row>
 
-      {/* Row 3: four things I can do, each shown as work */}
+      {/* Row 3: four things I can do, each shown as work. A swipeable row on phones, a grid from tablet up. */}
       <Row>
-        {results.map((r) => (
-          <Cell key={r.id} id={r.id} span="col-span-12 sm:col-span-6 lg:col-span-3" formula={r.formula} className="flex flex-col">
-            <div className="flex items-center justify-between gap-2">
-              <span className="text-[12.5px] font-semibold text-accent-ink">{r.skill}</span>
-              {r.status && <span className="text-[11.5px] font-medium text-[#7A5B00] dark:text-[#F2D27A]">{r.status}</span>}
-            </div>
-            <h3 className="mt-2 font-sans text-[17px] font-bold leading-snug text-ink">{r.headline}</h3>
-            <div className="mt-3 rounded-sm bg-head/70 px-3 py-2.5">
-              <div className="font-sans text-[1.7rem] font-bold tracking-tight leading-none text-ink">
-                {r.proof.value}
-                {r.proof.unit && <span className="ml-1.5 text-[15px] font-semibold text-ink-soft">{r.proof.unit}</span>}
+        <Cell id="A3" span="col-span-12 sm:hidden" pad={false} formula="=SKILLS()">
+          <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory px-4 py-4 [scrollbar-width:none]" tabIndex={0} aria-label="Four things Austin can do, swipe sideways">
+            {results.map((r) => (
+              <div key={r.id} className="snap-start shrink-0 w-[84%] rounded-sm border border-grid p-4 flex flex-col bg-paper">
+                <ResultBody r={r} />
               </div>
-              <p className="mt-1.5 text-[13px] leading-snug text-ink-soft">{r.proof.note}</p>
-            </div>
-            <div className="mt-3 flex flex-wrap gap-1.5">
-              {r.tools.map((t) => <span key={t} className="chip">{t}</span>)}
-            </div>
-            <Link to={r.link} className="mt-auto pt-4 text-[13.5px] link self-start">{r.linkText}</Link>
+            ))}
+          </div>
+          <p className="px-4 pb-3 text-[12.5px] text-muted">Swipe for more</p>
+        </Cell>
+        {results.map((r) => (
+          <Cell key={r.id} id={r.id} span="hidden sm:flex sm:flex-col sm:col-span-6 lg:col-span-3" formula={r.formula}>
+            <ResultBody r={r} />
           </Cell>
         ))}
       </Row>
@@ -306,20 +322,16 @@ const Home = () => {
             <h2 className="font-sans text-xl font-bold text-ink">Stack, by what I built with it</h2>
             <Link to="/skills" className="text-sm link">What each tool did</Link>
           </div>
-          <div className="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-5">
+          <div className="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {stack.map(({ discipline, tools }) => (
-              <div key={discipline}>
-                <div className="text-[13px] font-semibold text-accent-ink">{discipline}</div>
-                <ul className="mt-1.5 space-y-1">
-                  {tools.map((tool) => (
-                    <li key={tool.name} className="flex flex-wrap items-baseline gap-x-2 text-[14.5px]">
-                      <span className="font-medium text-ink">{tool.name}</span>
-                      <span className="text-[12.5px] text-muted">
-                        {[...new Set(tool.uses.map((u) => resolveWhere(u.where).label))].join(', ')}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+              <div key={discipline} className="rounded-sm border border-grid p-4">
+                <div className="flex items-baseline justify-between gap-2">
+                  <h3 className="font-sans text-[15px] font-bold text-ink">{discipline}</h3>
+                  <span className="text-[12px] text-muted">{tools.length} tools</span>
+                </div>
+                <div className="mt-2.5 flex flex-wrap gap-1.5">
+                  {tools.map((tool) => <span key={tool.name} className="chip">{tool.name}</span>)}
+                </div>
               </div>
             ))}
           </div>
