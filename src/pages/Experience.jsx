@@ -46,12 +46,12 @@ const Experience = () => {
       </Row>
       {experiences.map((exp, i) => (
         <Row key={exp.id}>
-          <Cell id={`A${i + 3}`} span="col-span-12 lg:col-span-3" formula={`=ROLE("${exp.shortName}")`} className="!pb-1 lg:!pb-6">
+          <Cell id={`A${i + 3}`} span="hidden lg:block lg:col-span-3" formula={`=ROLE("${exp.shortName}")`}>
             <div className="font-mono text-[13px] text-ink-soft">{exp.period}</div>
             <div className="mt-1 text-[13px] text-muted">{exp.location}</div>
             <div className="mt-2 inline-flex chip">{exp.type}</div>
           </Cell>
-          <Cell id={`D${i + 3}`} span="col-span-12 lg:col-span-9" formula={`=ROLE("${exp.shortName}")`} className="!pt-2 lg:!pt-6">
+          <Cell id={`D${i + 3}`} span="col-span-12 lg:col-span-9" formula={`=ROLE("${exp.shortName}")`}>
             <div className="flex items-center gap-3">
               {exp.logo && (
                 <div className="h-10 w-20 shrink-0 rounded-sm bg-white border border-grid grid place-items-center px-1.5">
@@ -61,6 +61,7 @@ const Experience = () => {
               <div className="min-w-0">
                 <h2 className="font-sans text-xl font-bold leading-snug text-ink">{exp.company}</h2>
                 <p className="mt-0.5 text-[15px] font-medium text-accent-ink">{exp.role}</p>
+                <p className="lg:hidden mt-0.5 font-mono text-[12.5px] text-muted">{exp.period}, {exp.location}</p>
               </div>
             </div>
             <ul className="mt-3 space-y-2 max-w-3xl">
