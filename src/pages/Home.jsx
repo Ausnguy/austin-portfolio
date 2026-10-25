@@ -117,7 +117,7 @@ const Home = () => {
           </div>
         </Cell>
         <Cell id="I1" span="col-span-12 lg:col-span-4" formula='=ASK("anything about Austin")' className="bg-accent-wash/40 flex flex-col">
-          <div className="cell-ref">I1</div>
+          <div className="cell-ref text-ink-soft">I1</div>
           <h2 className="mt-1 font-sans text-xl font-bold text-ink">Ask about me</h2>
           <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">
             A small language model that runs on your device and answers only from the facts in this workbook. No server,

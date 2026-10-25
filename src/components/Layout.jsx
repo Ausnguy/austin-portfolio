@@ -100,7 +100,7 @@ const Layout = ({ children }) => {
                 <rect x="2" y="3" width="20" height="18" rx="2" fill="#fff" />
                 <path d="M2 9h20M2 15h20M9 3v18M15 3v18" stroke="#107C41" strokeWidth="1.6" />
               </svg>
-              <span>Austin_Nguyen<span className="text-white/70">.xlsx</span></span>
+              <span>Austin_Nguyen<span className="font-normal text-white/90">.xlsx</span></span>
             </Link>
             <nav aria-label="Sheets" className="hidden md:flex items-center gap-1 text-[14.5px]">
               {SHEETS.map((sheet) => (

@@ -14,7 +14,8 @@ const Skills = lazy(() => import('./pages/Skills'));
 const Ask = lazy(() => import('./pages/Ask'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
-const SheetLoading = () => <div className="min-h-[60vh] bg-paper border-x border-grid" aria-busy="true" />;
+// Full-height placeholder so nothing below (like the footer) jumps when the sheet arrives.
+const SheetLoading = () => <div className="min-h-screen bg-paper border-x border-grid" aria-busy="true" />;
 
 function App() {
   const location = useLocation();
