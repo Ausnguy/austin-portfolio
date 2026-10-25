@@ -104,14 +104,30 @@ const Growth = ({ count, grow, active, reduceMotion }) => {
   return null;
 };
 
+// Re-renders when the light/dark theme toggles, since the colors come from CSS variables.
+const useTheme = () => {
+  const [dark, setDark] = useState(() => document.documentElement.classList.contains('dark'));
+  useEffect(() => {
+    const observer = new MutationObserver(() => setDark(document.documentElement.classList.contains('dark')));
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
+  return dark;
+};
+
 const Scene = ({ roles, active, reduceMotion }) => {
+  const dark = useTheme();
   const urls = roles.map((r) => (r.logo ? `${BASE}${r.logo}` : `${BASE}favicon.svg`));
   const loaded = useTexture(urls);
   const textures = useMemo(
     () => roles.map((r, i) => (r.logo ? loaded[i] : wordmarkTexture(r.name))),
     [roles, loaded],
   );
-  const colors = useMemo(() => ({ accent: cssColor('--accent'), base: cssColor('--muted').lerp(cssColor('--paper'), 0.45) }), []);
+  const colors = useMemo(
+    () => ({ accent: cssColor('--accent'), base: cssColor('--muted').lerp(cssColor('--paper'), 0.45) }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [dark],
+  );
   const grow = useRef(roles.map(() => (reduceMotion ? 1 : 0)));
   const max = Math.max(...roles.map((r) => r.months));
 
