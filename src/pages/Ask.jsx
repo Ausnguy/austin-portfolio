@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Sheet, Row, Cell, useSheet } from '../components/workbook';
 import { search, factCount } from '../ask/retrieve';
-import { buildMessages } from '../ask/prompt';
 import { groundAnswer } from '../ask/ground';
 import { lookupIntent, lookupSkill } from '../ask/lookup';
-import { useLocalModel, MODEL_NAME, MODEL_DOWNLOAD_MB } from '../ask/model';
+import { askHosted } from '../ask/hosted';
+import { MODEL_LABEL } from '../ask/constants';
 import { profile } from '../data/profile';
 
 export const SUGGESTIONS = [
@@ -28,48 +28,8 @@ const Sources = ({ facts }) => (
   </div>
 );
 
-const onPhone = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
-
-const ModelStatus = ({ model }) => {
-  if (model.status === 'ready') {
-    return (
-      <p className="text-sm text-ink-soft">
-        <span className="inline-block h-2 w-2 rounded-full bg-accent mr-2 align-middle" />
-        AI answers are on, running {MODEL_NAME} on {model.device === 'webgpu' ? 'your GPU' : 'your CPU'}. Nothing you type
-        leaves this page.
-      </p>
-    );
-  }
-  if (model.status === 'loading') {
-    const pct = Math.round(model.progress * 100);
-    return (
-      <div className="max-w-md">
-        <p className="text-sm text-ink-soft">Downloading the model to your browser… {pct}%</p>
-        <div className="mt-2 h-2 rounded-sm bg-head border border-grid overflow-hidden" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label="Model download">
-          <div className="h-full bg-accent transition-[width] duration-300" style={{ width: `${pct}%` }} />
-        </div>
-      </div>
-    );
-  }
-  return (
-    <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-      <button type="button" onClick={model.load} className="btn btn-primary">
-        {model.status === 'error' ? 'Try loading the AI again' : 'Turn on AI answers'}
-      </button>
-      <p className="text-sm text-muted max-w-xl">
-        {model.status === 'error'
-          ? `The model couldn’t load here (${model.error}). Answers straight from the workbook still work.`
-          : `Downloads ${MODEL_NAME} once (about ${MODEL_DOWNLOAD_MB} MB) and runs it on your device. Nothing you type leaves this page.${
-              onPhone ? ' On a phone it can be slow or run out of memory; answers straight from the workbook always work.' : ''
-            }`}
-      </p>
-    </div>
-  );
-};
-
 const Ask = () => {
   useSheet('A1', '=ASK("anything about Austin")', 'Ask Austin');
-  const model = useLocalModel();
   const [params, setParams] = useSearchParams();
   const [question, setQuestion] = useState('');
   const [entries, setEntries] = useState([]);
@@ -89,18 +49,14 @@ const Ask = () => {
       return;
     }
     const facts = search(text, 6);
-    const useModel = model.status === 'ready' && facts.length > 0;
     const id = Date.now();
-    setEntries((prev) => [...prev, { id, q: text, facts, mode: useModel ? 'ai' : 'facts', answer: '', done: !useModel }]);
-    if (!useModel) return;
+    setEntries((prev) => [...prev, { id, q: text, facts, mode: facts.length ? 'ai' : 'facts', answer: '', done: !facts.length }]);
+    if (!facts.length) return;
 
     setBusy(true);
     const update = (patch) => setEntries((prev) => prev.map((e) => (e.id === id ? { ...e, ...patch(e) } : e)));
     try {
-      let draft = '';
-      await model.generate(buildMessages(text, facts), (token) => {
-        draft += token;
-      });
+      const draft = await askHosted(text, facts);
       // Only sentences the facts support are shown; otherwise fall back to the facts themselves.
       const grounded = groundAnswer(draft, facts, { question: text });
       if (grounded.refused) {
@@ -110,8 +66,8 @@ const Ask = () => {
       } else {
         update(() => ({ answer: grounded.text, done: true }));
       }
-    } catch (err) {
-      update(() => ({ mode: 'facts', done: true, error: err.message }));
+    } catch {
+      update(() => ({ mode: 'facts', done: true, note: 'The answer service didn’t respond, so here are the facts it would have used.' }));
     } finally {
       setBusy(false);
     }
@@ -137,9 +93,10 @@ const Ask = () => {
             Ask about Austin’s projects, skills, experience or education. Answers come only from the {factCount} facts in
             this workbook, and every answer shows the cells it used.
           </p>
-          <div className="mt-5">
-            <ModelStatus model={model} />
-          </div>
+          <p className="mt-3 text-[13px] text-muted max-w-2xl">
+            Written answers come from {MODEL_LABEL} and are checked against the workbook before you see them. Your question is
+            sent to that service to write the answer and isn’t stored by this site.
+          </p>
         </Cell>
       </Row>
 
@@ -152,13 +109,13 @@ const Ask = () => {
             </Cell>
             <Cell id={`B${i + 2}`} span="col-span-12 lg:col-span-8" formula={
                 entry.mode === 'ai'
-                  ? `=GENERATE(${MODEL_NAME.replaceAll(' ', '_')}, facts)`
+                  ? '=GENERATE(llama_3_1_8b, facts)'
                   : entry.mode === 'lookup'
                     ? `=XLOOKUP("${entry.term}", workbook)`
                     : '=LOOKUP(question, facts)'
               }>
               <div className="cell-ref mb-1">
-                {entry.mode === 'ai' ? 'Answer, written by the local model' : entry.mode === 'lookup' ? 'Looked up in the workbook' : 'Straight from the workbook'}
+                {entry.mode === 'ai' ? `Written by ${MODEL_LABEL}, checked against the workbook` : entry.mode === 'lookup' ? 'Looked up in the workbook' : 'Straight from the workbook'}
               </div>
               {entry.mode === 'lookup' ? (
                 <>
@@ -199,7 +156,6 @@ const Ask = () => {
                 </ul>
               )}
               {entry.note && <p className="mt-2 text-sm text-muted">{entry.note}</p>}
-              {entry.error && <p className="mt-2 text-sm text-muted">The model stopped early ({entry.error}), so these are the matching facts instead.</p>}
               {entry.facts.length > 0 && <Sources facts={entry.facts.slice(0, entry.mode === 'ai' ? 4 : 3)} />}
             </Cell>
           </Row>

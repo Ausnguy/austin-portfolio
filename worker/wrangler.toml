@@ -1,0 +1,16 @@
+# Ask Austin's hosted model. Deploy with `npm run worker:deploy` (wrangler login once first).
+name = "austin-ask"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+[ai]
+binding = "AI"
+
+# 10 questions a minute per visitor.
+[[ratelimits]]
+name = "LIMITER"
+namespace_id = "1001"
+
+  [ratelimits.simple]
+  limit = 10
+  period = 60

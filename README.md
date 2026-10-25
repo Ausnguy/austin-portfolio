@@ -10,9 +10,9 @@ model that runs entirely in the visitor's browser.
 
 - **Ask Austin.** Questions are matched against a fact sheet generated from the site's own data (BM25 keyword
   search, no download). "Does Austin know X?" questions are answered exactly by searching the data for X.
-  Visitors can switch on a local model (Qwen3 0.6B via transformers.js in a Web Worker, WebGPU with a WASM
-  fallback). Every generated sentence is checked against the facts and dropped if its words, names, numbers or
-  claims aren't supported, so the model can't invent a resume.
+  Other questions go to a Cloudflare Worker (`worker/`) running Llama 3.1 8B on Workers AI. The browser sends
+  only fact ids, never text, so the endpoint can't be used as a general chatbot; every returned sentence is checked
+  against the facts and dropped if its words, names, numbers or claims aren't supported.
 - **3D experience chart.** React Three Fiber and drei: column height is months in each role, topped by a model of
   what the company does and its logo.
 - **Generated thumbnails.** Project images are rendered from R3F scenes in `tools/thumbnails`.
@@ -20,8 +20,8 @@ model that runs entirely in the visitor's browser.
 
 ## Stack
 
-React 18, Vite 5, Tailwind CSS 3, Framer Motion, React Three Fiber 8 + drei 9 (three.js), transformers.js 3,
-pdf.js. Deployed to GitHub Pages by `.github/workflows/main.yml` on every push to `main`.
+React 18, Vite 5, Tailwind CSS 3, Framer Motion, React Three Fiber 8 + drei 9 (three.js), pdf.js, and a
+Cloudflare Worker with Workers AI for Ask Austin. Deployed to GitHub Pages by `.github/workflows/main.yml` on every push to `main`.
 
 ## Run it
 
@@ -29,6 +29,7 @@ pdf.js. Deployed to GitHub Pages by `.github/workflows/main.yml` on every push t
 npm install
 npm run dev      # http://localhost:5173/austin-portfolio/
 npm run build    # vite build, then scripts/spa-routes.mjs copies index.html into each route folder
+npm run worker:deploy   # redeploy Ask Austin's Worker after changing anything in src/data (wrangler login first)
 ```
 
 ## Edit content
@@ -40,7 +41,7 @@ Everything on the site comes from `src/data/`:
 | `profile.js` | Name, contact, education and the plain-sentence facts Ask Austin uses |
 | `experience.js` | Roles, dates (drive the timeline and 3D chart), highlights, logo and 3D model |
 | `projects.js` | Projects, case studies, metrics, pipelines and links |
-| `skills.js` | Skill groups; "used in" is worked out from experience and projects |
+| `stack.js` | Tools by discipline, each tied to the project or role that used it and what it did |
 
 Ask Austin's fact sheet (`src/ask/knowledge.js`) is built from these files, so it stays in sync automatically.
 

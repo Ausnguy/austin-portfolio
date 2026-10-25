@@ -3,7 +3,7 @@
 
 import { experiences } from '../data/experience';
 import { projects } from '../data/projects';
-import { skillGroups, getGroupEvidence } from '../data/skills';
+import { stack, resumeOnly, resolveWhere } from '../data/stack';
 import { profile } from '../data/profile';
 
 const facts = [];
@@ -51,14 +51,25 @@ projects.forEach((p) => {
   }
 });
 
-// Skills
-skillGroups.forEach(({ group, skills }, i) => {
-  const used = getGroupEvidence(skills);
-  add(
-    `Skills!A${i + 2}`,
-    'Skills',
-    `Austin's ${group} skills: ${skills.join(', ')}.${used.length ? ` Used in: ${used.join(', ')}.` : ''}`,
-  );
+// Stack: one fact per tool per place it was used, plus resume-only skills.
+stack.forEach(({ discipline, tools }) =>
+  tools.forEach((tool) =>
+    tool.uses.forEach((use) => {
+      const { label } = resolveWhere(use.where);
+      add(`Stack!${tool.name.replace(/\W+/g, '_')}`, label, `${tool.name} (${discipline}) in ${label}${use.team ? ', a team project' : ''}: ${use.did}.`);
+    }),
+  ),
+);
+add('Stack!Resume', 'Resume', `Also on Austin's resume, not yet shown in a project here: ${resumeOnly.join(', ')}.`);
+
+// Stable ids and a version hash, so the hosted model can be sent fact ids instead of fact text.
+facts.forEach((f, i) => {
+  f.id = i;
 });
+let hash = 2166136261;
+for (const ch of facts.map((f) => f.text).join('\n')) {
+  hash = Math.imul(hash ^ ch.codePointAt(0), 16777619) >>> 0;
+}
+export const FACTS_VERSION = hash.toString(36);
 
 export default facts;

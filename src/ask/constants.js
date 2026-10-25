@@ -1,4 +1,3 @@
-export const MODEL_ID = 'onnx-community/Qwen3-0.6B-ONNX';
-export const MODEL_NAME = 'Qwen3 0.6B';
-// Approximate one-time download (570 MB on WebGPU, 620 MB on CPU), cached by the browser afterwards.
-export const MODEL_DOWNLOAD_MB = 600;
+// Ask Austin's hosted model (worker/ in this repo, deployed to Cloudflare Workers AI).
+export const ASK_ENDPOINT = 'https://austin-ask.austin-portfolio.workers.dev';
+export const MODEL_LABEL = 'Llama 3.1 8B on Cloudflare';

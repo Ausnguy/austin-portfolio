@@ -96,10 +96,7 @@ const Layout = ({ children }) => {
         <div className="bg-[#107C41] text-white">
           <div className="page h-12 px-3 sm:px-4 flex items-center gap-4">
             <Link to="/" className="flex items-center gap-2 font-semibold text-[16px] whitespace-nowrap">
-              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5">
-                <rect x="2" y="3" width="20" height="18" rx="2" fill="#fff" />
-                <path d="M2 9h20M2 15h20M9 3v18M15 3v18" stroke="#107C41" strokeWidth="1.6" />
-              </svg>
+              <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" className="h-6 w-6 rounded-[5px] ring-1 ring-white/30" />
               <span>Austin_Nguyen<span className="font-normal text-white/90">.xlsx</span></span>
             </Link>
             <nav aria-label="Sheets" className="hidden md:flex items-center gap-1 text-[14.5px]">

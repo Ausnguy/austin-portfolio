@@ -24,19 +24,23 @@ export const lookupSkill = (question) => {
 
   // Short terms like "R" match case-sensitively so they can't hit a stray letter (e.g. "r ≈ −0.995").
   const pattern = new RegExp(`(^|[^\\w])${escape(term)}([^\\w]|$)`, term.length <= 2 ? '' : 'i');
-  const hits = facts.filter((f) => pattern.test(f.text));
+  // Stack facts say what the tool did in each place, so they lead.
+  const hits = facts.filter((f) => pattern.test(f.text)).sort((a, b) => b.ref.startsWith('Stack!') - a.ref.startsWith('Stack!'));
   if (hits.length === 0) {
     return { term, facts: [], answer: `Not that the workbook shows: “${term}” doesn’t appear anywhere in Austin’s projects, experience or skills.` };
   }
 
-  const places = [...new Set(hits.map((f) => (f.label === 'Skills' || f.label === 'Profile' ? null : f.label)).filter(Boolean))];
+  // Where the stack has evidence for the tool, name only those places; otherwise any project or role mentioning it.
+  const stackHits = hits.filter((f) => f.ref.startsWith('Stack!') && f.label !== 'Resume');
+  const named = stackHits.length ? stackHits : hits;
+  const places = [...new Set(named.map((f) => (['Resume', 'Profile'].includes(f.label) ? null : f.label)).filter(Boolean))];
   const listed = places.length > 3 ? `${places.slice(0, 3).join(', ')} and ${places.length - 3} more` : places.join(', ').replace(/, ([^,]*)$/, ' and $1');
   return {
     term,
     facts: hits.slice(0, 3),
     answer: places.length
       ? `Yes. ${term} shows up in ${listed}.`
-      : `Yes. ${term} is on Austin’s skills list.`,
+      : `${term} is on Austin’s resume, but no project on this site shows it yet.`,
   };
 };
 

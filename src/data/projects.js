@@ -212,7 +212,7 @@ export const projects = [
     description: 'A PyTorch neural network that classifies handwritten digits, with an interactive draw-a-digit web demo in progress',
     category: 'Web',
     tags: ['Machine Learning', 'Web App'],
-    tools: ['Python', 'PyTorch', 'Flask', 'React'],
+    tools: ['Python', 'PyTorch'],
     featured: true,
     image: '/austin-portfolio/thumbs/mnist-digit-recognition.png',
     links: {
@@ -229,7 +229,7 @@ export const projects = [
         'The model reaches about 96–98% accuracy on the 10,000-image test set. The interactive web demo is still in progress.',
       improvements:
         'Add confidence scores, improve preprocessing for messy handwriting, and expand to letters/symbols.',
-      techStack: 'PyTorch, Flask, React, Python',
+      techStack: 'Python and PyTorch; Flask and React are planned for the web demo',
     },
   },
 

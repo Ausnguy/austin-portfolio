@@ -6,7 +6,7 @@ import { Sheet, Row, Cell, useSheet } from '../components/workbook';
 import { GitHubIcon, LinkedInIcon } from '../components/icons';
 import { getFeaturedProjects, getSpotlightProject } from '../data/projects';
 import { experiences } from '../data/experience';
-import { skillGroups } from '../data/skills';
+import { stack, resolveWhere } from '../data/stack';
 import { profile } from '../data/profile';
 
 const ExperienceChart3D = lazy(() => import('../components/ExperienceChart3D'));
@@ -29,12 +29,12 @@ const proof = [
   { text: 'Building a real-time internet routing pipeline on Kafka, Spark Structured Streaming and PostgreSQL', to: '/projects/interdomain' },
   { text: 'My CaseQuest team’s from-scratch failure model warned before 90 of 91 equipment failures', to: '/projects/casequest-2026' },
   { text: 'Built and own an automated Power BI compensation pipeline at HPE', to: '/experience' },
-  { text: 'This site runs a language model in your browser, with a filter that stops it making things up', to: '/ask' },
+  { text: 'Deployed an AI assistant for this site on Cloudflare, with a filter that stops it making things up', to: '/ask' },
 ];
 
 // What went into building this site, for the "This site is a project too" row.
 const siteBuild = [
-  { id: 'A8', title: 'Local LLM', body: 'Qwen3 0.6B runs in a Web Worker through transformers.js, on WebGPU with a WebAssembly fallback. No server, no API key.', formula: '=MODEL("Qwen3-0.6B", "in-browser")' },
+  { id: 'A8', title: 'Hosted AI', body: 'Ask Austin runs Llama 3.1 8B on a Cloudflare Worker I deployed. The browser sends fact ids, never text, so the endpoint can’t be used as a general chatbot.', formula: '=MODEL("llama-3.1-8b", "Cloudflare")' },
   { id: 'D8', title: 'Hallucination filter', body: 'Every generated sentence is checked against the facts; unsupported names, numbers or claims are dropped before you see them.', formula: '=FILTER(sentences, SUPPORTED(facts))' },
   { id: 'G8', title: 'Generated 3D', body: 'The company models, logos and project thumbnails are built in code with React Three Fiber and drei.', formula: '=RENDER(scene, "R3F")' },
   { id: 'J8', title: 'Fast and accessible', body: 'Lighthouse on the live site: Performance 94, Accessibility 100, Best Practices 100, SEO 100.', formula: '=LIGHTHOUSE("live")' },
@@ -150,8 +150,8 @@ const Home = () => {
           <div className="cell-ref text-ink-soft">I1</div>
           <h2 className="mt-1 font-sans text-xl font-bold text-ink">Ask about me</h2>
           <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">
-            A small language model that runs on your device and answers only from the facts in this workbook. No server,
-            no API key.
+            Ask anything about my work. Answers come only from the facts in this workbook, and every one is fact-checked
+            before you see it. Nothing to download.
           </p>
           <div className="mt-auto pt-5">
             <AskTeaser />
@@ -256,17 +256,23 @@ const Home = () => {
       <Row>
         <Cell id="A6" formula="=STACK()">
           <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <h2 className="font-sans text-xl font-bold text-ink">Stack</h2>
-            <Link to="/skills" className="text-sm link">Where I’ve used each one</Link>
+            <h2 className="font-sans text-xl font-bold text-ink">Stack, by what I built with it</h2>
+            <Link to="/skills" className="text-sm link">What each tool did</Link>
           </div>
-          <div className="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
-            {skillGroups.map(({ group, skills }) => (
-              <div key={group}>
-                <div className="text-[13px] text-muted">{group}</div>
-                <div className="hidden sm:flex mt-1.5 flex-wrap gap-1.5">
-                  {skills.map((s) => <span key={s} className="chip">{s}</span>)}
-                </div>
-                <p className="sm:hidden mt-0.5 text-[14.5px] text-ink">{skills.join(', ')}</p>
+          <div className="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-5">
+            {stack.map(({ discipline, tools }) => (
+              <div key={discipline}>
+                <div className="text-[13px] font-semibold text-accent-ink">{discipline}</div>
+                <ul className="mt-1.5 space-y-1">
+                  {tools.map((tool) => (
+                    <li key={tool.name} className="flex flex-wrap items-baseline gap-x-2 text-[14.5px]">
+                      <span className="font-medium text-ink">{tool.name}</span>
+                      <span className="text-[12.5px] text-muted">
+                        {[...new Set(tool.uses.map((u) => resolveWhere(u.where).label))].join(', ')}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>

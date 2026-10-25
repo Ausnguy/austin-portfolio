@@ -1,5 +1,6 @@
+import { Link } from 'react-router-dom';
 import { Sheet, Row, Cell, useSheet } from '../components/workbook';
-import { skillGroups, getGroupEvidence } from '../data/skills';
+import { stack, resumeOnly, resolveWhere } from '../data/stack';
 import { profile } from '../data/profile';
 
 const Skills = () => {
@@ -11,40 +12,54 @@ const Skills = () => {
         <Cell id="A1" formula="=STACK()">
           <h1 className="sheet-title">Skills &amp; Education</h1>
           <p className="body-copy mt-2 max-w-2xl">
-            What I work with, and where I’ve actually used it. The “used in” column is worked out from my experience and
-            project data, not typed by hand.
+            Every tool here is tied to a project or role that used it, and what it did there. Team work is marked.
           </p>
         </Cell>
       </Row>
 
-      {/* Column headers for the skills table */}
-      <Row rowClassName="hidden lg:grid">
-        <Cell id="A2" span="col-span-3" pad={false} formula="=HEADER()" className="px-6 py-2 bg-head/60 text-[13px] font-semibold text-muted">Group</Cell>
-        <Cell id="D2" span="col-span-6" pad={false} formula="=HEADER()" className="px-6 py-2 bg-head/60 text-[13px] font-semibold text-muted">Skills</Cell>
-        <Cell id="J2" span="col-span-3" pad={false} formula="=HEADER()" className="px-6 py-2 bg-head/60 text-[13px] font-semibold text-muted">Used in</Cell>
+      <Row>
+        <Cell id="A2" formula="=TABLE(stack)" pad={false}>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[640px] border-collapse text-left text-[14px]">
+              <thead>
+                <tr className="bg-head text-[12.5px] text-muted">
+                  {['Tool', 'Where', 'What it did'].map((h) => (
+                    <th key={h} scope="col" className="border-b border-r last:border-r-0 border-grid px-4 py-2 font-semibold">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              {stack.map(({ discipline, tools }) => (
+                <tbody key={discipline}>
+                  <tr>
+                    <th colSpan={3} scope="colgroup" className="bg-accent-wash/50 border-b border-grid px-4 py-2 text-[13px] font-semibold text-accent-ink">
+                      {discipline}
+                    </th>
+                  </tr>
+                  {tools.flatMap((tool) =>
+                    tool.uses.map((use, i) => {
+                      const where = resolveWhere(use.where);
+                      return (
+                        <tr key={`${tool.name}-${use.where}`} className="align-top">
+                          <td className="border-b border-r border-grid px-4 py-2.5 font-semibold text-ink">{i === 0 ? tool.name : ''}</td>
+                          <td className="border-b border-r border-grid px-4 py-2.5 whitespace-nowrap">
+                            <Link to={where.to} className="link font-medium">{where.label}</Link>
+                            {use.team && <span className="ml-1.5 text-[12px] text-muted">team</span>}
+                          </td>
+                          <td className="border-b border-grid px-4 py-2.5 text-ink-soft">{use.did}</td>
+                        </tr>
+                      );
+                    }),
+                  )}
+                </tbody>
+              ))}
+            </table>
+          </div>
+          <p className="px-4 py-3 text-[13.5px] text-muted">
+            <span className="font-semibold text-ink-soft">Also on my resume, not shown in a project here yet: </span>
+            {resumeOnly.join(', ')}
+          </p>
+        </Cell>
       </Row>
-      {skillGroups.map(({ group, skills }, i) => {
-        const used = getGroupEvidence(skills);
-        const formula = `=XLOOKUP("${group}", experience, projects)`;
-        return (
-          <Row key={group}>
-            <Cell id={`A${i + 3}`} span="col-span-12 lg:col-span-3" formula={formula} className="!pb-2 lg:!pb-6">
-              <h2 className="font-sans text-base font-bold text-ink">{group}</h2>
-            </Cell>
-            <Cell id={`D${i + 3}`} span="col-span-12 lg:col-span-6" formula={formula} className="!py-2 lg:!py-6">
-              <div className="flex flex-wrap gap-1.5">
-                {skills.map((s) => <span key={s} className="chip">{s}</span>)}
-              </div>
-            </Cell>
-            <Cell id={`J${i + 3}`} span="col-span-12 lg:col-span-3" formula={formula} className="!pt-2 lg:!pt-6">
-              <p className="text-[14px] leading-relaxed text-ink-soft">
-                <span className="lg:hidden text-muted">Used in: </span>
-                {used.length ? used.join(', ') : 'Coursework and personal study'}
-              </p>
-            </Cell>
-          </Row>
-        );
-      })}
 
       {/* Education */}
       <Row>

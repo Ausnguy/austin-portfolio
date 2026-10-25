@@ -29,7 +29,7 @@ export const useSheet = (ref, formula, title) => {
     resetSheet(ref, formula);
   }, [ref, formula, resetSheet]);
   useEffect(() => {
-    document.title = title ? `${title} | Austin Nguyen` : 'Austin_Nguyen.xlsx | Austin Nguyen';
+    document.title = title ? `${title} | Austin Nguyen` : 'Austin Nguyen | Data systems, end to end';
   }, [title]);
 };
 
