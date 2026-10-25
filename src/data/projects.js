@@ -17,6 +17,14 @@ export const projects = [
     tools: ['Python', 'Kafka', 'Spark', 'PostgreSQL', 'FastAPI', 'Docker', 'React'],
     featured: true,
     image: '/austin-portfolio/thumbs/interdomain.png',
+    pipeline: [
+      { name: 'RIPE RIS Live', detail: 'Public stream of BGP updates from route collectors worldwide' },
+      { name: 'Python ingestion', detail: 'WebSocket client normalizes each update into route events' },
+      { name: 'Kafka', detail: 'bgp-updates topic, keyed by peer ASN' },
+      { name: 'Spark + PostgreSQL', detail: 'Sliding-window instability checks; events stored with CIDR/INET types' },
+      { name: 'FastAPI', detail: 'Health, metrics, recent routes, withdrawals, active ASNs' },
+      { name: 'React dashboard', detail: 'Updates per minute, top ASNs, withdrawals, live/stale/offline' },
+    ],
     links: {
       github: 'https://github.com/Ausnguy/Interdomain',
       demo: null,
@@ -67,6 +75,13 @@ export const projects = [
     featured: true,
     spotlight: true,
     image: '/austin-portfolio/casequest/poster.jpg',
+    pipeline: [
+      { name: 'Case workbook', detail: 'Readings, stop events and assets for 6 sites and 18 machines' },
+      { name: 'Python cleaning', detail: 'Logged rules and 39 integrity checks' },
+      { name: 'Failure model', detail: 'Logistic regression flags bearing or seal failures 3 days out' },
+      { name: 'Dispatch API', detail: 'TypeScript on Vercel, state in Redis with compare-and-swap' },
+      { name: 'Console + phone app', detail: '3D ops console for the manager, Expo app for the engineer' },
+    ],
     video: 'casequest/parvius-launch.mp4',
     videoLoop: 'casequest/parvius-loop.mp4',
     videoLoopPoster: 'casequest/loop-poster.jpg',

@@ -4,6 +4,7 @@ import { Sheet, Row, Cell, useSheet } from '../components/workbook';
 import { search, factCount } from '../ask/retrieve';
 import { buildMessages } from '../ask/prompt';
 import { groundAnswer } from '../ask/ground';
+import { lookupSkill } from '../ask/lookup';
 import { useLocalModel, MODEL_NAME, MODEL_DOWNLOAD_MB } from '../ask/model';
 import { profile } from '../data/profile';
 
@@ -12,7 +13,7 @@ export const SUGGESTIONS = [
   'What is Austin’s tech stack?',
   'Tell me about Parvius',
   'Where does Austin go to school?',
-  'What did Austin learn at CaseQuest?',
+  'Does Austin know Kafka?',
   'How do I contact Austin?',
 ];
 
@@ -80,6 +81,12 @@ const Ask = () => {
     const text = q.trim();
     if (!text || busy) return;
     setQuestion('');
+    // "Does Austin know X?" is answered exactly from the data, no model needed.
+    const lookup = lookupSkill(text);
+    if (lookup) {
+      setEntries((prev) => [...prev, { id: Date.now(), q: text, facts: lookup.facts, mode: 'lookup', term: lookup.term, answer: lookup.answer, done: true }]);
+      return;
+    }
     const facts = search(text, 6);
     const useModel = model.status === 'ready' && facts.length > 0;
     const id = Date.now();
@@ -142,9 +149,31 @@ const Ask = () => {
               <div className="cell-ref mb-1">Question</div>
               <p className="text-[16px] font-semibold text-ink">{entry.q}</p>
             </Cell>
-            <Cell id={`B${i + 2}`} span="col-span-12 lg:col-span-8" formula={entry.mode === 'ai' ? `=GENERATE(${MODEL_NAME.replaceAll(' ', '_')}, facts)` : '=LOOKUP(question, facts)'}>
-              <div className="cell-ref mb-1">{entry.mode === 'ai' ? 'Answer, written by the local model' : 'Straight from the workbook'}</div>
-              {entry.facts.length === 0 ? (
+            <Cell id={`B${i + 2}`} span="col-span-12 lg:col-span-8" formula={
+                entry.mode === 'ai'
+                  ? `=GENERATE(${MODEL_NAME.replaceAll(' ', '_')}, facts)`
+                  : entry.mode === 'lookup'
+                    ? `=XLOOKUP("${entry.term}", workbook)`
+                    : '=LOOKUP(question, facts)'
+              }>
+              <div className="cell-ref mb-1">
+                {entry.mode === 'ai' ? 'Answer, written by the local model' : entry.mode === 'lookup' ? 'Looked up in the workbook' : 'Straight from the workbook'}
+              </div>
+              {entry.mode === 'lookup' ? (
+                <>
+                  <p className="body-copy text-ink">{entry.answer}</p>
+                  {entry.facts.length > 0 && (
+                    <ul className="mt-2 space-y-2">
+                      {entry.facts.map((f) => (
+                        <li key={f.ref + f.text} className="relative pl-4 body-copy">
+                          <span aria-hidden="true" className="absolute left-0 top-[0.7em] h-1.5 w-1.5 rounded-full bg-accent" />
+                          {f.text}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </>
+              ) : entry.facts.length === 0 ? (
                 <p className="body-copy">
                   Nothing in Austin’s workbook matches that. Try asking about projects, skills, experience or education, or
                   email <a className="link" href={`mailto:${profile.email}`}>{profile.email}</a>.

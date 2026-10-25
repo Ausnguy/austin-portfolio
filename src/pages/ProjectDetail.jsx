@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 import workerSrc from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
 import ProjectCard, { StatusBadge } from '../components/ProjectCard';
+import Pipeline from '../components/Pipeline';
 import { Sheet, Row, Cell, useSheet } from '../components/workbook';
 import { ChevronLeft, GitHubIcon } from '../components/icons';
 import { getProjectBySlug, getFeaturedProjects } from '../data/projects';
@@ -296,6 +297,11 @@ const ProjectDetail = () => {
           <CaseRow n={n++} label={`How ${we} built it`} formula="=APPROACH()">
             <p className="body-copy max-w-3xl">{caseStudy.approach}</p>
           </CaseRow>
+          {project.pipeline && (
+            <CaseRow n={n++} label="How it fits together" formula="=FLOW(pipeline)">
+              <Pipeline steps={project.pipeline} />
+            </CaseRow>
+          )}
           <CaseRow n={n++} label="Results" formula="=RESULTS()">
             <div className="rounded-sm border-l-4 border-accent bg-accent-wash/60 px-5 py-4 max-w-3xl">
               <p className="body-copy text-ink">{caseStudy.results}</p>

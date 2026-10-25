@@ -31,6 +31,7 @@ projects.forEach((p) => {
   const ref = `Projects!${p.shortTitle.replace(/\W+/g, '_')}`;
   const status = p.status === 'wip' ? ' It is a work in progress.' : '';
   add(ref, p.shortTitle, `Project "${p.title}"${p.date ? ` (${p.date})` : ''}: ${trimDot(p.description)}.${status}${p.highlight ? ` Key result: ${trimDot(p.highlight)}.` : ''}`, true);
+  add(ref, p.shortTitle, `${p.shortTitle} tools: ${p.tools.join(', ')}.`);
   if (p.team) add(ref, p.shortTitle, `${p.shortTitle} was a team project with ${p.team.length} people: ${p.team.join(', ')}.`);
   if (p.links?.github) add(ref, p.shortTitle, `${p.shortTitle} code is on GitHub at ${p.links.github}.`);
   if (p.links?.demo) add(ref, p.shortTitle, `${p.shortTitle} has a live demo at ${p.links.demo}.`);
