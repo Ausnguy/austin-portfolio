@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 import workerSrc from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
+import StatStrip from '../components/StatStrip';
+import { getProjectBySlug } from '../data/projects';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
 
@@ -140,8 +142,6 @@ const PdfFirstPage = ({ src, poster }) => {
     </div>
   );
 };
-import { getProjectBySlug } from '../data/projects';
-
 const ProjectDetail = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -161,6 +161,8 @@ const ProjectDetail = () => {
   }
   
   const { caseStudy } = project;
+  const baseUrl = import.meta.env.BASE_URL;
+  const isTeam = Boolean(project.team);
   
   return (
     <div className="min-h-screen">
@@ -184,7 +186,7 @@ const ProjectDetail = () => {
               {project.featured && <span className="tag bg-rust text-cream border-rust">Featured</span>}
             </div>
             
-            <h1 className="font-sans text-5xl md:text-6xl font-bold mb-6">
+            <h1 className="font-sans text-5xl md:text-6xl font-bold mb-6 text-balance">
               {project.title}
             </h1>
             
@@ -200,12 +202,19 @@ const ProjectDetail = () => {
               ))}
             </div>
             
+            {(project.event || project.team) && (
+              <div className="font-mono text-xs text-slate leading-relaxed mb-8 max-w-3xl">
+                {project.event && <div>{project.event}</div>}
+                {project.team && <div>Team: {project.team.join(', ')}</div>}
+              </div>
+            )}
+
             {project.links.github && (
               <a
                 href={project.links.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn mr-4"
+                className="btn mr-4 mb-4"
               >
                 View Code
               </a>
@@ -215,7 +224,7 @@ const ProjectDetail = () => {
                 href={project.links.demo}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn btn-outline"
+                className="btn btn-outline mb-4"
               >
                 Live Demo
               </a>
@@ -224,8 +233,45 @@ const ProjectDetail = () => {
         </div>
       </section>
       
+      {/* Video */}
+      {project.video && (
+        <section className="max-w-7xl mx-auto px-6 pt-12 pb-8">
+          <motion.figure
+            initial={{ opacity: 0, transform: 'translateY(12px)' }}
+            animate={{ opacity: 1, transform: 'translateY(0px)' }}
+            transition={{ duration: 0.5, delay: 0.15, ease: [0.23, 1, 0.32, 1] }}
+            className="mr-3"
+          >
+            <div className="plate aspect-video">
+              <video
+                src={`${baseUrl}${project.video}`}
+                poster={`${baseUrl}${project.videoPoster}`}
+                controls
+                playsInline
+                preload="metadata"
+                className="w-full h-full object-contain bg-charcoal"
+              >
+                Your browser can't play this video.{' '}
+                <a href={`${baseUrl}${project.video}`}>Download it instead</a>.
+              </video>
+            </div>
+            {project.videoCaption && (
+              <figcaption className="mt-6 font-mono text-xs text-slate">
+                {project.videoCaption}
+              </figcaption>
+            )}
+          </motion.figure>
+        </section>
+      )}
+
+      {project.metrics && (
+        <section className="max-w-7xl mx-auto px-6 py-12">
+          <StatStrip metrics={project.metrics} />
+        </section>
+      )}
+
       {/* Hero Image */}
-      {!project.pdf && <section className="max-w-7xl mx-auto px-6 py-8">
+      {!project.pdf && !project.video && <section className="max-w-7xl mx-auto px-6 py-8">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -294,7 +340,7 @@ const ProjectDetail = () => {
             >
               <div className="section-num">/ APPROACH</div>
               <h2 className="font-sans text-3xl font-bold mb-4">
-                How I tackled it
+                {isTeam ? 'How we tackled it' : 'How I tackled it'}
               </h2>
               <p className="font-serif text-lg leading-relaxed">
                 {caseStudy.approach}
@@ -317,6 +363,33 @@ const ProjectDetail = () => {
                 {caseStudy.results}
               </p>
             </motion.div>
+
+            {/* Lessons */}
+            {caseStudy.lessons && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="section-num">/ WHAT WE LEARNED</div>
+                <h2 className="font-sans text-3xl font-bold mb-6">
+                  Lessons we're taking with us
+                </h2>
+                <div className="grid sm:grid-cols-2 gap-6">
+                  {caseStudy.lessons.map((lesson) => (
+                    <div key={lesson.title} className="border-2 border-charcoal bg-white p-6">
+                      <h3 className="font-sans text-xl font-bold mb-2 leading-snug">
+                        {lesson.title}
+                      </h3>
+                      <p className="font-serif leading-relaxed">
+                        {lesson.body}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
             
             {/* Improvements */}
             <motion.div
@@ -345,9 +418,26 @@ const ProjectDetail = () => {
               <h2 className="font-sans text-3xl font-bold mb-4">
                 Tools used
               </h2>
-              <p className="font-serif text-lg leading-relaxed mb-6">
-                {caseStudy.techStack}
-              </p>
+              {typeof caseStudy.techStack === 'string' ? (
+                <p className="font-serif text-lg leading-relaxed mb-6">
+                  {caseStudy.techStack}
+                </p>
+              ) : (
+                <div className="grid sm:grid-cols-2 gap-x-10 gap-y-8 mb-8">
+                  {Object.entries(caseStudy.techStack).map(([group, items]) => (
+                    <div key={group} className="border-t-2 border-charcoal pt-4">
+                      <h3 className="font-sans text-lg font-bold mb-3">{group}</h3>
+                      <ul className="space-y-2">
+                        {items.map((item) => (
+                          <li key={item} className="font-serif leading-snug pl-4 relative before:content-[''] before:absolute before:left-0 before:top-[0.6em] before:w-1.5 before:h-1.5 before:bg-rust">
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              )}
               
               <div className="flex flex-wrap gap-2">
                 {project.tools.map((tool) => (

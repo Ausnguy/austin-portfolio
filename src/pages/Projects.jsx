@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import ProjectCard from '../components/ProjectCard';
 import ProjectFilters from '../components/ProjectFilters';
-import { projects, getProjectsByCategory } from '../data/projects';
+import { getProjectsByCategory } from '../data/projects';
+import { EASE_OUT } from '../lib/motion';
 
 const Projects = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -50,7 +51,7 @@ const Projects = () => {
               Projects
             </h1>
             <p className="font-serif text-xl max-w-3xl">
-              A collection of data analytics, machine learning, and business intelligence projects. 
+              Data analytics, machine learning, full-stack and business intelligence projects.
               Each one taught me something about making data useful.
             </p>
           </motion.div>
@@ -76,9 +77,21 @@ const Projects = () => {
         
         {filteredProjects.length > 0 ? (
           <div className="grid lg:grid-cols-2 gap-8">
-            {filteredProjects.map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} />
-            ))}
+            {/* Cards bridge filter changes instead of popping in and out. */}
+            <AnimatePresence mode="popLayout" initial={false}>
+              {filteredProjects.map((project, index) => (
+                <motion.div
+                  key={project.id}
+                  layout
+                  initial={{ opacity: 0, transform: 'scale(0.97)' }}
+                  animate={{ opacity: 1, transform: 'scale(1)' }}
+                  exit={{ opacity: 0, transform: 'scale(0.97)' }}
+                  transition={{ duration: 0.2, ease: EASE_OUT }}
+                >
+                  <ProjectCard project={project} index={index} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         ) : (
           <motion.div

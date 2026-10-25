@@ -4,15 +4,21 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
+      // Colors are CSS variables (see index.css) so dark mode swaps the whole palette.
       colors: {
-        cream: '#FFFCF2',
-        charcoal: '#2B2B2B',
-        slate: '#52616B',
-        sage: '#8FAD88',
-        rust: '#C85A54',
-        sand: '#E8DCC4',
+        cream: 'rgb(var(--cream) / <alpha-value>)',
+        charcoal: 'rgb(var(--charcoal) / <alpha-value>)',
+        slate: 'rgb(var(--slate) / <alpha-value>)',
+        sage: 'rgb(var(--sage) / <alpha-value>)',
+        rust: 'rgb(var(--rust) / <alpha-value>)',
+        sand: 'rgb(var(--sand) / <alpha-value>)',
+        white: 'rgb(var(--paper) / <alpha-value>)',
+      },
+      transitionTimingFunction: {
+        out: 'cubic-bezier(0.23, 1, 0.32, 1)',
       },
       fontFamily: {
         sans: ['Space Grotesk', 'system-ui', 'sans-serif'],

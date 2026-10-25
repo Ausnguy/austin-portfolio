@@ -1,92 +1,124 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --cream: 255 252 242;
+    --paper: 255 255 255;
+    --charcoal: 43 43 43;
+    --slate: 82 97 107;
+    --sage: 143 173 136;
+    --rust: 200 90 84;
+    --sand: 232 220 196;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    color-scheme: light;
+  }
+
+  /* Ink-on-paper inverted: warm dark ground, paper-colored ink. */
+  :root.dark {
+    --cream: 28 27 24;
+    --paper: 37 35 31;
+    --charcoal: 242 237 227;
+    --slate: 164 172 176;
+    --sage: 122 154 115;
+    --rust: 224 120 111;
+    --sand: 50 46 39;
+    color-scheme: dark;
+  }
+
   * {
     box-sizing: border-box;
   }
-  
+
   body {
     @apply bg-cream text-charcoal antialiased;
   }
-  
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-rust;
+    outline-style: solid;
+  }
+
   /* Custom scrollbar */
   ::-webkit-scrollbar {
     @apply w-2;
   }
-  
+
   ::-webkit-scrollbar-track {
     @apply bg-sand;
   }
-  
+
   ::-webkit-scrollbar-thumb {
     @apply bg-charcoal;
   }
 }
 
 @layer components {
-  /* Brutalist buttons */
+  /* Brutalist buttons: hard offset shadow, pressed into on hover */
   .btn {
-    @apply px-7 py-3 bg-charcoal text-cream border-2 border-charcoal font-mono text-sm font-medium uppercase tracking-wide relative inline-block transition-all duration-200;
+    @apply px-7 py-3 bg-charcoal text-cream border-2 border-charcoal font-mono text-sm font-medium uppercase tracking-wide relative inline-block;
+    --offset: 4px;
+    --shadow: var(--rust);
+    box-shadow: var(--offset) var(--offset) 0 0 rgb(var(--shadow));
+    transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out);
   }
-  
-  .btn::after {
-    content: '';
-    @apply absolute top-1 left-1 -right-1 -bottom-1 bg-rust -z-10 transition-all duration-200;
-  }
-  
-  .btn:hover {
-    @apply translate-x-0.5 translate-y-0.5;
-  }
-  
-  .btn:hover::after {
-    @apply top-0.5 left-0.5 -right-0.5 -bottom-0.5;
+
+  .btn:active {
+    transform: scale(0.97);
   }
   
   .btn-outline {
     @apply bg-transparent text-charcoal;
-  }
-  
-  .btn-outline::after {
-    @apply bg-sage;
+    --shadow: var(--sage);
   }
   
   /* Project cards with offset shadow */
   .card {
-    @apply bg-white border-2 border-charcoal p-6 relative transition-all duration-300;
+    @apply bg-white border-2 border-charcoal p-6 relative;
+    --offset: 8px;
+    box-shadow: var(--offset) var(--offset) 0 0 rgb(var(--sage));
+    transition: transform 200ms var(--ease-out), box-shadow 200ms var(--ease-out);
   }
-  
-  .card::before {
-    content: '';
-    @apply absolute top-2 left-2 -right-2 -bottom-2 bg-sage -z-10 transition-all duration-300;
+
+  .card .img-frame img,
+  .card .img-frame video {
+    transition: transform 400ms var(--ease-out);
   }
-  
-  .card:hover {
-    @apply translate-x-1 translate-y-1;
-  }
-  
-  .card:hover::before {
-    @apply top-1 left-1 -right-1 -bottom-1;
+
+  /* The face moves toward its shadow while the shadow stays where it was. */
+  @media (hover: hover) and (pointer: fine) {
+    .btn:hover {
+      transform: translate(2px, 2px);
+      --offset: 2px;
+    }
+
+    .card:hover {
+      transform: translate(4px, 4px);
+      --offset: 4px;
+    }
+
+    .card:hover .img-frame img,
+    .card:hover .img-frame video {
+      transform: scale(1.03);
+    }
   }
   
   /* Tags */
   .tag {
     @apply inline-block px-3 py-1 bg-sand text-charcoal font-mono text-xs uppercase tracking-wide border border-charcoal;
   }
-  
+
   /* Section numbers */
   .section-num {
     @apply font-mono text-sm text-rust mb-2 tracking-widest;
   }
-  
+
   /* Input field */
   .input {
     @apply w-full px-4 py-3 border-2 border-charcoal bg-white font-mono text-sm
            focus:outline-none focus:ring-2 focus:ring-rust focus:border-charcoal
-           transition-all duration-200;
+           transition-shadow duration-200;
   }
 
   /* Image frames */
@@ -97,6 +129,12 @@
   .img-frame::after {
     content: '';
     @apply absolute inset-0 bg-gradient-to-br from-transparent to-charcoal/10 pointer-events-none;
+  }
+
+  /* A media "plate": framed artwork with a hard rust offset, used for the featured video. */
+  .plate {
+    @apply relative border-2 border-charcoal bg-charcoal;
+    box-shadow: 12px 12px 0 0 rgb(var(--rust));
   }
 
   /* Timeline */
@@ -128,19 +166,22 @@
 
 /* Grid background pattern */
 .grid-bg {
-  background-image: 
-    linear-gradient(#E8DCC4 1px, transparent 1px),
-    linear-gradient(90deg, #E8DCC4 1px, transparent 1px);
+  background-image:
+    linear-gradient(rgb(var(--sand)) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--sand)) 1px, transparent 1px);
   background-size: 40px 40px;
   opacity: 0.3;
 }
 
-/* Animations */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+:root.dark .grid-bg {
+  opacity: 0.5;
 }
 
-.animate-float {
-  animation: float 3s ease-in-out infinite;
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .card,
+  .card .img-frame img,
+  .card .img-frame video {
+    transition-duration: 0ms;
+  }
 }

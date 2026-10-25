@@ -1,6 +1,42 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
+const ThemeToggle = () => {
+  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
+
+  const toggle = () => {
+    const next = !isDark;
+    document.documentElement.classList.toggle('dark', next);
+    try {
+      localStorage.setItem('theme', next ? 'dark' : 'light');
+    } catch {
+      // Storage can be blocked; the theme still applies for this visit.
+    }
+    setIsDark(next);
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      title={isDark ? 'Light mode' : 'Dark mode'}
+      className="w-8 h-8 grid place-items-center border-2 border-charcoal text-charcoal hover:bg-sand transition-colors"
+    >
+      {isDark ? (
+        <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+        </svg>
+      ) : (
+        <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4" fill="currentColor">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+        </svg>
+      )}
+    </button>
+  );
+};
+
 const Layout = ({ children }) => {
   const location = useLocation();
   const [activeSection, setActiveSection] = useState('');
@@ -59,6 +95,13 @@ const Layout = ({ children }) => {
       {/* Grid background */}
       <div className="grid-bg fixed inset-0 pointer-events-none"></div>
       
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:px-4 focus:py-2 focus:bg-charcoal focus:text-cream font-mono text-xs uppercase"
+      >
+        Skip to content
+      </a>
+
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-cream border-b-2 border-charcoal">
         <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
@@ -66,7 +109,7 @@ const Layout = ({ children }) => {
             AN
           </Link>
           
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-4 sm:gap-8">
             <Link
               to="/"
               onClick={goHome}
@@ -133,12 +176,14 @@ const Layout = ({ children }) => {
                 )}
               </Link>
             )}
+
+            <ThemeToggle />
           </div>
         </div>
       </nav>
       
       {/* Main Content */}
-      <main className="relative">
+      <main id="main" className="relative">
         {children}
       </main>
       
@@ -147,7 +192,7 @@ const Layout = ({ children }) => {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-center">
             <div className="font-mono text-xs">© 2026 Austin Nguyen</div>
-            <div className="font-mono text-xs text-slate">Built with React + Vite</div>
+            <div className="font-mono text-xs text-slate">Built with React, Vite and Framer Motion</div>
           </div>
         </div>
       </footer>
