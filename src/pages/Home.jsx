@@ -16,12 +16,49 @@ const HOME_FORMULA = '=TURN(messy_data, "decisions people act on")';
 // Spans for the cell that fills out the last row of project cards (full class names so Tailwind keeps them).
 const FILLER_SPAN = { 1: 'lg:col-span-3', 2: 'lg:col-span-6', 3: 'lg:col-span-9' };
 
-// One headline result per kind of work, each linked to where it comes from.
+// What I can do, shown as work: the skill it proves, what I did, one proof number, the tools, and where to read more.
 const results = [
-  { id: 'A3', area: 'Machine learning', value: '90 of 91', label: 'equipment failures flagged before they happened', link: '/projects/casequest-2026', linkText: 'Parvius', formula: '=COUNTIF(failures, "warned first")' },
-  { id: 'D3', area: 'AI infrastructure', value: '~70%', label: 'less modeled energy by routing simple requests to small models', link: '/projects/ai-efficiency-modeling', linkText: 'BNY project', formula: '=1 - energy_after / energy_before' },
-  { id: 'G3', area: 'Business', value: '$75K+', label: 'first-year revenue from the Amazon store I ran, at 30%+ margins', link: '/projects/sales-analytics-dashboard', linkText: 'ToolAndMore', formula: '=SUM(ToolAndMore!revenue_year_1)' },
-  { id: 'J3', area: 'Academics', value: profile.gpa, label: 'GPA at UH Bauer, on the Dean’s List since Fall 2023', link: '/skills', linkText: 'Education', formula: '=GPA("UH Bauer")' },
+  {
+    id: 'A3',
+    skill: 'Data engineering',
+    headline: 'Streaming pipeline on live internet routing data',
+    proof: { value: '6', unit: 'stages', note: 'RIPE feed → Kafka → Spark → PostgreSQL → API → dashboard' },
+    tools: ['Kafka', 'Spark', 'PostgreSQL', 'FastAPI'],
+    status: 'In progress, V1 live',
+    link: '/projects/interdomain',
+    linkText: 'See how it works',
+    formula: '=SKILL("data engineering")',
+  },
+  {
+    id: 'D3',
+    skill: 'Machine learning',
+    headline: 'Built a failure-prediction model from scratch, with a team of 5',
+    proof: { value: '90 of 91', unit: '', note: 'equipment failures flagged on unseen data' },
+    tools: ['Python', 'NumPy', 'TypeScript', 'Expo'],
+    link: '/projects/casequest-2026',
+    linkText: 'Watch the demo',
+    formula: '=SKILL("machine learning")',
+  },
+  {
+    id: 'G3',
+    skill: 'BI at enterprise scale',
+    headline: 'Own the automated Power BI pipeline behind compensation reporting at HPE',
+    proof: { value: 'Automated', unit: '', note: 'compensation reporting that used to be manual' },
+    tools: ['Power BI', 'DAX', 'Power Query', 'SharePoint'],
+    link: '/experience',
+    linkText: 'See the role',
+    formula: '=SKILL("business intelligence")',
+  },
+  {
+    id: 'J3',
+    skill: 'Ownership and analytics',
+    headline: 'Ran an Amazon store, using pricing and ROI analysis to guide what to buy',
+    proof: { value: '$75K+', unit: '', note: 'first-year revenue at 30%+ margins' },
+    tools: ['Excel', 'Pricing analysis', 'Sourcing'],
+    link: '/projects/sales-analytics-dashboard',
+    linkText: 'Read the case study',
+    formula: '=SKILL("analytics")',
+  },
 ];
 
 // The hero's receipts: each one is something shipped, linked to where it's shown.
@@ -41,7 +78,7 @@ const siteBuild = [
 ];
 
 const currentStatus = [
-  { id: 'A2', label: 'School', value: 'MIS at UH Bauer, May 2027', formula: '=SCHOOL("University of Houston")' },
+  { id: 'A2', label: 'School', value: 'MIS at UH Bauer, 3.95 GPA, May 2027', formula: '=SCHOOL("University of Houston")' },
   { id: 'D2', label: 'Now', value: 'Data Analyst Intern at HPE', formula: '=NOW("Hewlett Packard Enterprise")' },
   { id: 'G2', label: 'Building', value: 'Interdomain, a real-time BGP pipeline', formula: '=BUILDING("Interdomain")', to: '/projects/interdomain' },
   { id: 'J2', label: 'Based in', value: profile.location, formula: '=LOCATION("Houston, TX")' },
@@ -185,16 +222,26 @@ const Home = () => {
         </Cell>
       </Row>
 
-      {/* Row 3: one headline result per kind of work */}
+      {/* Row 3: four things I can do, each shown as work */}
       <Row>
         {results.map((r) => (
-          <Cell key={r.id} id={r.id} span="col-span-6 lg:col-span-3" formula={r.formula} className="flex flex-col">
-            <div className="text-[12.5px] font-semibold text-accent-ink">{r.area}</div>
-            <div className="mt-2 font-sans text-[1.9rem] sm:text-[2.5rem] font-bold tracking-tight leading-none text-ink whitespace-nowrap">
-              {r.value}
+          <Cell key={r.id} id={r.id} span="col-span-12 sm:col-span-6 lg:col-span-3" formula={r.formula} className="flex flex-col">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[12.5px] font-semibold text-accent-ink">{r.skill}</span>
+              {r.status && <span className="text-[11.5px] font-medium text-[#7A5B00] dark:text-[#F2D27A]">{r.status}</span>}
             </div>
-            <p className="mt-2 text-[13.5px] sm:text-[14px] leading-snug text-ink-soft">{r.label}</p>
-            <Link to={r.link} className="mt-auto pt-3 text-[13.5px] link self-start">{r.linkText}</Link>
+            <h3 className="mt-2 font-sans text-[17px] font-bold leading-snug text-ink">{r.headline}</h3>
+            <div className="mt-3 rounded-sm bg-head/70 px-3 py-2.5">
+              <div className="font-sans text-[1.7rem] font-bold tracking-tight leading-none text-ink">
+                {r.proof.value}
+                {r.proof.unit && <span className="ml-1.5 text-[15px] font-semibold text-ink-soft">{r.proof.unit}</span>}
+              </div>
+              <p className="mt-1.5 text-[13px] leading-snug text-ink-soft">{r.proof.note}</p>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {r.tools.map((t) => <span key={t} className="chip">{t}</span>)}
+            </div>
+            <Link to={r.link} className="mt-auto pt-4 text-[13.5px] link self-start">{r.linkText}</Link>
           </Cell>
         ))}
       </Row>
