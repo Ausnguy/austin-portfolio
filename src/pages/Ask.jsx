@@ -27,6 +27,8 @@ const Sources = ({ facts }) => (
   </div>
 );
 
+const onPhone = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
+
 const ModelStatus = ({ model }) => {
   if (model.status === 'ready') {
     return (
@@ -56,7 +58,9 @@ const ModelStatus = ({ model }) => {
       <p className="text-sm text-muted max-w-xl">
         {model.status === 'error'
           ? `The model couldn’t load here (${model.error}). Answers straight from the workbook still work.`
-          : `Downloads ${MODEL_NAME} once (about ${MODEL_DOWNLOAD_MB} MB) and runs it on your device. Nothing you type leaves this page.`}
+          : `Downloads ${MODEL_NAME} once (about ${MODEL_DOWNLOAD_MB} MB) and runs it on your device. Nothing you type leaves this page.${
+              onPhone ? ' On a phone it can be slow or run out of memory; answers straight from the workbook always work.' : ''
+            }`}
       </p>
     </div>
   );

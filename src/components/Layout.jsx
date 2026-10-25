@@ -6,7 +6,7 @@ export const SHEETS = [
   { to: '/', label: 'Summary', end: true },
   { to: '/projects', label: 'Projects' },
   { to: '/experience', label: 'Experience' },
-  { to: '/skills', label: 'Skills & Education' },
+  { to: '/skills', label: 'Skills & Education', short: 'Skills' },
   { to: '/ask', label: 'Ask Austin' },
 ];
 
@@ -63,11 +63,27 @@ const FormulaBar = () => {
   );
 };
 
+const SheetTab = ({ sheet, compact = false }) => (
+  <NavLink
+    to={sheet.to}
+    end={sheet.end}
+    className={({ isActive }) =>
+      `shrink-0 h-11 md:h-10 px-4 inline-flex items-center text-[14px] border-r border-grid transition-colors ${
+        isActive
+          ? 'bg-paper text-accent-ink font-semibold shadow-[inset_0_-3px_0_rgb(var(--accent))]'
+          : 'text-ink-soft hover:text-ink hover:bg-paper/60'
+      }`
+    }
+  >
+    {compact && sheet.short ? sheet.short : sheet.label}
+  </NavLink>
+);
+
 const Layout = ({ children }) => {
   const resumeUrl = `${import.meta.env.BASE_URL}resume.pdf`;
 
   return (
-    <div className="min-h-screen flex flex-col pb-[4.75rem]">
+    <div className="min-h-screen flex flex-col md:pb-[4.75rem]">
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:px-4 focus:py-2 focus:rounded focus:bg-paper focus:text-ink text-sm font-semibold"
@@ -115,7 +131,13 @@ const Layout = ({ children }) => {
             </div>
           </div>
         </div>
-        <div className="page border-x border-grid">
+        {/* Phones: sheet tabs sit under the title bar, so nothing is pinned over the content. */}
+        <nav aria-label="Sheet tabs" className="md:hidden flex overflow-x-auto bg-head border-b border-grid [scrollbar-width:none]">
+          {SHEETS.map((sheet) => (
+            <SheetTab key={sheet.to} sheet={sheet} compact />
+          ))}
+        </nav>
+        <div className="hidden md:block page border-x border-grid">
           <FormulaBar />
         </div>
       </header>
@@ -124,24 +146,13 @@ const Layout = ({ children }) => {
         {children}
       </main>
 
-      {/* Sheet tabs and status bar, pinned like Excel's */}
-      <div className="fixed bottom-0 inset-x-0 z-40 bg-head border-t border-grid">
+      <footer className="md:hidden px-4 py-6 text-center text-[13px] text-muted">© 2026 Austin Nguyen</footer>
+
+      {/* Desktop: sheet tabs and status bar, pinned like Excel's */}
+      <div className="hidden md:block fixed bottom-0 inset-x-0 z-40 bg-head border-t border-grid">
         <nav aria-label="Sheet tabs" className="page flex overflow-x-auto">
           {SHEETS.map((sheet) => (
-            <NavLink
-              key={sheet.to}
-              to={sheet.to}
-              end={sheet.end}
-              className={({ isActive }) =>
-                `shrink-0 h-10 px-4 inline-flex items-center text-[14px] border-r border-grid transition-colors ${
-                  isActive
-                    ? 'bg-paper text-accent-ink font-semibold shadow-[inset_0_-3px_0_rgb(var(--accent))]'
-                    : 'text-ink-soft hover:text-ink hover:bg-paper/60'
-                }`
-              }
-            >
-              {sheet.label}
-            </NavLink>
+            <SheetTab key={sheet.to} sheet={sheet} />
           ))}
         </nav>
         <div className="bg-[#107C41] text-white/90 text-[12px]">

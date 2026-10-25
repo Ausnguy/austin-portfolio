@@ -1,6 +1,9 @@
 // Runs the language model off the main thread so the page stays responsive while it loads and writes.
-import { pipeline, TextStreamer } from '@huggingface/transformers';
+import { env, pipeline, TextStreamer } from '@huggingface/transformers';
 import { MODEL_ID } from './constants';
+
+// Models come from the Hugging Face Hub; skip the probe for a local /models/ copy (it only 404s).
+env.allowLocalModels = false;
 
 let generator = null;
 

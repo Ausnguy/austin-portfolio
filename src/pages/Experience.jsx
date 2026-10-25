@@ -52,8 +52,17 @@ const Experience = () => {
             <div className="mt-2 inline-flex chip">{exp.type}</div>
           </Cell>
           <Cell id={`D${i + 3}`} span="col-span-12 lg:col-span-9" formula={`=ROLE("${exp.shortName}")`} className="!pt-2 lg:!pt-6">
-            <h2 className="font-sans text-xl font-bold leading-snug text-ink">{exp.company}</h2>
-            <p className="mt-0.5 text-[15px] font-medium text-accent-ink">{exp.role}</p>
+            <div className="flex items-center gap-3">
+              {exp.logo && (
+                <div className="h-10 w-20 shrink-0 rounded-sm bg-white border border-grid grid place-items-center px-1.5">
+                  <img src={`${import.meta.env.BASE_URL}${exp.logo}`} alt={`${exp.company} logo`} className="max-h-7 max-w-full object-contain" loading="lazy" />
+                </div>
+              )}
+              <div className="min-w-0">
+                <h2 className="font-sans text-xl font-bold leading-snug text-ink">{exp.company}</h2>
+                <p className="mt-0.5 text-[15px] font-medium text-accent-ink">{exp.role}</p>
+              </div>
+            </div>
             <ul className="mt-3 space-y-2 max-w-3xl">
               {exp.highlights.map((h) => (
                 <li key={h} className="relative pl-4 body-copy">

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ProjectCard from '../components/ProjectCard';
 import LoopVideo from '../components/LoopVideo';
@@ -9,18 +9,19 @@ import { experiences } from '../data/experience';
 import { skillGroups } from '../data/skills';
 import { profile } from '../data/profile';
 
-const Chart3D = lazy(() => import('../components/Chart3D'));
+const ExperienceChart3D = lazy(() => import('../components/ExperienceChart3D'));
 
 const HOME_FORMULA = '=TURN(messy_data, "decisions people act on")';
 
 // Spans for the cell that fills out the last row of project cards (full class names so Tailwind keeps them).
 const FILLER_SPAN = { 1: 'lg:col-span-3', 2: 'lg:col-span-6', 3: 'lg:col-span-9' };
 
-const kpis = [
-  { id: 'A3', value: profile.gpa, label: 'GPA at UH Bauer, Dean’s List Fall 2023 – Fall 2026', formula: '=GPA("UH Bauer")' },
-  { id: 'D3', value: '90 / 91', label: 'equipment failures our CaseQuest model flagged before they happened', formula: '=COUNTIF(failures, "warned first")' },
-  { id: 'G3', value: '~96–98%', label: 'test accuracy of my PyTorch digit classifier on 10,000 held-out images', formula: '=ACCURACY(mnist_test_set)' },
-  { id: 'J3', value: '1 of 35', label: 'picked from 500+ applicants for Bloomberg’s Decoded: Data', formula: '=RANK(Austin, decoded_data_applicants)' },
+// One headline result per kind of work, each linked to where it comes from.
+const results = [
+  { id: 'A3', area: 'Machine learning', value: '90 of 91', label: 'equipment failures flagged before they happened', link: '/projects/casequest-2026', linkText: 'Parvius', formula: '=COUNTIF(failures, "warned first")' },
+  { id: 'D3', area: 'AI infrastructure', value: '~70%', label: 'less modeled energy by routing simple requests to small models', link: '/projects/ai-efficiency-modeling', linkText: 'BNY project', formula: '=1 - energy_after / energy_before' },
+  { id: 'G3', area: 'Business', value: '$75K+', label: 'first-year revenue from the Amazon store I ran, at 30%+ margins', link: '/projects/sales-analytics-dashboard', linkText: 'ToolAndMore', formula: '=SUM(ToolAndMore!revenue_year_1)' },
+  { id: 'J3', area: 'Academics', value: profile.gpa, label: 'GPA at UH Bauer, on the Dean’s List since Fall 2023', link: '/skills', linkText: 'Education', formula: '=GPA("UH Bauer")' },
 ];
 
 const toMonth = (ym) => {
@@ -33,7 +34,29 @@ const nowMonth = now.getFullYear() * 12 + now.getMonth() + 1;
 // Months spent in each role, oldest first, for the 3D chart.
 const roles = [...experiences]
   .sort((a, b) => toMonth(a.start) - toMonth(b.start))
-  .map((exp) => ({ name: exp.shortName, months: (exp.end ? toMonth(exp.end) + 1 : nowMonth) - toMonth(exp.start), current: !exp.end }));
+  .map((exp) => ({
+    name: exp.shortName,
+    company: exp.company,
+    role: exp.role,
+    period: exp.period,
+    summary: exp.summary,
+    logo: exp.logo,
+    item: exp.item,
+    months: (exp.end ? toMonth(exp.end) + 1 : nowMonth) - toMonth(exp.start),
+    current: !exp.end,
+  }));
+
+// Mounts its children only once they come near the viewport, so heavy chunks load on demand.
+const WhenNear = ({ children, fallback }) => {
+  const ref = useRef(null);
+  const [near, setNear] = useState(false);
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => entry.isIntersecting && setNear(true), { rootMargin: '400px' });
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+  return <div ref={ref} className="h-full">{near ? children : fallback}</div>;
+};
 
 const AskTeaser = () => {
   const navigate = useNavigate();
@@ -122,14 +145,16 @@ const Home = () => {
         </Cell>
       </Row>
 
-      {/* Row 3: headline numbers */}
+      {/* Row 3: one headline result per kind of work */}
       <Row>
-        {kpis.map((kpi) => (
-          <Cell key={kpi.id} id={kpi.id} span="col-span-6 lg:col-span-3" formula={kpi.formula}>
-            <div className="font-sans text-3xl sm:text-[2.6rem] font-bold tracking-tight leading-none text-ink whitespace-nowrap">
-              {kpi.value}
+        {results.map((r) => (
+          <Cell key={r.id} id={r.id} span="col-span-6 lg:col-span-3" formula={r.formula} className="flex flex-col">
+            <div className="text-[12.5px] font-semibold text-accent-ink">{r.area}</div>
+            <div className="mt-2 font-sans text-[1.9rem] sm:text-[2.5rem] font-bold tracking-tight leading-none text-ink whitespace-nowrap">
+              {r.value}
             </div>
-            <p className="mt-2 text-[14px] leading-snug text-ink-soft">{kpi.label}</p>
+            <p className="mt-2 text-[13.5px] sm:text-[14px] leading-snug text-ink-soft">{r.label}</p>
+            <Link to={r.link} className="mt-auto pt-3 text-[13.5px] link self-start">{r.linkText}</Link>
           </Cell>
         ))}
       </Row>
@@ -209,31 +234,45 @@ const Home = () => {
 
       {/* Row 7: experience at a glance */}
       <Row>
-        <Cell id="A7" span="col-span-12 lg:col-span-7" pad={false} formula="=CHART(months_per_role, 3D_COLUMN)">
-          <div className="h-[300px] sm:h-[340px]">
-            <Suspense fallback={<div className="h-full grid place-items-center text-sm text-muted">Loading chart…</div>}>
-              <Chart3D
-                values={roles.map((r) => r.months)}
-                labels={roles.map((_, i) => String.fromCharCode(65 + i))}
-                highlight={roles.findIndex((r) => r.current)}
-                label={`3D column chart of months spent in each role: ${roles.map((r) => `${r.name} ${r.months} months`).join(', ')}`}
-              />
-            </Suspense>
+        <Cell id="A7" span="col-span-12 lg:col-span-6" pad={false} formula="=CHART(months_per_role, 3D_COLUMN)">
+          <div className="h-[320px] sm:h-[400px] lg:h-[460px] lg:sticky lg:top-[7.5rem]">
+            <WhenNear fallback={<div className="h-full grid place-items-center text-sm text-muted">Loading chart…</div>}>
+              <Suspense fallback={<div className="h-full grid place-items-center text-sm text-muted">Loading chart…</div>}>
+                <ExperienceChart3D
+                  roles={roles}
+                  label={`3D column chart of months spent in each role: ${roles.map((r) => `${r.name} ${r.months} months`).join(', ')}`}
+                />
+              </Suspense>
+            </WhenNear>
           </div>
         </Cell>
-        <Cell id="H7" span="col-span-12 lg:col-span-5" formula="=SORT(roles, start_date)">
-          <h2 className="font-sans text-xl font-bold text-ink">Experience</h2>
-          <p className="mt-1 text-sm text-muted">Months in each role, oldest first. The green column is where I am now.</p>
-          <ol className="mt-4 divide-y divide-grid border-y border-grid">
-            {roles.map((r, i) => (
-              <li key={r.name} className="flex items-center gap-3 py-2 text-[15px]">
-                <span className="font-mono text-[12px] text-muted w-4">{String.fromCharCode(65 + i)}</span>
-                <span className={`flex-1 ${r.current ? 'font-semibold text-ink' : 'text-ink-soft'}`}>{r.name}</span>
-                <span className="font-mono text-[13px] text-muted tabular-nums">{r.months} mo</span>
+        <Cell id="G7" span="col-span-12 lg:col-span-6" formula="=SORT(roles, start_date, -1)">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h2 className="font-sans text-xl font-bold text-ink">Experience</h2>
+            <span className="text-[13px] text-muted">Column height = months in the role</span>
+          </div>
+          <ol className="mt-3 divide-y divide-grid border-y border-grid">
+            {[...roles].reverse().map((r) => (
+              <li key={r.name} className="py-3 grid grid-cols-[4.5rem_minmax(0,1fr)] gap-3">
+                <div className="h-9 rounded-sm bg-white border border-grid grid place-items-center px-1.5">
+                  {r.logo ? (
+                    <img src={`${baseUrl}${r.logo}`} alt="" className="max-h-6 max-w-full object-contain" loading="lazy" />
+                  ) : (
+                    <span className="text-[11px] font-bold text-[#1D2329]">{r.name}</span>
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+                    <span className={`text-[15px] font-semibold ${r.current ? 'text-accent-ink' : 'text-ink'}`}>{r.company}</span>
+                    <span className="font-mono text-[12px] text-muted whitespace-nowrap">{r.period}</span>
+                  </div>
+                  <div className="text-[13.5px] text-ink-soft">{r.role}</div>
+                  <p className="mt-1 text-[13.5px] leading-snug text-muted">{r.summary}</p>
+                </div>
               </li>
             ))}
           </ol>
-          <Link to="/experience" className="link mt-4 inline-block">Open the Experience sheet</Link>
+          <Link to="/experience" className="link mt-4 inline-block">Full timeline and details</Link>
         </Cell>
       </Row>
 
