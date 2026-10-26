@@ -65,7 +65,11 @@ const ProjectCard = ({ project, compact = false }) => {
         <h3 className={`mt-1 md:mt-1.5 font-sans font-bold leading-snug text-ink decoration-accent decoration-2 underline-offset-4 group-hover:underline text-[16px] ${compact ? 'md:text-[17px]' : 'md:text-xl'}`}>
           {project.title}
         </h3>
-        {project.highlight && <p className="mt-1 md:mt-2 text-[13.5px] md:text-[14.5px] font-semibold leading-snug text-ink-soft md:text-ink">{project.highlight}</p>}
+        {compact && project.tldr?.[0] ? (
+          <p className="mt-1 md:mt-2 text-[13.5px] md:text-[14px] leading-snug text-ink-soft">{project.tldr[0]}</p>
+        ) : (
+          project.highlight && <p className="mt-1 md:mt-2 text-[13.5px] md:text-[14.5px] font-semibold leading-snug text-ink-soft md:text-ink">{project.highlight}</p>
+        )}
         {!compact && <p className="hidden md:block mt-1.5 text-[15px] leading-relaxed text-ink-soft">{project.description}</p>}
         <p className="hidden md:block mt-auto pt-3 font-mono text-[12.5px] text-muted">{project.tools.join(', ')}</p>
       </div>

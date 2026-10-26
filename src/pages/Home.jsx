@@ -4,7 +4,7 @@ import ProjectCard from '../components/ProjectCard';
 import LoopVideo from '../components/LoopVideo';
 import { Sheet, Row, Cell, useSheet } from '../components/workbook';
 import { GitHubIcon, LinkedInIcon } from '../components/icons';
-import { getFeaturedProjects, getSpotlightProject } from '../data/projects';
+import { getFeaturedProjects, getSpotlightProject, projects } from '../data/projects';
 import { experiences } from '../data/experience';
 import ToolIcon from '../components/ToolIcon';
 import { homeTools, metaFor } from '../data/toolIcons';
@@ -79,11 +79,11 @@ const AskTeaser = () => {
   );
 };
 
-// Three results that say what I do, each linked to where it's shown.
+// Three plain facts, each linked to where the detail lives.
 const stats = [
-  { value: '8.7K', unit: 'events/sec', note: 'Streaming pipeline on live internet routing data', to: '/projects/interdomain' },
-  { value: '90 of 91', unit: '', note: 'Equipment failures our team’s model flagged on unseen data', to: '/projects/casequest-2026' },
-  { value: '$75K+', unit: '', note: 'First-year revenue from an Amazon store I ran, at 30%+ margins', to: '/projects/sales-analytics-dashboard' },
+  { value: String(projects.length), label: 'projects I’ve built and written up', to: '/projects' },
+  { value: String(experiences.length), label: 'jobs, internships and programs since 2023', to: '/experience' },
+  { value: profile.gpa, label: 'GPA at the University of Houston', to: '/skills' },
 ];
 
 const Home = () => {
@@ -98,12 +98,10 @@ const Home = () => {
       {/* Who I am, and the assistant */}
       <Row>
         <Cell id="A1" span="col-span-12 lg:col-span-8" formula={HOME_FORMULA} className="lg:!p-10">
-          <h1 className="font-sans text-5xl sm:text-7xl font-bold tracking-tight leading-[0.95] text-ink">
-            Austin Nguyen
+          <div className="font-sans text-xl sm:text-2xl font-semibold text-accent-ink">Hi, I’m Austin.</div>
+          <h1 className="mt-4 font-sans text-[2.1rem] sm:text-5xl lg:text-[3.4rem] font-bold tracking-tight leading-[1.08] text-ink max-w-3xl">
+            I got into data by running an Amazon store. Now I build the pipelines, models and dashboards that help people decide what to do next.
           </h1>
-          <p className="mt-5 text-xl sm:text-2xl leading-snug text-ink max-w-2xl">
-            I ship data systems end to end: streaming pipelines, ML models, BI at enterprise scale, and the apps on top.
-          </p>
           <p className="mt-3 text-[15px] text-muted">MIS at the University of Houston · Data Analyst Intern at HPE · {profile.location}</p>
           <div className="mt-7 flex flex-wrap gap-2.5">
             <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">View resume</a>
@@ -130,11 +128,8 @@ const Home = () => {
         {stats.map((item, i) => (
           <Cell key={item.value} id={`${'ADG'[i]}2`} span="col-span-12 sm:col-span-4" formula={`=PROOF(${i + 1})`}>
             <Link to={item.to} className="group block">
-              <div className="font-sans text-4xl sm:text-5xl font-bold tracking-tight leading-none text-ink">
-                {item.value}
-                {item.unit && <span className="ml-2 text-lg font-semibold text-ink-soft">{item.unit}</span>}
-              </div>
-              <p className="mt-3 text-[15px] leading-snug text-ink-soft group-hover:text-ink">{item.note}</p>
+              <div className="font-sans text-5xl sm:text-6xl font-bold tracking-tight leading-none text-ink">{item.value}</div>
+              <p className="mt-3 text-[16px] leading-snug text-ink-soft group-hover:text-ink">{item.label}</p>
             </Link>
           </Cell>
         ))}
@@ -160,8 +155,7 @@ const Home = () => {
               <span className="text-muted">{spotlight.date}</span>
             </div>
             <h2 className="mt-2 font-sans text-2xl font-bold leading-tight text-ink">{spotlight.title}</h2>
-            <p className="mt-3 text-[15.5px] font-semibold text-ink">{spotlight.highlight}.</p>
-            <p className="mt-2 body-copy">{spotlight.description}</p>
+            <p className="mt-3 body-copy">{spotlight.description}</p>
             <div className="mt-auto pt-6 flex flex-wrap gap-2.5">
               <Link to={`/projects/${spotlight.slug}`} className="btn btn-primary">Case study + video</Link>
               <a href={spotlight.links.demo} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">Live demo</a>
