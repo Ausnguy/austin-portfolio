@@ -3,33 +3,30 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; }
-  body { width: 1200px; height: 630px; position: relative; overflow: hidden; background: #ECE9E2; color: #0F0F0F; font-family: 'Archivo', sans-serif; }
-  .rule { position: absolute; left: 64px; top: 64px; width: 72px; height: 10px; background: #2338FF; }
-  h1 { position: absolute; left: 60px; top: 104px; font-size: 134px; line-height: .86; font-weight: 900; font-stretch: 68%; letter-spacing: -1px; text-transform: uppercase; }
-  .line { position: absolute; left: 64px; top: 394px; width: 380px; font-size: 29px; line-height: 1.22; font-weight: 500; font-stretch: 90%; }
-  .url { position: absolute; left: 64px; bottom: 44px; font: 500 20px 'IBM Plex Mono', monospace; color: #55524b; }
-  .win { position: absolute; background: #fff; border: 1.5px solid #0F0F0F; box-shadow: 8px 8px 0 #0F0F0F; overflow: hidden; }
-  .win .t { height: 30px; padding: 0 12px; display: flex; align-items: center; font: 500 15px 'IBM Plex Mono', monospace; background: #fff; border-bottom: 1.5px solid #0F0F0F; }
-  .win img { display: block; width: 100%; object-fit: cover; }
-  .a { left: 566px; top: 48px; width: 574px; }
-  .a img { height: 323px; }
-  .b { left: 506px; top: 356px; width: 340px; }
-  .b .box { height: 200px; background: #fff url(chart.png) no-repeat; background-size: 118% auto; background-position: 53% 33%; }
-  .c { left: 874px; top: 380px; width: 266px; background: #fff; }
-  .c img { height: 190px; }
+  body { width: 1200px; height: 630px; position: relative; overflow: hidden; background: #fff; color: #1D2329; font-family: 'Archivo', sans-serif; }
+  /* the site's grid: 120px columns, 90px rows */
+  .grid { position: absolute; inset: 0; background-image: linear-gradient(#E2E5E9 2px, transparent 2px), linear-gradient(90deg, #E2E5E9 2px, transparent 2px); background-size: 120px 90px; background-position: 60px 0; }
+  .cols { position: absolute; left: 0; right: 0; top: 0; height: 60px; background: #F3F5F7; border-bottom: 2px solid #E2E5E9; }
+  .cols span { position: absolute; top: 0; width: 120px; height: 60px; line-height: 60px; text-align: center; font: 600 24px 'IBM Plex Mono', monospace; color: #636B75; border-left: 2px solid #E2E5E9; }
+  .rows { position: absolute; left: 0; top: 60px; bottom: 0; width: 60px; background: #F3F5F7; border-right: 2px solid #E2E5E9; }
+  /* selected cell, like the favicon: green frame plus a fill handle */
+  .sel { position: absolute; left: 118px; top: 150px; width: 1022px; height: 220px; background: #fff; border: 6px solid #107C41; }
+  .sel::after { content: ''; position: absolute; right: -16px; bottom: -16px; width: 22px; height: 22px; background: #107C41; border: 4px solid #fff; }
+  h1 { position: absolute; left: 150px; top: 160px; font-size: 164px; line-height: .9; font-weight: 800; font-stretch: 78%; letter-spacing: -2px; white-space: nowrap; }
+  .line { position: absolute; left: 118px; top: 410px; width: 1020px; font-size: 44px; line-height: 1.2; font-weight: 600; font-stretch: 88%; color: #39424C; }
+  .bar { position: absolute; left: 60px; right: 0; bottom: 0; height: 76px; background: #0B4A2B; color: #fff; padding: 0 58px; display: flex; align-items: center; font: 600 32px 'IBM Plex Mono', monospace; }
 </style>
 </head>
 <body>
-  <div class="rule"></div>
-  <h1>Austin<br>Nguyen</h1>
+  <div class="grid"></div>
+  <div class="cols"><span style="left:60px">A</span><span style="left:180px">B</span><span style="left:300px">C</span><span style="left:420px">D</span><span style="left:540px">E</span><span style="left:660px">F</span><span style="left:780px">G</span><span style="left:900px">H</span><span style="left:1020px">I</span><span style="left:1140px">J</span></div>
+  <div class="rows"></div>
+  <div class="sel"></div>
+  <h1>Austin Nguyen</h1>
   <p class="line">Data engineering, machine learning, and the software around them.</p>
-  <div class="url">ausnguy.github.io/austin-portfolio</div>
-
-  <div class="win a"><div class="t">parvius / console + phone</div><img src="../../public/casequest/loop-poster.jpg" alt=""></div>
-  <div class="win b"><div class="t">experience / 3D chart</div><div class="box"></div></div>
-  <div class="win c"><div class="t">interdomain / routing</div><img src="../../public/thumbs/interdomain.png" alt=""></div>
+  <div class="bar">ausnguy.github.io/austin-portfolio</div>
 </body>
 </html>
