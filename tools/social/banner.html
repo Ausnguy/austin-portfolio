@@ -1,0 +1,28 @@
+<!doctype html>
+<!-- Source for public/linkedin-banner.png (1584x396 LinkedIn cover). Render with tools/social/banner.cjs. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  body { width: 1584px; height: 396px; position: relative; overflow: hidden; background: #fff; color: #1D2329; }
+  .grid { position: absolute; inset: 0; background-image: linear-gradient(#E2E5E9 2px, transparent 2px), linear-gradient(90deg, #E2E5E9 2px, transparent 2px); background-size: 132px 66px; background-position: 0 0; }
+  .cols { position: absolute; left: 0; right: 0; top: 0; height: 66px; background: #F3F5F7; border-bottom: 2px solid #E2E5E9; }
+  .cols span { position: absolute; top: 0; width: 132px; height: 66px; line-height: 66px; text-align: center; font: 600 24px 'IBM Plex Mono', monospace; color: #636B75; border-left: 2px solid #E2E5E9; }
+  .sel { position: absolute; left: 420px; top: 132px; width: 860px; height: 132px; background: #fff; border: 6px solid #107C41; }
+  .sel::after { content: ''; position: absolute; right: -16px; bottom: -16px; width: 22px; height: 22px; background: #107C41; border: 4px solid #fff; }
+  h1 { position: absolute; left: 448px; top: 150px; font: 800 68px/1.05 'Libre Franklin', sans-serif; letter-spacing: -1.5px; white-space: nowrap; }
+  .f { position: absolute; left: 420px; top: 290px; font: 600 34px 'IBM Plex Mono', monospace; color: #107C41; white-space: nowrap; }
+  .tab { position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: #0B4A2B; }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="cols"><span style="left:0">A</span><span style="left:132px">B</span><span style="left:264px">C</span><span style="left:396px">D</span><span style="left:528px">E</span><span style="left:660px">F</span><span style="left:792px">G</span><span style="left:924px">H</span><span style="left:1056px">I</span><span style="left:1188px">J</span><span style="left:1320px">K</span><span style="left:1452px">L</span></div>
+  <div class="sel"></div>
+  <h1>Data engineering + ML</h1>
+  <p class="f">=PYTHON + SQL + KAFKA + SPARK + PYTORCH</p>
+  <div class="tab"></div>
+</body>
+</html>
