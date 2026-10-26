@@ -209,7 +209,7 @@ const ProjectDetail = () => {
   const { caseStudy } = project;
   const tabs = caseStudy
     ? [
-        { id: 'how', label: 'How it works' },
+        { id: 'how', label: 'How it works (technical)' },
         project.decisions && { id: 'decisions', label: 'Key decisions' },
         caseStudy.lessons && { id: 'learned', label: `What ${project.team ? 'we' : 'I'} learned` },
         { id: 'stack', label: 'Tech stack' },
@@ -273,8 +273,38 @@ const ProjectDetail = () => {
         </Cell>
       </Row>
 
+      {/* The case and the solution, in plain language, before anything technical */}
+      {project.story && (
+        <Row>
+          <Cell id="A2" span="col-span-12 md:col-span-6" formula="=CASE()" className="border-t-4 border-t-[#B23A2E]">
+            <div className="text-[13px] font-bold text-[#B23A2E] dark:text-[#F0907F]">The case</div>
+            <h2 className="mt-2 font-sans text-xl sm:text-2xl font-bold leading-snug text-ink">{project.story.case.headline}</h2>
+            <ul className="mt-4 space-y-2">
+              {project.story.case.points.map((pt) => (
+                <li key={pt} className="relative pl-5 text-[16px] leading-snug text-ink-soft">
+                  <span aria-hidden="true" className="absolute left-0 top-[0.55em] h-1.5 w-1.5 rounded-full bg-[#B23A2E]" />
+                  {pt}
+                </li>
+              ))}
+            </ul>
+            {project.story.case.note && <p className="mt-4 text-[14px] leading-relaxed text-muted">{project.story.case.note}</p>}
+          </Cell>
+          <Cell id="H2" span="col-span-12 md:col-span-6" formula="=SOLUTION()" className="border-t-4 border-t-accent bg-accent-wash/40">
+            <div className="text-[13px] font-bold text-accent-ink">Our solution</div>
+            <h2 className="mt-2 font-sans text-xl sm:text-2xl font-bold leading-snug text-ink">{project.story.solution.headline}</h2>
+            <ul className="mt-4 space-y-2">
+              {project.story.solution.points.map((pt) => (
+                <li key={pt} className="relative pl-5 text-[16px] leading-snug text-ink-soft">
+                  <span aria-hidden="true" className="absolute left-0 top-[0.55em] h-1.5 w-1.5 rounded-full bg-accent" />
+                  {pt}
+                </li>
+              ))}
+            </ul>
+          </Cell>
+        </Row>
+      )}
       {/* TL;DR: the whole project in three cells */}
-      {project.tldr && (
+      {project.tldr && !project.story && (
         <Row>
           {['Problem', 'What was built', 'Result'].map((label, i) => (
             <Cell key={label} id={`${'AEI'[i]}2`} span="col-span-12 md:col-span-4" formula={`=TLDR(${i + 1})`} className={i === 2 ? 'bg-accent-wash/40' : ''}>
@@ -337,12 +367,27 @@ const ProjectDetail = () => {
         </Row>
       )}
 
+      {/* What was built */}
+      {project.story?.built && (
+        <Row>
+          {project.story.built.map((item, i) => (
+            <Cell key={item.title} id={`${'AEI'[i]}4`} span="col-span-12 md:col-span-4" formula={`=BUILT(${i + 1})`}>
+              <div className="text-[12.5px] font-semibold text-accent-ink">{item.who}</div>
+              <h3 className="mt-1 font-sans text-[17px] font-bold text-ink">{item.title}</h3>
+              <p className="mt-1.5 text-[15px] leading-relaxed text-ink-soft">{item.body}</p>
+            </Cell>
+          ))}
+        </Row>
+      )}
+
       {/* Case study */}
       {caseStudy && (
         <>
-          <CaseRow n={n++} label="The problem" formula="=PROBLEM()">
-            <p className="body-copy max-w-3xl">{caseStudy.problem}</p>
-          </CaseRow>
+          {!project.story && (
+            <CaseRow n={n++} label="The problem" formula="=PROBLEM()">
+              <p className="body-copy max-w-3xl">{caseStudy.problem}</p>
+            </CaseRow>
+          )}
           <CaseRow n={n++} label="Results" formula="=RESULTS()">
             <div className="rounded-sm border-l-4 border-accent bg-accent-wash/60 px-5 py-4 max-w-3xl">
               <Bullets text={caseStudy.results} />

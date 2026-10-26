@@ -91,6 +91,31 @@ export const projects = [
       'A failure-prediction model, a 3D operations console and an engineer phone app that share one live state.',
       'The model warned before 90 of 91 mechanical failures on unseen data; the parts program is modeled at about 968 hours a year saved.',
     ],
+    // Plain-language layer shown first on the project page: the case, the solution, and what was built.
+    story: {
+      case: {
+        headline: 'Lone Mesa Energy lost about 6,599 hours to unplanned stops in 2025.',
+        points: [
+          'Six oil sites with eighteen pumps and compressors.',
+          'About $5.6M in modeled lost contribution.',
+          '24% of the lost time was machines waiting for a spare part.',
+        ],
+        note: 'The competition asked us, acting as consultants, to pick the one problem that matters most and recommend one practical fix.',
+      },
+      solution: {
+        headline: 'A critical spare-parts program, backed by an early-warning system for failures.',
+        points: [
+          'Keep critical parts in stock, but only at sites whose overdue safety actions are closed.',
+          'A model flags machines likely to fail within 3 days, so the right parts and engineer are ready.',
+          'Modeled at about 968 hours a year of downtime avoided.',
+        ],
+      },
+      built: [
+        { title: 'Failure model', who: 'For the planner', body: 'Reads daily vibration, temperature and inspection notes, and flags machines likely to have a bearing or seal failure within 3 days.' },
+        { title: 'Ops console', who: 'For the manager', body: 'A 3D map of the sites, a parts warehouse and dispatch that refuses to send an engineer without every kit.' },
+        { title: 'Phone app', who: 'For the field engineer', body: 'Take the job, travel to the site and report which kits were fitted, on the same live state as the console.' },
+      ],
+    },
     decisions: [
       {
         title: 'Predict 3 days out from a 2-day window',
