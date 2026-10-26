@@ -33,6 +33,8 @@ export const toolMeta = {
   'Git & GitHub': { slug: 'github', label: 'Git & GitHub' },
   pytest: { slug: 'pytest', label: 'pytest' },
   Vitest: { slug: 'vitest', label: 'Vitest' },
+  Databricks: { slug: 'databricks', label: 'Databricks' },
+  HackerRank: { slug: 'hackerrank', label: 'HackerRank' },
 };
 
 export const iconSlugs = [...new Set(Object.values(toolMeta).map((m) => m.slug).filter(Boolean))];

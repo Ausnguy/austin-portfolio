@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ToolIcon from '../components/ToolIcon';
-import { metaFor } from '../data/toolIcons';
+import { metaFor, toolMeta } from '../data/toolIcons';
 import { Sheet, Row, Cell, useSheet } from '../components/workbook';
 import { stack, resumeOnly, resolveWhere } from '../data/stack';
 import { profile } from '../data/profile';
@@ -55,6 +55,24 @@ const ToolGrid = ({ tools }) => {
   );
 };
 
+const BASE = import.meta.env.BASE_URL;
+
+// Logo files kept in public/logos, for organizations that aren't in the icon set.
+const ORG_LOGOS = { HPE: 'hpe.png', 'University of Houston': 'uh.png', 'Bloomberg Decoded': 'bloomberg.png', 'Carnegie Mellon': 'cmu.png', ConocoPhillips: 'conocophillips.png' };
+
+const OrgLogo = ({ name }) => {
+  const file = Object.entries(ORG_LOGOS).find(([key]) => name.includes(key))?.[1];
+  return (
+    <span className="grid h-9 w-11 shrink-0 place-items-center rounded-sm border border-grid bg-white px-1">
+      {toolMeta[name] ? (
+        <ToolIcon name={name} size={22} />
+      ) : file ? (
+        <img src={`${BASE}logos/${file}`} alt="" className="max-h-6 max-w-full object-contain" />
+      ) : null}
+    </span>
+  );
+};
+
 const Skills = () => {
   useSheet('A1', '=STACK()', 'Skills & Education');
 
@@ -95,8 +113,15 @@ const Skills = () => {
       <Row>
         <Cell id="A9" formula='=SCHOOL("University of Houston")'>
           <div className="text-[13px] font-semibold text-accent-ink">Education</div>
-          <h2 className="mt-1 font-sans text-2xl sm:text-3xl font-bold leading-tight text-ink">{profile.school}</h2>
-          <p className="mt-1.5 text-[16px] text-ink-soft">{profile.degree}</p>
+          <div className="mt-2 flex items-center gap-4">
+            <span className="grid h-16 w-20 shrink-0 place-items-center rounded-sm border border-grid bg-white px-2">
+              <img src={`${BASE}logos/uh.png`} alt="University of Houston" className="max-h-12 max-w-full object-contain" />
+            </span>
+            <div>
+              <h2 className="font-sans text-2xl sm:text-3xl font-bold leading-tight text-ink">{profile.school}</h2>
+              <p className="mt-1 text-[16px] text-ink-soft">{profile.degree}</p>
+            </div>
+          </div>
 
           <dl className="mt-5 grid grid-cols-3 gap-px bg-grid border border-grid rounded-sm overflow-hidden">
             {[
@@ -119,8 +144,9 @@ const Skills = () => {
           <h3 className="mt-6 font-sans text-[15px] font-bold text-ink">Certifications</h3>
           <ul className="mt-2 divide-y divide-grid border-y border-grid">
             {profile.certifications.map((c) => (
-              <li key={c.name} className="flex items-baseline justify-between gap-3 py-2.5 text-[15px]">
-                <span className="font-medium text-ink">{c.name}</span>
+              <li key={c.name} className="flex items-center gap-3 py-2.5 text-[15px]">
+                <OrgLogo name={c.issuer} />
+                <span className="flex-1 font-medium text-ink">{c.name}</span>
                 <span className="text-[13px] text-muted">{c.issuer}</span>
               </li>
             ))}
@@ -142,7 +168,12 @@ const Skills = () => {
               'Bloomberg Decoded: Data, 1 of 35 from 500+ applicants',
               'Carnegie Mellon Tepper Business Analytics Summer Summit',
               'CaseQuest 2026, sponsored by ConocoPhillips',
-            ].map((s) => <li key={s} className="py-2.5 text-[15px] text-ink">{s}</li>)}
+            ].map((s) => (
+              <li key={s} className="flex items-center gap-3 py-2.5 text-[15px] text-ink">
+                <OrgLogo name={s} />
+                {s}
+              </li>
+            ))}
           </ul>
         </Cell>
       </Row>
