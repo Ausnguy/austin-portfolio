@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Source for public/og.png (1200×630 link preview). Render with tools/social/render.cjs. -->
+<!-- Source for public/og.png (1200x630 link preview and LinkedIn thumbnail). Render with tools/social/render.cjs. -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -7,41 +7,44 @@
 <style>
   * { box-sizing: border-box; margin: 0; }
   body { width: 1200px; height: 630px; background: #f3f5f7; font-family: 'IBM Plex Sans', sans-serif; color: #1d2329; overflow: hidden; }
-  .bar { height: 64px; background: #107c41; color: #fff; display: flex; align-items: center; gap: 14px; padding: 0 40px; font-size: 26px; font-weight: 600; }
-  .bar span { opacity: .7; }
-  .fx { height: 44px; background: #fff; border-bottom: 1px solid #e2e5e9; display: flex; align-items: center; font: 500 18px 'IBM Plex Mono', monospace; }
-  .fx .ref { width: 96px; padding-left: 40px; color: #6a737d; }
-  .fx .f { padding-left: 24px; border-left: 1px solid #e2e5e9; height: 100%; display: flex; align-items: center; }
-  .grid { display: grid; grid-template-columns: 56px 1fr; background: #fff; height: 522px; }
-  .rows { background: #f3f5f7; border-right: 1px solid #e2e5e9; font: 500 16px 'IBM Plex Mono', monospace; color: #6a737d; display: grid; grid-template-rows: 300px 1fr; }
-  .rows div { padding: 18px 0 0 22px; border-bottom: 1px solid #e2e5e9; }
-  .body { display: grid; grid-template-rows: 300px 1fr; }
-  .hero { padding: 38px 56px; border-bottom: 1px solid #e2e5e9; position: relative; }
-  .hero::after { content: ''; position: absolute; inset: 0; box-shadow: inset 0 0 0 3px #107c41; }
-  h1 { font-size: 92px; font-weight: 700; letter-spacing: -2px; line-height: 1; }
-  .tag { margin-top: 22px; font-size: 32px; line-height: 1.3; max-width: 980px; }
-  .cells { display: grid; grid-template-columns: repeat(3, 1fr); }
-  .cells > div { padding: 34px 40px 0 56px; border-right: 1px solid #e2e5e9; }
-  .cells > div:last-child { border-right: 0; }
-  .k { font-size: 20px; color: #6a737d; }
-  .v { margin-top: 8px; font-size: 30px; font-weight: 600; line-height: 1.2; }
+  .bar { height: 56px; background: #0b4a2b; color: #fff; display: flex; align-items: center; gap: 14px; padding: 0 36px; font-size: 24px; font-weight: 600; }
+  .bar img { width: 32px; height: 32px; border-radius: 7px; }
+  .bar .url { margin-left: auto; font: 500 18px 'IBM Plex Mono', monospace; opacity: .85; }
+  .main { display: grid; grid-template-columns: 1fr 470px; height: 574px; background: #fff; }
+  .left { display: grid; grid-template-rows: 360px 1fr; border-right: 1px solid #e2e5e9; }
+  .hero { padding: 44px 52px 0; border-bottom: 1px solid #e2e5e9; }
+  .kicker { font: 500 17px 'IBM Plex Mono', monospace; color: #107c41; }
+  h1 { margin-top: 10px; font-size: 96px; font-weight: 700; letter-spacing: -3px; line-height: 1; }
+  .tag { margin-top: 22px; font-size: 34px; line-height: 1.25; max-width: 640px; color: #39424c; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .stats > div { padding: 26px 18px 0 40px; border-right: 1px solid #e2e5e9; }
+  .stats > div:last-child { border-right: 0; }
+  .v { font-size: 42px; font-weight: 700; letter-spacing: -1px; line-height: 1; white-space: nowrap; }
+  .k { margin-top: 8px; font-size: 18px; line-height: 1.3; color: #636b75; }
+  .right { padding: 22px; display: grid; grid-template-rows: 1fr 1fr; gap: 14px; background: #f3f5f7; }
+  .shot { position: relative; border: 1px solid #d5dae0; border-radius: 6px; overflow: hidden; background: #10161d; }
+  .shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .shot span { position: absolute; left: 10px; bottom: 10px; background: #fff; color: #1d2329; font-size: 16px; font-weight: 600; padding: 4px 10px; border-radius: 4px; }
 </style>
 </head>
 <body>
-  <div class="bar"><b>▦</b><div>Austin_Nguyen<span>.xlsx</span></div></div>
-  <div class="fx"><div class="ref">A1</div><div class="f">=TURN(messy_data, "decisions people act on")</div></div>
-  <div class="grid">
-    <div class="rows"><div>1</div><div>2</div></div>
-    <div class="body">
+  <div class="bar"><img src="../../public/favicon.svg" alt=""><div>Austin Nguyen</div><div class="url">ausnguy.github.io/austin-portfolio</div></div>
+  <div class="main">
+    <div class="left">
       <div class="hero">
+        <div class="kicker">Data engineering · ML · BI</div>
         <h1>Austin Nguyen</h1>
-        <p class="tag">I build data systems end to end: the pipeline, the model, the dashboard and the app on top.</p>
+        <p class="tag">I ship data systems end to end: streaming pipelines, ML models, and the apps on top.</p>
       </div>
-      <div class="cells">
-        <div><div class="k">School</div><div class="v">MIS at UH Bauer<br>3.95 GPA</div></div>
-        <div><div class="k">Now</div><div class="v">Data Analyst Intern<br>at HPE</div></div>
-        <div><div class="k">Latest build</div><div class="v">Parvius<br>CaseQuest 2026</div></div>
+      <div class="stats">
+        <div><div class="v">8.7K/s</div><div class="k">live events through my streaming pipeline</div></div>
+        <div><div class="v">90 of 91</div><div class="k">equipment failures flagged in advance</div></div>
+        <div><div class="v">3.95</div><div class="k">GPA, UH Bauer MIS</div></div>
       </div>
+    </div>
+    <div class="right">
+      <div class="shot"><img src="../../public/thumbs/interdomain.png" alt=""><span>Interdomain</span></div>
+      <div class="shot"><img src="../../public/casequest/loop-poster.jpg" alt=""><span>Parvius</span></div>
     </div>
   </div>
 </body>
