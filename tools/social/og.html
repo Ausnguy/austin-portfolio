@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@800&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@500&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; }
   body { width: 1200px; height: 630px; position: relative; overflow: hidden; background: #fff; color: #1D2329; font-family: 'Archivo', sans-serif; }
@@ -17,6 +17,10 @@
   .sel::after { content: ''; position: absolute; right: -16px; bottom: -16px; width: 22px; height: 22px; background: #107C41; border: 4px solid #fff; }
   h1 { position: absolute; left: 150px; top: 98px; font-family: 'Libre Franklin', sans-serif; font-size: 124px; line-height: .98; letter-spacing: -2.5px; white-space: normal; font-weight: 800; white-space: normal; }
   .line { position: absolute; left: 118px; top: 400px; font: 600 40px 'IBM Plex Mono', monospace; color: #107C41; white-space: nowrap; }
+  .tri { position: absolute; left: 856px; top: 90px; width: 0; height: 0; border-top: 22px solid #D93025; border-left: 22px solid transparent; }
+  .cmt { position: absolute; left: 912px; top: 96px; width: 240px; padding: 14px 16px; background: #FFF8C5; border: 2px solid #C9B94A; font: 500 28px/1.25 'IBM Plex Sans', sans-serif; color: #1D2329; box-shadow: 4px 4px 0 rgba(29,35,41,.18); }
+  .cmt::before { content: ''; position: absolute; left: -54px; top: 14px; width: 54px; height: 2px; background: #C9B94A; transform: rotate(-8deg); transform-origin: right center; }
+  .cmt b { display: block; margin-bottom: 4px; font: 600 18px 'IBM Plex Mono', monospace; color: #7a6d1c; }
   .bar { position: absolute; left: 60px; right: 0; bottom: 0; height: 76px; background: #0B4A2B; color: #fff; padding: 0 58px; display: flex; align-items: center; font: 600 32px 'IBM Plex Mono', monospace; }
 </style>
 </head>
@@ -27,6 +31,8 @@
   <div class="sel"></div>
   <h1>Austin<br>Nguyen</h1>
   <p class="line">=DATA_ENGINEERING + ML + SOFTWARE</p>
+  <div class="tri"></div>
+  <div class="cmt"><b>Austin Nguyen</b>yes, my portfolio is a spreadsheet</div>
   <div class="bar">ausnguy.github.io/austin-portfolio</div>
 </body>
 </html>
