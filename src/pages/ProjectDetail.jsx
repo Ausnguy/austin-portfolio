@@ -162,6 +162,22 @@ const CaseRow = ({ n, label, formula, children }) => (
   </Row>
 );
 
+// Long prose becomes a short list: one point per sentence (three or more sentences), plain text otherwise.
+const Bullets = ({ text }) => {
+  const parts = text.split(/(?<=[.!?])\s+(?=[A-Z])/);
+  if (parts.length < 3) return <p className="body-copy max-w-3xl">{text}</p>;
+  return (
+    <ul className="max-w-3xl space-y-2.5">
+      {parts.map((part) => (
+        <li key={part} className="relative pl-5 body-copy">
+          <span aria-hidden="true" className="absolute left-0 top-[0.62em] h-1.5 w-1.5 rounded-full bg-accent" />
+          {part}
+        </li>
+      ))}
+    </ul>
+  );
+};
+
 // Metric cells always fill the row: 2x2 on phones, one row from desktop width.
 const metricSpan = (i, n) => {
   if (n === 4) return 'col-span-6 lg:col-span-3';
@@ -173,6 +189,7 @@ const metricSpan = (i, n) => {
 const ProjectDetail = () => {
   const { slug } = useParams();
   const project = getProjectBySlug(slug);
+  const [tabId, setTabId] = useState('how');
   useSheet('A1', project ? `=PROJECT("${project.shortTitle}")` : '=NA()', project ? project.title : 'Project not found');
 
   if (!project) {
@@ -190,6 +207,15 @@ const ProjectDetail = () => {
   }
 
   const { caseStudy } = project;
+  const tabs = caseStudy
+    ? [
+        { id: 'how', label: 'How it works' },
+        project.decisions && { id: 'decisions', label: 'Key decisions' },
+        caseStudy.lessons && { id: 'learned', label: `What ${project.team ? 'we' : 'I'} learned` },
+        { id: 'stack', label: 'Tech stack' },
+      ].filter(Boolean)
+    : [];
+  const tab = tabs.find((t) => t.id === tabId) ?? tabs[0];
   const baseUrl = import.meta.env.BASE_URL;
   const we = project.team ? 'we' : 'I';
   const moreProjects = getFeaturedProjects().filter((p) => p.id !== project.id).slice(0, 3);
@@ -317,69 +343,93 @@ const ProjectDetail = () => {
           <CaseRow n={n++} label="The problem" formula="=PROBLEM()">
             <p className="body-copy max-w-3xl">{caseStudy.problem}</p>
           </CaseRow>
-          <CaseRow n={n++} label={`How ${we} built it`} formula="=APPROACH()">
-            <p className="body-copy max-w-3xl">{caseStudy.approach}</p>
-          </CaseRow>
-          {project.pipeline && (
-            <CaseRow n={n++} label="How it fits together" formula="=FLOW(pipeline)">
-              <Pipeline steps={project.pipeline} />
-            </CaseRow>
-          )}
-          {project.decisions && (
-            <CaseRow n={n++} label="Key decisions" formula="=DECISIONS()">
-              <ol className="grid sm:grid-cols-2 gap-px bg-grid border border-grid">
-                {project.decisions.map((d, i) => (
-                  <li key={d.title} className="bg-paper p-4 sm:[&:last-child:nth-child(odd)]:col-span-2">
-                    <div className="font-mono text-[11px] text-muted">Decision {i + 1}</div>
-                    <h3 className="mt-0.5 font-sans text-[16px] font-bold leading-snug text-ink">{d.title}</h3>
-                    <p className="mt-1.5 text-[14.5px] leading-relaxed text-ink-soft">{d.why}</p>
-                    {d.alternative && <p className="mt-1.5 text-[14px] leading-relaxed text-muted">Alternative considered: {d.alternative}</p>}
-                  </li>
-                ))}
-              </ol>
-            </CaseRow>
-          )}
           <CaseRow n={n++} label="Results" formula="=RESULTS()">
             <div className="rounded-sm border-l-4 border-accent bg-accent-wash/60 px-5 py-4 max-w-3xl">
-              <p className="body-copy text-ink">{caseStudy.results}</p>
+              <Bullets text={caseStudy.results} />
             </div>
           </CaseRow>
-          {caseStudy.lessons && (
-            <CaseRow n={n++} label={`What ${we} learned`} formula="=LESSONS()">
-              <div className="grid sm:grid-cols-2 gap-px bg-grid border border-grid">
-                {caseStudy.lessons.map((lesson) => (
-                  <div key={lesson.title} className="bg-paper p-4">
-                    <h3 className="font-sans text-[16px] font-bold leading-snug text-ink">{lesson.title}</h3>
-                    <p className="mt-1.5 text-[15px] leading-relaxed text-ink-soft">{lesson.body}</p>
-                  </div>
+
+          {/* The long parts live behind tabs so the page isn't a wall of text */}
+          <Row>
+            <Cell id={`A${n++}`} formula="=DETAILS()" className="!p-0">
+              <div role="tablist" aria-label="Project details" className="flex overflow-x-auto border-b border-grid [scrollbar-width:none]">
+                {tabs.map((t) => (
+                  <button
+                    key={t.id}
+                    id={`tab-${t.id}`}
+                    role="tab"
+                    type="button"
+                    aria-selected={t.id === tab.id}
+                    aria-controls={`panel-${t.id}`}
+                    onClick={() => setTabId(t.id)}
+                    className={`whitespace-nowrap px-4 sm:px-6 py-3.5 text-[14.5px] font-semibold border-b-2 -mb-px transition-colors duration-150 ${
+                      t.id === tab.id ? 'border-accent text-accent-ink bg-accent-wash/40' : 'border-transparent text-ink-soft hover:text-ink'
+                    }`}
+                  >
+                    {t.label}
+                  </button>
                 ))}
               </div>
-            </CaseRow>
-          )}
-          <CaseRow n={n++} label={`What ${we}’d do next`} formula="=NEXT_STEPS()">
-            <p className="body-copy max-w-3xl">{caseStudy.improvements}</p>
-          </CaseRow>
-          <CaseRow n={n++} label="Tech stack" formula="=STACK()">
-            {typeof caseStudy.techStack === 'string' ? (
-              <p className="body-copy">{caseStudy.techStack}</p>
-            ) : (
-              <div className="grid sm:grid-cols-2 gap-px bg-grid border border-grid">
-                {Object.entries(caseStudy.techStack).map(([group, items]) => (
-                  <div key={group} className="bg-paper p-4">
-                    <h3 className="font-sans text-[15px] font-bold text-ink">{group}</h3>
-                    <ul className="mt-2 space-y-1.5">
-                      {items.map((item) => (
-                        <li key={item} className="relative pl-4 text-[14.5px] leading-snug text-ink-soft">
-                          <span aria-hidden="true" className="absolute left-0 top-[0.55em] h-1.5 w-1.5 rounded-full bg-accent" />
-                          {item}
-                        </li>
+              <div role="tabpanel" id={`panel-${tab.id}`} aria-labelledby={`tab-${tab.id}`} className="p-4 sm:p-6 lg:p-8">
+                {tab.id === 'how' && (
+                  <div className="space-y-6">
+                    <Bullets text={caseStudy.approach} />
+                    {project.pipeline && <Pipeline steps={project.pipeline} />}
+                  </div>
+                )}
+                {tab.id === 'decisions' && (
+                  <ol className="grid sm:grid-cols-2 gap-px bg-grid border border-grid">
+                    {project.decisions.map((d, i) => (
+                      <li key={d.title} className="bg-paper p-4 sm:[&:last-child:nth-child(odd)]:col-span-2">
+                        <div className="font-mono text-[11px] text-muted">Decision {i + 1}</div>
+                        <h3 className="mt-0.5 font-sans text-[16px] font-bold leading-snug text-ink">{d.title}</h3>
+                        <p className="mt-1.5 text-[14.5px] leading-relaxed text-ink-soft">{d.why}</p>
+                        {d.alternative && <p className="mt-1.5 text-[14px] leading-relaxed text-muted">Alternative considered: {d.alternative}</p>}
+                      </li>
+                    ))}
+                  </ol>
+                )}
+                {tab.id === 'learned' && (
+                  <div className="space-y-6">
+                    <div className="grid sm:grid-cols-2 gap-px bg-grid border border-grid">
+                      {caseStudy.lessons.map((lesson) => (
+                        <div key={lesson.title} className="bg-paper p-4">
+                          <h3 className="font-sans text-[16px] font-bold leading-snug text-ink">{lesson.title}</h3>
+                          <p className="mt-1.5 text-[15px] leading-relaxed text-ink-soft">{lesson.body}</p>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
+                    {caseStudy.improvements && (
+                      <div>
+                        <h3 className="font-sans text-[15px] font-bold text-ink">What {we}’d do next</h3>
+                        <div className="mt-2"><Bullets text={caseStudy.improvements} /></div>
+                      </div>
+                    )}
                   </div>
-                ))}
+                )}
+                {tab.id === 'stack' &&
+                  (typeof caseStudy.techStack === 'string' ? (
+                    <p className="body-copy">{caseStudy.techStack}</p>
+                  ) : (
+                    <div className="grid sm:grid-cols-2 gap-px bg-grid border border-grid">
+                      {Object.entries(caseStudy.techStack).map(([group, items]) => (
+                        <div key={group} className="bg-paper p-4">
+                          <h3 className="font-sans text-[15px] font-bold text-ink">{group}</h3>
+                          <ul className="mt-2 space-y-1.5">
+                            {items.map((item) => (
+                              <li key={item} className="relative pl-4 text-[14.5px] leading-snug text-ink-soft">
+                                <span aria-hidden="true" className="absolute left-0 top-[0.55em] h-1.5 w-1.5 rounded-full bg-accent" />
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
               </div>
-            )}
-          </CaseRow>
+            </Cell>
+          </Row>
         </>
       )}
 
