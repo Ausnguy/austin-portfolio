@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Caveat:wght@700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; }
   body { width: 1200px; height: 630px; position: relative; overflow: hidden; background: #fff; color: #1D2329; font-family: 'Archivo', sans-serif; }
@@ -13,10 +13,12 @@
   .cols span { position: absolute; top: 0; width: 120px; height: 60px; line-height: 60px; text-align: center; font: 600 24px 'IBM Plex Mono', monospace; color: #636B75; border-left: 2px solid #E2E5E9; }
   .rows { position: absolute; left: 0; top: 60px; bottom: 0; width: 60px; background: #F3F5F7; border-right: 2px solid #E2E5E9; }
   /* selected cell, like the favicon: green frame plus a fill handle */
-  .sel { position: absolute; left: 118px; top: 150px; width: 1022px; height: 220px; background: #fff; border: 6px solid #107C41; }
+  .sel { position: absolute; left: 118px; top: 84px; width: 760px; height: 276px; background: #fff; border: 6px solid #107C41; }
   .sel::after { content: ''; position: absolute; right: -16px; bottom: -16px; width: 22px; height: 22px; background: #107C41; border: 4px solid #fff; }
-  h1 { position: absolute; left: 150px; top: 160px; font-size: 164px; line-height: .9; font-weight: 800; font-stretch: 78%; letter-spacing: -2px; white-space: nowrap; }
-  .line { position: absolute; left: 118px; top: 410px; width: 1020px; font-size: 44px; line-height: 1.2; font-weight: 600; font-stretch: 88%; color: #39424C; }
+  h1 { position: absolute; left: 150px; top: 104px; font-family: 'Syne', sans-serif; font-size: 108px; line-height: 1.04; white-space: normal; font-weight: 800; letter-spacing: -3px; white-space: nowrap; }
+  .line { position: absolute; left: 118px; top: 396px; font: 600 36px 'IBM Plex Mono', monospace; color: #107C41; white-space: nowrap; }
+  .note { position: absolute; left: 640px; top: 474px; font: 700 40px 'Caveat', cursive; color: #1D2329; transform: rotate(-3deg); }
+  .note svg { position: absolute; left: -64px; top: -44px; }
   .bar { position: absolute; left: 60px; right: 0; bottom: 0; height: 76px; background: #0B4A2B; color: #fff; padding: 0 58px; display: flex; align-items: center; font: 600 32px 'IBM Plex Mono', monospace; }
 </style>
 </head>
@@ -25,8 +27,9 @@
   <div class="cols"><span style="left:60px">A</span><span style="left:180px">B</span><span style="left:300px">C</span><span style="left:420px">D</span><span style="left:540px">E</span><span style="left:660px">F</span><span style="left:780px">G</span><span style="left:900px">H</span><span style="left:1020px">I</span><span style="left:1140px">J</span></div>
   <div class="rows"></div>
   <div class="sel"></div>
-  <h1>Austin Nguyen</h1>
-  <p class="line">Data engineering, machine learning, and the software around them.</p>
+  <h1>Austin<br>Nguyen</h1>
+  <p class="line">=DATA_ENGINEERING + ML + SOFTWARE</p>
+  <p class="note"><svg width="60" height="50" viewBox="0 0 60 50" fill="none" stroke="#1D2329" stroke-width="3" stroke-linecap="round"><path d="M56 44 C30 46 12 34 8 8"/><path d="M0 18 L8 6 L18 16"/></svg>yes, my portfolio is a spreadsheet</p>
   <div class="bar">ausnguy.github.io/austin-portfolio</div>
 </body>
 </html>
