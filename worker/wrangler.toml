@@ -1,4 +1,4 @@
-# Ask Austin's hosted model. Deploy with `npm run worker:deploy` (wrangler login once first).
+# Ask Austin's hosted model and anonymous stats. Deploy with `npm run worker:deploy` (wrangler login once first).
 name = "austin-ask"
 main = "src/index.js"
 compatibility_date = "2026-10-01"
@@ -14,3 +14,9 @@ namespace_id = "1001"
   [ratelimits.simple]
   limit = 10
   period = 60
+
+# Anonymous visit and click counts for /track and /stats.
+[[d1_databases]]
+binding = "DB"
+database_name = "austin-stats"
+database_id = "9fc40c71-01d6-424d-a474-c73b68ed104a"

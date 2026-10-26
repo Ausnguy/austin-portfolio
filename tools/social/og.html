@@ -3,49 +3,53 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@600;700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; }
-  body { width: 1200px; height: 630px; background: #f3f5f7; font-family: 'IBM Plex Sans', sans-serif; color: #1d2329; overflow: hidden; }
-  .bar { height: 56px; background: #0b4a2b; color: #fff; display: flex; align-items: center; gap: 14px; padding: 0 36px; font-size: 24px; font-weight: 600; }
-  .bar img { width: 32px; height: 32px; border-radius: 7px; }
-  .bar .url { margin-left: auto; font: 500 18px 'IBM Plex Mono', monospace; opacity: .85; }
-  .main { display: grid; grid-template-columns: 1fr 470px; height: 574px; background: #fff; }
-  .left { display: grid; grid-template-rows: 360px 1fr; border-right: 1px solid #e2e5e9; }
-  .hero { padding: 44px 52px 0; border-bottom: 1px solid #e2e5e9; }
-  .kicker { font: 500 17px 'IBM Plex Mono', monospace; color: #107c41; }
-  h1 { margin-top: 10px; font-size: 96px; font-weight: 700; letter-spacing: -3px; line-height: 1; }
-  .tag { margin-top: 22px; font-size: 34px; line-height: 1.25; max-width: 640px; color: #39424c; }
-  .stats { display: grid; grid-template-columns: repeat(3, 1fr); }
-  .stats > div { padding: 26px 18px 0 40px; border-right: 1px solid #e2e5e9; }
-  .stats > div:last-child { border-right: 0; }
-  .v { font-size: 42px; font-weight: 700; letter-spacing: -1px; line-height: 1; white-space: nowrap; }
-  .k { margin-top: 8px; font-size: 18px; line-height: 1.3; color: #636b75; }
-  .right { padding: 22px; display: grid; grid-template-rows: 1fr 1fr; gap: 14px; background: #f3f5f7; }
-  .shot { position: relative; border: 1px solid #d5dae0; border-radius: 6px; overflow: hidden; background: #10161d; }
-  .shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .shot span { position: absolute; left: 10px; bottom: 10px; background: #fff; color: #1d2329; font-size: 16px; font-weight: 600; padding: 4px 10px; border-radius: 4px; }
+  body { width: 1200px; height: 630px; overflow: hidden; position: relative; color: #eafff3; font-family: 'IBM Plex Sans', sans-serif;
+    background:
+      radial-gradient(ellipse 620px 520px at 82% 42%, rgba(38, 214, 123, .30), transparent 70%),
+      radial-gradient(ellipse 500px 420px at 8% 100%, rgba(38, 214, 123, .10), transparent 70%),
+      #050b08; }
+  .grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(120, 255, 190, .06) 1px, transparent 1px), linear-gradient(90deg, rgba(120, 255, 190, .06) 1px, transparent 1px); background-size: 48px 48px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 90% at 60% 50%, #000 30%, transparent 85%); mask-image: radial-gradient(ellipse 80% 90% at 60% 50%, #000 30%, transparent 85%); }
+  svg.net { position: absolute; right: -20px; top: 0; width: 700px; height: 630px; }
+  .copy { position: absolute; left: 72px; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; }
+  .prompt { font: 500 24px 'IBM Plex Mono', monospace; color: #5fe3a1; }
+  .prompt i { color: #7a9a8a; font-style: normal; }
+  h1 { margin-top: 26px; font-size: 128px; line-height: .94; font-weight: 700; letter-spacing: -4px; text-shadow: 0 0 60px rgba(38, 214, 123, .35); }
+  .cursor { display: inline-block; width: 20px; height: 104px; margin-left: 14px; background: #3df0a0; box-shadow: 0 0 28px rgba(61, 240, 160, .8); vertical-align: -6px; }
+  .words { margin-top: 34px; display: flex; gap: 14px; font: 500 28px 'IBM Plex Mono', monospace; }
+  .words span { padding: 9px 20px; border: 1.5px solid rgba(95, 227, 161, .55); border-radius: 6px; color: #b9ffd9; background: rgba(38, 214, 123, .08); }
+  .mono { position: absolute; left: 72px; bottom: 34px; font: 400 21px 'IBM Plex Mono', monospace; color: #6f9784; }
 </style>
 </head>
 <body>
-  <div class="bar"><img src="../../public/favicon.svg" alt=""><div>Austin Nguyen</div><div class="url">ausnguy.github.io/austin-portfolio</div></div>
-  <div class="main">
-    <div class="left">
-      <div class="hero">
-        <div class="kicker">Data engineering · ML · BI</div>
-        <h1>Austin Nguyen</h1>
-        <p class="tag">I ship data systems end to end: streaming pipelines, ML models, and the apps on top.</p>
-      </div>
-      <div class="stats">
-        <div><div class="v">8.7K/s</div><div class="k">live events through my streaming pipeline</div></div>
-        <div><div class="v">90 of 91</div><div class="k">equipment failures flagged in advance</div></div>
-        <div><div class="v">3.95</div><div class="k">GPA, UH Bauer MIS</div></div>
-      </div>
-    </div>
-    <div class="right">
-      <div class="shot"><img src="../../public/thumbs/interdomain.png" alt=""><span>Interdomain</span></div>
-      <div class="shot"><img src="../../public/casequest/loop-poster.jpg" alt=""><span>Parvius</span></div>
-    </div>
+  <div class="grid"></div>
+  <svg class="net" id="net" viewBox="0 0 700 630"></svg>
+  <div class="copy">
+    <div class="prompt"><i>~/</i>austin-nguyen <i>$</i> ship --end-to-end</div>
+    <h1>Austin<br>Nguyen<span class="cursor"></span></h1>
+    <div class="words"><span>pipelines</span><span>models</span><span>apps</span></div>
   </div>
+  <div class="mono">ausnguy.github.io/austin-portfolio</div>
+  <script>
+    // A constellation of linked nodes, seeded so every render is identical.
+    let seed = 41; const rand = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+    const W = 700, H = 630, nodes = [];
+    for (let i = 0; i < 46; i++) {
+      const a = rand() * Math.PI * 2, r = 70 + Math.pow(rand(), .6) * 270;
+      nodes.push({ x: 380 + Math.cos(a) * r * 1.05, y: 300 + Math.sin(a) * r * .95, s: 2 + rand() * 4 });
+    }
+    let out = '<defs><filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.2"/></filter></defs>';
+    const links = [];
+    nodes.forEach((n, i) => nodes.slice(i + 1).forEach((m, j) => { const d = Math.hypot(n.x - m.x, n.y - m.y); if (d < 120) links.push([n, m, d]); }));
+    links.forEach(([n, m, d], k) => { out += `<line x1="${n.x}" y1="${n.y}" x2="${m.x}" y2="${m.y}" stroke="#5fe3a1" stroke-opacity="${(0.5 - d / 300).toFixed(2)}" stroke-width="1.2"/>`; });
+    // One highlighted path through the network
+    const path = nodes.slice().sort((a, b) => a.x - b.x).filter((_, i) => i % 6 === 0).slice(0, 7);
+    out += `<polyline points="${path.map((p) => p.x + ',' + p.y).join(' ')}" fill="none" stroke="#3df0a0" stroke-width="2.4" filter="url(#g)"/><polyline points="${path.map((p) => p.x + ',' + p.y).join(' ')}" fill="none" stroke="#baffd8" stroke-width="1.4"/>`;
+    nodes.forEach((n) => { out += `<circle cx="${n.x}" cy="${n.y}" r="${n.s * 2.6}" fill="#3df0a0" opacity=".22" filter="url(#g)"/><circle cx="${n.x}" cy="${n.y}" r="${n.s}" fill="#eafff3"/>`; });
+    document.getElementById('net').innerHTML = out;
+  </script>
 </body>
 </html>

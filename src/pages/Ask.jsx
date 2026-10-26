@@ -5,6 +5,7 @@ import { search, factCount } from '../ask/retrieve';
 import { groundAnswer } from '../ask/ground';
 import { lookupExtra, lookupIntent, lookupSkill } from '../ask/lookup';
 import { askHosted } from '../ask/hosted';
+import { trackEvent } from '../lib/track';
 import { MODEL_LABEL } from '../ask/constants';
 import { profile } from '../data/profile';
 
@@ -30,6 +31,7 @@ const Ask = () => {
     const text = q.trim();
     if (!text || busy) return;
     setQuestion('');
+    trackEvent('ask');
     // Skill questions ("Does Austin know X?") and the common ones (projects, experience, school,
     // contact) are answered exactly from the data, no model needed.
     const lookup = lookupSkill(text) ?? lookupExtra(text) ?? lookupIntent(text);

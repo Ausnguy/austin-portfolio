@@ -143,7 +143,7 @@ const Layout = ({ children }) => {
         {children}
       </main>
 
-      <footer className="md:hidden px-4 py-6 text-center text-[13px] text-muted">© 2026 Austin Nguyen</footer>
+      <footer className="md:hidden px-4 py-6 text-center text-[13px] text-muted">© 2026 Austin Nguyen · anonymous visit counts, no cookies</footer>
 
       {/* Desktop: sheet tabs and status bar, pinned like Excel's */}
       <div className="hidden md:block fixed bottom-0 inset-x-0 z-40 bg-head border-t border-grid">
@@ -155,7 +155,7 @@ const Layout = ({ children }) => {
         <div className="bg-[#107C41] text-white/90 text-[12px]">
           <div className="page h-7 px-3 sm:px-4 flex items-center justify-between">
             <span>Ready</span>
-            <span>© 2026 Austin Nguyen</span>
+            <span>© 2026 Austin Nguyen · anonymous visit counts, no cookies</span>
           </div>
         </div>
       </div>
