@@ -98,11 +98,16 @@ const Home = () => {
       {/* Who I am, and the assistant */}
       <Row>
         <Cell id="A1" span="col-span-12 lg:col-span-8" formula={HOME_FORMULA} className="lg:!p-10">
-          <div className="font-sans text-xl sm:text-2xl font-semibold text-accent-ink">Hi, I’m Austin.</div>
-          <h1 className="mt-4 font-sans text-[2.1rem] sm:text-5xl lg:text-[3.4rem] font-bold tracking-tight leading-[1.08] text-ink max-w-3xl">
-            I got into data by running an Amazon store. Now I build the pipelines, models and dashboards that help people decide what to do next.
+          <div className="font-sans text-2xl sm:text-3xl font-semibold text-accent-ink">Hi, I’m Austin.</div>
+          <h1 className="mt-5 font-sans text-[2.1rem] sm:text-5xl lg:text-[3.4rem] font-bold tracking-[-0.015em] leading-[1.2] text-ink max-w-3xl">
+            I got into data by running an{' '}
+            {/* Wordmark letters fill the top 59% of the image. Sitting the image on the baseline and nudging it down with
+                `top` lines the letters up with the text while the smile hangs below without widening the line gap. */}
+            <img src={`${baseUrl}logos/amazon.png`} alt="Amazon" className="relative top-[0.36em] inline h-[0.88em] w-auto align-baseline dark:hidden" />
+            <img src={`${baseUrl}logos/amazon-dark.png`} alt="Amazon" className="relative top-[0.36em] hidden h-[0.88em] w-auto align-baseline dark:inline" />
+            {' '}store. Now I build the pipelines, models and dashboards that help people decide what to do next.
           </h1>
-          <p className="mt-3 text-[15px] text-muted">MIS at the University of Houston · Data Analyst Intern at HPE · {profile.location}</p>
+          <p className="mt-5 text-[15px] text-muted">MIS at the University of Houston · Data Analyst Intern at HPE · {profile.location}</p>
           <div className="mt-7 flex flex-wrap gap-2.5">
             <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">View resume</a>
             <a href={`mailto:${profile.email}`} className="btn btn-secondary">Email me</a>
