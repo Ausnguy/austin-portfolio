@@ -3,53 +3,33 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; }
-  body { width: 1200px; height: 630px; overflow: hidden; position: relative; color: #eafff3; font-family: 'IBM Plex Sans', sans-serif;
-    background:
-      radial-gradient(ellipse 620px 520px at 82% 42%, rgba(38, 214, 123, .30), transparent 70%),
-      radial-gradient(ellipse 500px 420px at 8% 100%, rgba(38, 214, 123, .10), transparent 70%),
-      #050b08; }
-  .grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(120, 255, 190, .06) 1px, transparent 1px), linear-gradient(90deg, rgba(120, 255, 190, .06) 1px, transparent 1px); background-size: 48px 48px;
-    -webkit-mask-image: radial-gradient(ellipse 80% 90% at 60% 50%, #000 30%, transparent 85%); mask-image: radial-gradient(ellipse 80% 90% at 60% 50%, #000 30%, transparent 85%); }
-  svg.net { position: absolute; right: -20px; top: 0; width: 700px; height: 630px; }
-  .copy { position: absolute; left: 72px; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; }
-  .prompt { font: 500 24px 'IBM Plex Mono', monospace; color: #5fe3a1; }
-  .prompt i { color: #7a9a8a; font-style: normal; }
-  h1 { margin-top: 26px; font-size: 128px; line-height: .94; font-weight: 700; letter-spacing: -4px; text-shadow: 0 0 60px rgba(38, 214, 123, .35); }
-  .cursor { display: inline-block; width: 20px; height: 104px; margin-left: 14px; background: #3df0a0; box-shadow: 0 0 28px rgba(61, 240, 160, .8); vertical-align: -6px; }
-  .words { margin-top: 34px; display: flex; gap: 14px; font: 500 28px 'IBM Plex Mono', monospace; }
-  .words span { padding: 9px 20px; border: 1.5px solid rgba(95, 227, 161, .55); border-radius: 6px; color: #b9ffd9; background: rgba(38, 214, 123, .08); }
-  .mono { position: absolute; left: 72px; bottom: 34px; font: 400 21px 'IBM Plex Mono', monospace; color: #6f9784; }
+  body { width: 1200px; height: 630px; position: relative; overflow: hidden; background: #ECE9E2; color: #0F0F0F; font-family: 'Archivo', sans-serif; }
+  .rule { position: absolute; left: 64px; top: 64px; width: 72px; height: 10px; background: #2338FF; }
+  h1 { position: absolute; left: 60px; top: 104px; font-size: 134px; line-height: .86; font-weight: 900; font-stretch: 68%; letter-spacing: -1px; text-transform: uppercase; }
+  .line { position: absolute; left: 64px; top: 394px; width: 380px; font-size: 29px; line-height: 1.22; font-weight: 500; font-stretch: 90%; }
+  .url { position: absolute; left: 64px; bottom: 44px; font: 500 20px 'IBM Plex Mono', monospace; color: #55524b; }
+  .win { position: absolute; background: #fff; border: 1.5px solid #0F0F0F; box-shadow: 8px 8px 0 #0F0F0F; overflow: hidden; }
+  .win .t { height: 30px; padding: 0 12px; display: flex; align-items: center; font: 500 15px 'IBM Plex Mono', monospace; background: #fff; border-bottom: 1.5px solid #0F0F0F; }
+  .win img { display: block; width: 100%; object-fit: cover; }
+  .a { left: 566px; top: 48px; width: 574px; }
+  .a img { height: 323px; }
+  .b { left: 506px; top: 356px; width: 340px; }
+  .b .box { height: 200px; background: #fff url(chart.png) no-repeat; background-size: 118% auto; background-position: 53% 33%; }
+  .c { left: 874px; top: 380px; width: 266px; background: #fff; }
+  .c img { height: 190px; }
 </style>
 </head>
 <body>
-  <div class="grid"></div>
-  <svg class="net" id="net" viewBox="0 0 700 630"></svg>
-  <div class="copy">
-    <div class="prompt"><i>~/</i>austin-nguyen <i>$</i> ship --end-to-end</div>
-    <h1>Austin<br>Nguyen<span class="cursor"></span></h1>
-    <div class="words"><span>pipelines</span><span>models</span><span>apps</span></div>
-  </div>
-  <div class="mono">ausnguy.github.io/austin-portfolio</div>
-  <script>
-    // A constellation of linked nodes, seeded so every render is identical.
-    let seed = 41; const rand = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
-    const W = 700, H = 630, nodes = [];
-    for (let i = 0; i < 46; i++) {
-      const a = rand() * Math.PI * 2, r = 70 + Math.pow(rand(), .6) * 270;
-      nodes.push({ x: 380 + Math.cos(a) * r * 1.05, y: 300 + Math.sin(a) * r * .95, s: 2 + rand() * 4 });
-    }
-    let out = '<defs><filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.2"/></filter></defs>';
-    const links = [];
-    nodes.forEach((n, i) => nodes.slice(i + 1).forEach((m, j) => { const d = Math.hypot(n.x - m.x, n.y - m.y); if (d < 120) links.push([n, m, d]); }));
-    links.forEach(([n, m, d], k) => { out += `<line x1="${n.x}" y1="${n.y}" x2="${m.x}" y2="${m.y}" stroke="#5fe3a1" stroke-opacity="${(0.5 - d / 300).toFixed(2)}" stroke-width="1.2"/>`; });
-    // One highlighted path through the network
-    const path = nodes.slice().sort((a, b) => a.x - b.x).filter((_, i) => i % 6 === 0).slice(0, 7);
-    out += `<polyline points="${path.map((p) => p.x + ',' + p.y).join(' ')}" fill="none" stroke="#3df0a0" stroke-width="2.4" filter="url(#g)"/><polyline points="${path.map((p) => p.x + ',' + p.y).join(' ')}" fill="none" stroke="#baffd8" stroke-width="1.4"/>`;
-    nodes.forEach((n) => { out += `<circle cx="${n.x}" cy="${n.y}" r="${n.s * 2.6}" fill="#3df0a0" opacity=".22" filter="url(#g)"/><circle cx="${n.x}" cy="${n.y}" r="${n.s}" fill="#eafff3"/>`; });
-    document.getElementById('net').innerHTML = out;
-  </script>
+  <div class="rule"></div>
+  <h1>Austin<br>Nguyen</h1>
+  <p class="line">Data engineering, machine learning, and the software around them.</p>
+  <div class="url">ausnguy.github.io/austin-portfolio</div>
+
+  <div class="win a"><div class="t">parvius / console + phone</div><img src="../../public/casequest/loop-poster.jpg" alt=""></div>
+  <div class="win b"><div class="t">experience / 3D chart</div><div class="box"></div></div>
+  <div class="win c"><div class="t">interdomain / routing</div><img src="../../public/thumbs/interdomain.png" alt=""></div>
 </body>
 </html>
