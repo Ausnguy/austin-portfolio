@@ -12,8 +12,11 @@
   .cols span { position: absolute; top: 0; width: 132px; height: 66px; line-height: 66px; text-align: center; font: 600 24px 'IBM Plex Mono', monospace; color: #636B75; border-left: 2px solid #E2E5E9; }
   .sel { position: absolute; left: 420px; top: 132px; width: 860px; height: 132px; background: #fff; border: 6px solid #107C41; }
   .sel::after { content: ''; position: absolute; right: -16px; bottom: -16px; width: 22px; height: 22px; background: #107C41; border: 4px solid #fff; }
-  h1 { position: absolute; left: 448px; top: 150px; font: 800 68px/1.05 'Libre Franklin', sans-serif; letter-spacing: -1.5px; white-space: nowrap; }
+  h1 { position: absolute; left: 448px; top: 156px; font: 800 56px/1.1 'Libre Franklin', sans-serif; letter-spacing: -1.5px; white-space: nowrap; }
   .f { position: absolute; left: 420px; top: 290px; font: 600 34px 'IBM Plex Mono', monospace; color: #107C41; white-space: nowrap; }
+  h1 i { display: inline-block; width: 6px; height: 52px; margin-left: 8px; vertical-align: -6px; background: #107C41; }
+  .sb { position: absolute; right: 0; top: 66px; bottom: 12px; width: 22px; background: #F3F5F7; border-left: 2px solid #E2E5E9; }
+  .sb::after { content: ''; position: absolute; left: 5px; right: 5px; top: 8px; height: 56px; border-radius: 6px; background: #B7BDC4; }
   .tab { position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: #0B4A2B; }
 </style>
 </head>
@@ -21,8 +24,9 @@
   <div class="grid"></div>
   <div class="cols"><span style="left:0">A</span><span style="left:132px">B</span><span style="left:264px">C</span><span style="left:396px">D</span><span style="left:528px">E</span><span style="left:660px">F</span><span style="left:792px">G</span><span style="left:924px">H</span><span style="left:1056px">I</span><span style="left:1188px">J</span><span style="left:1320px">K</span><span style="left:1452px">L</span></div>
   <div class="sel"></div>
-  <h1>Data engineering + ML</h1>
-  <p class="f">=PYTHON + SQL + KAFKA + SPARK + PYTORCH</p>
+  <h1>Data engineering, ML, and&hellip;<i></i></h1>
+  <p class="f">&#9662; more below</p>
+  <div class="sb"></div>
   <div class="tab"></div>
 </body>
 </html>
