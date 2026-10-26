@@ -19,7 +19,7 @@ const fileUrl = (p) => `file:///${p.replace(/\\/g, '/')}`;
 
   // iOS home screen icon: the favicon on a solid background (iOS adds its own rounding).
   await page.setViewport({ width: 180, height: 180 });
-  await page.setContent(`<body style="margin:0;background:#107C41"><img src="${fileUrl(path.join(PUBLIC, 'favicon.svg'))}" style="width:180px;height:180px;display:block"></body>`);
+  await page.setContent(`<body style="margin:0;background:#0B4A2B"><img src="${fileUrl(path.join(PUBLIC, 'favicon.svg'))}" style="width:180px;height:180px;display:block"></body>`);
   await new Promise((r) => setTimeout(r, 300));
   await page.screenshot({ path: path.join(PUBLIC, 'apple-touch-icon.png') });
   console.log('wrote apple-touch-icon.png');
