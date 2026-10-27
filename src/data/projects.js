@@ -2,6 +2,64 @@
 // To add a new project: Copy an object below, update all fields, and it will automatically appear on the site.
 
 export const projects = [
+
+  {
+    id: 7,
+    slug: 'marketstreet',
+    role: 'Team of 6',
+    event: 'MIS 3371 (Section 10129), University of Houston',
+    team: ['Austin Nguyen', 'Sophia Musetti', 'Arya Nair', 'Benjamin Nguyen', 'Shayaan M Dawra', 'Agah Duzenli'],
+    tldr: [
+      'Beginner investors want to practice trading without risking real money, and a trading system needs clear rules about what is allowed.',
+      'MarketStreet, a paper-trading app where a user submits a simulated buy or sell order that is checked against business rules, then accepted or rejected with a reason.',
+      'Requirements, business rules, data dictionary, state diagram and a working order-form prototype are done; the application logic and data storage are still being built.',
+    ],
+    decisions: [
+      {
+        title: 'Catch bad input in the browser, and rule failures in the application',
+        why: 'Missing fields and non-numeric quantities are blocked on the form and create no record. Once an order is received it gets a transaction ID, and any order that breaks a business rule is saved as Rejected with a reason, leaving cash and holdings unchanged.',
+      },
+      {
+        title: 'Two final statuses: Accepted and Rejected',
+        why: 'Every order moves from Submitted to Validated to Accepted or Rejected, and the last two are final, so the record of a trade can never change after the fact.',
+      },
+    ],
+    title: 'MarketStreet: Paper Trading System',
+    shortTitle: 'MarketStreet',
+    status: 'wip',
+    date: 'Sep 2026 – present',
+    highlight: 'A simulated stock trade, checked against business rules and recorded',
+    description:
+      'A paper-trading system where users practice buying and selling stocks with simulated money, built as a team project for MIS 3371.',
+    category: 'Web',
+    tags: ['Web App', 'Systems Design', 'Work in progress'],
+    tools: ['HTML', 'CSS', 'JavaScript'],
+    featured: false,
+    image: '/austin-portfolio/thumbs/marketstreet.png',
+    pipeline: [
+      { name: 'User submits an order', detail: 'Buy or sell, stock symbol and number of shares' },
+      { name: 'Browser checks the form', detail: 'Missing or non-numeric input is blocked and nothing is recorded' },
+      { name: 'Application checks the rules', detail: 'Valid trade type and symbol, whole-number shares, enough cash to buy or enough shares to sell' },
+      { name: 'Trade is recorded', detail: 'Transaction ID, status, price, value and timestamp' },
+      { name: 'Portfolio updates', detail: 'Accepted trades change cash and holdings; rejected trades show the reason' },
+    ],
+    links: {
+      github: null,
+      demo: null,
+      caseStudy: true,
+    },
+    caseStudy: {
+      problem:
+        'Someone learning to trade may want to practice without risking real money. A paper-trading system also needs consistent rules, so users can see what happened to each trade and why.',
+      approach:
+        'We designed the system around one main transaction, a simulated stock trade. We wrote the requirements, business rules, user stories and a data dictionary, drew the workflow, the architecture and a state diagram, and split the responsibilities between the presentation layer, the application logic and the data. Each order is checked against the rules: a valid trade type and stock symbol, a positive whole number of shares, enough cash for a purchase and enough shares for a sale. We then built a step-by-step order form prototype that shows the account balance and the price of each stock.',
+      results:
+        'The design documents and the order-form prototype are done. The application logic that enforces the rules and the storage for transactions are still in progress.',
+      improvements:
+        'Connect the form to the application layer, store each transaction with its status and timestamps, and show a history of completed trades.',
+      techStack: 'HTML, CSS and JavaScript for the order-form prototype; design documents and diagrams for the requirements, rules, data and states',
+    },
+  },
   {
     id: 6,
     slug: 'interdomain',
