@@ -80,7 +80,7 @@ const SheetTab = ({ sheet, compact = false }) => (
 );
 
 const Layout = ({ children }) => {
-  const resumeUrl = `${import.meta.env.BASE_URL}resume.pdf?v=2`;
+  const resumeUrl = `${import.meta.env.BASE_URL}resume.pdf?v=3`;
 
   return (
     <div className="min-h-screen flex flex-col md:pb-[4.75rem]">

@@ -249,6 +249,8 @@ def esc(text):
 
 def run_html(r):
     t = esc(r.text)
+    if re.search(r' {8,}$', t):  # padding spaces before a right-aligned date
+        t = t.rstrip(' ') + '	'
     if not t:
         return ''
     if r.font.size and abs(r.font.size.pt - 10.5) > 0.2:
@@ -273,9 +275,13 @@ def to_html(path, out):
                 inner_runs.append(run_html(r).replace('\t', '\u0001'))
                 if child.find(qn('w:br')) is not None:
                     inner_runs.append('<br>')
-            elif child.tag == qn('w:hyperlink'):
+            elif child.tag == qn('w:sdt'):  # content controls (Google Docs markers) hold real text too
                 for rr in child.iter(qn('w:r')):
-                    inner_runs.append(f'<u>{esc(Run(rr, p).text)}</u>')
+                    inner_runs.append(run_html(Run(rr, p)))
+            elif child.tag == qn('w:hyperlink'):
+                url = doc.part.rels[child.get(qn('r:id'))].target_ref
+                for rr in child.iter(qn('w:r')):
+                    inner_runs.append(f'<a href="{html.escape(url)}"><u>{esc(Run(rr, p).text)}</u></a>')
         line = ''.join(inner_runs)
         is_bullet = p._p.pPr is not None and p._p.pPr.numPr is not None
         if not txt.strip() and not links:
