@@ -44,7 +44,7 @@ export const projects = [
       { name: 'Portfolio updates', detail: 'Accepted trades change cash and holdings; rejected trades show the reason' },
     ],
     links: {
-      github: null,
+      github: 'https://github.com/UH-MIS3371/MIS3371-Section10129-Group14',
       demo: null,
       caseStudy: true,
     },
