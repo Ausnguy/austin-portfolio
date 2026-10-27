@@ -53,7 +53,7 @@ export const experiences = [
     company: 'USI Insurance Services',
     shortName: 'USI Insurance',
     logo: 'logos/usi.png',
-    item: 'umbrella',
+    item: 'bill',
     summary: 'Analyzed $1M+ in healthcare claims to support renewals for 10+ employer clients.',
     role: 'Data Analytics Intern – Employee Benefits',
     period: 'June 2025 – July 2025',

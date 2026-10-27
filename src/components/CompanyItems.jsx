@@ -63,23 +63,71 @@ const Terminal = () => {
   );
 };
 
-// USI sells insurance: the umbrella.
-const Umbrella = () => (
-  <group>
-    <mesh position={[0, 0.95, 0]}>
-      <coneGeometry args={[0.62, 0.34, 8, 1, true]} />
-      <meshStandardMaterial color="#0B4EA2" roughness={0.45} side={THREE.DoubleSide} />
-    </mesh>
-    <mesh position={[0, 0.5, 0]}>
-      <cylinderGeometry args={[0.022, 0.022, 0.95, 12]} />
-      <meshStandardMaterial color={METAL} metalness={0.7} roughness={0.3} />
-    </mesh>
-    <mesh position={[0.09, 0.05, 0]} rotation={[0, 0, Math.PI]}>
-      <torusGeometry args={[0.09, 0.025, 10, 24, Math.PI]} />
-      <meshStandardMaterial color={DARK} roughness={0.5} />
-    </mesh>
-  </group>
-);
+// USI sells employee benefits and insurance: a medical bill, with its red cross, line items and amount due.
+const MedicalBill = () => {
+  const z = 0.026;
+  const rows = [
+    [0.3, 0.88], [0.42, 0.765], [0.24, 0.65], [0.36, 0.535], [0.3, 0.42],
+  ];
+  return (
+    <group>
+      <RoundedBox args={[0.74, 0.08, 0.3]} radius={0.03} smoothness={3} position={[0, 0.04, 0]}>
+        <meshStandardMaterial color="#d6dbe0" roughness={0.6} />
+      </RoundedBox>
+      <RoundedBox args={[0.78, 1.04, 0.04]} radius={0.025} smoothness={3} position={[0, 0.6, 0]}>
+        <meshStandardMaterial color="#ffffff" roughness={0.55} />
+      </RoundedBox>
+      <mesh position={[0, 1.03, z]}>
+        <planeGeometry args={[0.78, 0.22]} />
+        <meshBasicMaterial color="#0B4EA2" />
+      </mesh>
+      <mesh position={[-0.26, 1.03, z + 0.002]}>
+        <circleGeometry args={[0.075, 24]} />
+        <meshBasicMaterial color="#ffffff" />
+      </mesh>
+      <mesh position={[-0.26, 1.03, z + 0.004]}>
+        <planeGeometry args={[0.1, 0.032]} />
+        <meshBasicMaterial color="#D8362B" />
+      </mesh>
+      <mesh position={[-0.26, 1.03, z + 0.004]}>
+        <planeGeometry args={[0.032, 0.1]} />
+        <meshBasicMaterial color="#D8362B" />
+      </mesh>
+      <mesh position={[0.1, 1.06, z + 0.002]}>
+        <planeGeometry args={[0.34, 0.045]} />
+        <meshBasicMaterial color="#ffffff" />
+      </mesh>
+      <mesh position={[0.04, 1.0, z + 0.002]}>
+        <planeGeometry args={[0.22, 0.028]} />
+        <meshBasicMaterial color="#9DBBE6" />
+      </mesh>
+      {rows.map(([w, y]) => (
+        <group key={y}>
+          <mesh position={[-0.33 + w / 2, y, z]}>
+            <planeGeometry args={[w, 0.04]} />
+            <meshBasicMaterial color="#b4bcc5" />
+          </mesh>
+          <mesh position={[0.27, y, z]}>
+            <planeGeometry args={[0.13, 0.04]} />
+            <meshBasicMaterial color="#6b7680" />
+          </mesh>
+        </group>
+      ))}
+      <mesh position={[0, 0.31, z]}>
+        <planeGeometry args={[0.68, 0.012]} />
+        <meshBasicMaterial color="#1D2329" />
+      </mesh>
+      <mesh position={[-0.13, 0.19, z]}>
+        <planeGeometry args={[0.4, 0.07]} />
+        <meshBasicMaterial color="#1D2329" />
+      </mesh>
+      <mesh position={[0.22, 0.19, z]}>
+        <planeGeometry args={[0.26, 0.11]} />
+        <meshBasicMaterial color="#D8362B" />
+      </mesh>
+    </group>
+  );
+};
 
 // Carnegie Mellon: a graduation cap with a CMU-red tassel.
 const GradCap = () => (
@@ -165,6 +213,6 @@ const Drill = () => (
   </group>
 );
 
-export const ITEMS = { server: Server, terminal: Terminal, umbrella: Umbrella, gradcap: GradCap, cart: Cart, drill: Drill };
+export const ITEMS = { server: Server, terminal: Terminal, bill: MedicalBill, gradcap: GradCap, cart: Cart, drill: Drill };
 // How tall each model is, so the logo card can float just above it.
-export const ITEM_HEIGHT = { server: 1, terminal: 1, umbrella: 1.12, gradcap: 0.45, cart: 0.95, drill: 0.9 };
+export const ITEM_HEIGHT = { server: 1, terminal: 1, bill: 1.12, gradcap: 0.45, cart: 0.95, drill: 0.9 };

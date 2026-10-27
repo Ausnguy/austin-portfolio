@@ -7,7 +7,7 @@ const puppeteer = require(process.argv[2]);
 const CHROME = process.argv[3] ?? 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const BASE = `http://localhost:${process.env.PORT ?? 5173}/austin-portfolio/tools/thumbnails/index.html`;
 const OUT = path.join(__dirname, '..', '..', 'public', 'thumbs');
-const ALL = ['interdomain', 'mnist-digit-recognition', 'ai-efficiency-modeling', 'sales-analytics-dashboard', 'fed-oil-price-analysis'];
+const ALL = ['interdomain', 'mnist-digit-recognition', 'ai-efficiency-modeling', 'sales-analytics-dashboard', 'fed-oil-price-analysis', 'marketstreet'];
 const SLUGS = process.argv.slice(4).length ? process.argv.slice(4) : ALL;
 
 (async () => {

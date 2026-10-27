@@ -272,12 +272,69 @@ const Bp = () => {
   );
 };
 
+// A candlestick chart for the paper-trading app, with a trend line and an order ticket floating over it.
+const MarketStreet = () => {
+  const candles = useMemo(() => {
+    const rand = seeded(11);
+    let price = 0.5;
+    return Array.from({ length: 16 }, (_, i) => {
+      const open = price;
+      price += (rand() - 0.38) * 0.55 + 0.06;
+      const close = Math.max(0.15, price);
+      const high = Math.max(open, close) + rand() * 0.25;
+      const low = Math.max(0.05, Math.min(open, close) - rand() * 0.25);
+      return { i, open, close, high, low };
+    });
+  }, []);
+  const gap = 0.46;
+  const H = 2.2; // price to world height
+  const base = Math.min(...candles.map((c) => c.low)) * H; // lowest wick rests on the slab
+  const x = (i) => (i - 7.5) * gap;
+  const trend = candles.map((c) => new THREE.Vector3(x(c.i), c.close * H - base + 0.45, 0.35));
+  return (
+    <group position={[0, -1.1, 0]} rotation={[0, -0.32, 0]}>
+      <RoundedBox args={[16 * gap + 1, 0.3, 1.5]} radius={0.1} smoothness={4} position={[0, -0.15, 0]}>
+        <meshStandardMaterial color={INK} roughness={0.35} metalness={0.1} />
+      </RoundedBox>
+      {candles.map((c) => {
+        const up = c.close >= c.open;
+        const lo = Math.min(c.open, c.close);
+        const hi = Math.max(c.open, c.close);
+        const body = Math.max(0.14, (hi - lo) * H);
+        const color = up ? GREEN_LIGHT : AMBER;
+        return (
+          <group key={c.i} position={[x(c.i), 0.02 - base, 0]}>
+            <mesh position={[0, ((c.high + c.low) / 2) * H + 0.05, 0]}>
+              <boxGeometry args={[0.05, (c.high - c.low) * H + 0.1, 0.05]} />
+              <meshStandardMaterial color="#aab4bf" roughness={0.5} />
+            </mesh>
+            <RoundedBox args={[0.3, body, 0.3]} radius={0.04} smoothness={3} position={[0, lo * H + body / 2 + 0.05, 0]}>
+              <meshStandardMaterial color={color} roughness={0.4} />
+            </RoundedBox>
+          </group>
+        );
+      })}
+      <Line points={trend} color={GREEN} lineWidth={3} />
+      <group position={[-2.5, 3.5, 0.6]} rotation={[0, 0.18, 0]}>
+        <RoundedBox args={[1.9, 1.15, 0.07]} radius={0.07} smoothness={4}>
+          <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={0.35} roughness={0.45} />
+        </RoundedBox>
+        <mesh position={[-0.45, 0.28, 0.045]}><planeGeometry args={[0.7, 0.2]} /><meshBasicMaterial color={GREEN} /></mesh>
+        <mesh position={[-0.2, 0.0, 0.045]}><planeGeometry args={[1.2, 0.1]} /><meshBasicMaterial color="#cfd5db" /></mesh>
+        <mesh position={[-0.35, -0.2, 0.045]}><planeGeometry args={[0.9, 0.1]} /><meshBasicMaterial color="#cfd5db" /></mesh>
+        <mesh position={[0.55, -0.38, 0.045]}><planeGeometry args={[0.6, 0.18]} /><meshBasicMaterial color={INK} /></mesh>
+      </group>
+    </group>
+  );
+};
+
 const SCENES = {
   interdomain: { Component: Interdomain, camera: [0, 1.6, 10.5] },
   'mnist-digit-recognition': { Component: Mnist, camera: [0, 6.2, 6.4] },
   'ai-efficiency-modeling': { Component: Bny, camera: [1.2, 3.4, 10.5] },
   'sales-analytics-dashboard': { Component: ToolAndMore, camera: [2.5, 3.4, 9] },
   'fed-oil-price-analysis': { Component: Bp, camera: [1.2, 2.4, 9.5] },
+  marketstreet: { Component: MarketStreet, camera: [1.5, 3.2, 10.5] },
 };
 
 const Ready = () => {
