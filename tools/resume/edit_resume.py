@@ -186,6 +186,9 @@ def edit(src, out):
     retext('Reduced modeled AI', 'energy consumption ', 'energy ')
     retext('Reduced modeled AI', ' by evaluating distributed model-routing and caching strategies. ', ' via model routing and caching. ')
 
+    # GPA is 3.9 (the source file splits '3.95' across two runs).
+    retext('GPA:', '5 | ', ' | ')
+
     # First HPE bullet: drop two filler words so it fits on two lines.
     hpe = next(p for p in doc.paragraphs if text_of(p).startswith('Built and owned an automated BI pipeline'))
     hpe.runs[0].text = hpe.runs[0].text.replace('pipeline using Power Query, SharePoint, Power BI, and DAX to consolidate ', 'pipeline (Power Query, SharePoint, Power BI, DAX) to consolidate ')

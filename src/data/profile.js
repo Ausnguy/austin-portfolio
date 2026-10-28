@@ -10,7 +10,7 @@ export const profile = {
   school: 'University of Houston, C. T. Bauer College of Business',
   degree: 'B.B.A. in Management Information Systems',
   graduation: 'May 2027',
-  gpa: '3.95',
+  gpa: '3.9',
   deansList: 'Fall 2023 – Fall 2026',
   coursework: ['Data Programming', 'Database Management Systems', 'Systems Analysis & Design', 'Business Statistics'],
   certifications: [
@@ -21,7 +21,7 @@ export const profile = {
   scholarships: ['Ted Bauer Scholarship', 'Lockheed Martin Vocational Scholarship', 'George Foundation Scholarship'],
   facts: [
     'Austin Nguyen is a Management Information Systems (MIS) student at the University of Houston, C. T. Bauer College of Business, earning a B.B.A. and graduating in May 2027.',
-    'Austin has a 3.95 GPA and made the Dean’s List from Fall 2023 through Fall 2026.',
+    'Austin has a 3.9 GPA and made the Dean’s List from Fall 2023 through Fall 2026.',
     'Austin’s relevant coursework: Data Programming, Database Management Systems, Systems Analysis & Design, and Business Statistics.',
     'Austin’s scholarships: the Ted Bauer Scholarship, the Lockheed Martin Vocational Scholarship, and the George Foundation Scholarship.',
     'Austin is based in Houston, Texas.',

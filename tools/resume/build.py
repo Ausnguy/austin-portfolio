@@ -64,7 +64,7 @@ PROGRAMS = [
 
 EDUCATION_LINES = [
     'B.B.A. in Management Information Systems',
-    'GPA: 3.95 | Dean’s List: Fall 2023 – Fall 2026',
+    'GPA: 3.9 | Dean’s List: Fall 2023 – Fall 2026',
     '**Relevant Coursework:** Data Programming, Database Management Systems, Systems Analysis & Design, Business Statistics',
 ]
 
