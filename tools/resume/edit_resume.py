@@ -31,10 +31,10 @@ CASEQUEST_HEADER = [
     ('Case study', 'link', CASEQUEST_URL),
 ]
 CASEQUEST_BULLETS = [
-    [('Co-built a failure-prediction model (logistic regression written from scratch in NumPy) that ', 'r'),
-     ('flagged 90 of 91 mechanical failures on unseen data (AUC 0.82), ', 'b'), ('a median 1.5 days ahead.', 'r')],
-    [('Recommended a spare-parts program ', 'r'), ('modeled to avoid ~968 downtime hours a year, ', 'b'),
-     ('and shipped a live 3D operations console and engineer phone app that share one state through a TypeScript/Redis API.', 'r')],
+    [('Flagged ', 'r'), ('90 of 91 mechanical failures on unseen data (AUC 0.82), ', 'b'),
+     ('a median 1.5 days ahead, with a failure-prediction model of logistic regression written from scratch in NumPy.', 'r')],
+    [('Projected ', 'r'), ('~968 fewer downtime hours a year ', 'b'),
+     ('by recommending a spare-parts program, and delivered a live 3D operations console and engineer phone app on one shared TypeScript/Redis API.', 'r')],
 ]
 
 SKILLS = [
@@ -190,8 +190,8 @@ def edit(src, out):
     retext('Engineered a', ' using Pandas, scikit-learn, XGBoost, and Power BI/XMLA, automating time-series backtesting and evaluation of ',
            ' (Pandas, scikit-learn, XGBoost, Power BI/XMLA) backtesting ')
     retext('Engineered a', ', identifying a ', ', finding a ')
-    retext('Reduced modeled AI', 'energy consumption ', 'energy ')
-    retext('Reduced modeled AI', ' by evaluating distributed model-routing and caching strategies. ', ' via model routing and caching. ')
+    retext('Reduced modeled AI', 'Reduced modeled AI energy consumption ', 'Cut modeled AI energy use ')
+    retext('Cut modeled AI', ' by evaluating distributed model-routing and caching strategies. ', ' via model routing and caching. ')
 
     # Contact line: the phone number was black and the rest dark gray (333333). Make it one color.
     from docx.shared import RGBColor
@@ -228,6 +228,34 @@ def edit(src, out):
                 inter._p.append(child)
     right_tab(inter)
 
+    # XYZ bullets: what was accomplished, measured by a number, and how. Bold only the measure.
+    def xyz(prefix, segments):
+        par = next(p for p in doc.paragraphs if text_of(p).startswith(prefix))
+        fill(par, segments, protos, doc)
+
+    xyz('Built and owned an automated BI pipeline', [
+        ('Saved 7 Compensation Managers ', 'r'), ('10–12 hours per reporting cycle ', 'b'),
+        ('by building and owning an automated BI pipeline (Power Query, SharePoint, Power BI, DAX) that consolidates 8 Workday datasets. ', 'r')])
+    xyz('Enabled faster compensation', [
+        ('Enabled faster compensation decisions across ', 'r'), ('66,000+ employee records ', 'b'),
+        ('by creating a single Power BI source of truth for pay guidelines, salary ranges, and equity budgets. ', 'r')])
+    xyz('Engineered a Python forecasting', [
+        ('Identified a ', 'r'), ('$164M gap in projected channel sales ', 'b'),
+        ('by engineering a Python forecasting pipeline (Pandas, scikit-learn, XGBoost) that backtests 8 statistical and ML models across 14 fiscal quarters. ', 'r')])
+    xyz('Analyzed $1M+', [
+        ('Supported renewal strategy for ', 'r'), ('10+ employer clients ', 'b'),
+        ('by analyzing $1M+ in healthcare claims in Excel, covering cost trends, utilization, and benchmarking to identify patterns. ', 'r')])
+    xyz('Standardized 5,000+', [
+        ('Improved consistency of ', 'r'), ('5,000+ rows ', 'b'), ('of healthcare data via cleaning, normalization, and QA checks. ', 'r')])
+    xyz('Maintained 30%+', [
+        ('Held ', 'r'), ('30%+ profit margins ', 'b'), ('through ROI, sourcing, and pricing analysis that guided purchasing. ', 'r')])
+    xyz('Built an end-to-end', [
+        ('Processed ', 'r'), ('~8.7K streaming events/sec (~33K records/sec) ', 'b'),
+        ('from 23 worldwide monitoring locations by building an end-to-end real-time data platform for global Internet routing activity. ', 'r')])
+    xyz('Scaled the pipeline', [
+        ('Cut dashboard query latency ', 'r'), ('>99% (13–27 s to 44–62 ms) ', 'b'),
+        ('and cleared a 19.6M-message backlog with 5K-record batch ingestion, pre-aggregated minute metrics, and time-partitioned storage. ', 'r')])
+
     # Less bold so the eye can follow: keep the headline metric in each bullet, unbold the rest.
     unbold = ['8 Workday datasets', 'Engineered a modular Python forecasting pipeline', '8 statistical and ML models',
               '10+ employer clients', 'healthcare datasets', '23 worldwide monitoring locations', '19.6M-message backlog']
@@ -241,11 +269,11 @@ def edit(src, out):
 
     # BNY: one more bullet (from the project's write-up on the site), cloned from a plain bullet so no hidden content is copied.
     from docx.text.paragraph import Paragraph
-    bny_bullet = next(p for p in doc.paragraphs if text_of(p).startswith('Reduced modeled AI'))
+    bny_bullet = next(p for p in doc.paragraphs if text_of(p).startswith('Cut modeled AI'))
     plain = next(p for p in doc.paragraphs if text_of(p).startswith('Generated $75K+'))
     extra = copy.deepcopy(plain._p)
     bny_bullet._p.addnext(extra)
-    fill(Paragraph(extra, bny_bullet._parent), [('Built a lightweight Python logging layer to track compute use and flag inefficiencies. ', 'r')], protos, doc)
+    fill(Paragraph(extra, bny_bullet._parent), [('Flagged compute inefficiencies ', 'r'), ('by building a lightweight Python logging layer that tracks usage. ', 'r')], protos, doc)
 
     # Cloned paragraphs must not share Word paragraph ids with the originals.
     for par in doc.paragraphs:
