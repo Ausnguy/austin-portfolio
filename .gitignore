@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Personal and generated files that don't belong in the repo
+research_notes/
+/*.docx
+/*.zip
+/*.pdf
+~$*
+tools/resume/out/
+.*.tmp.*
