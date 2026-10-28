@@ -193,6 +193,12 @@ def edit(src, out):
     retext('Reduced modeled AI', 'energy consumption ', 'energy ')
     retext('Reduced modeled AI', ' by evaluating distributed model-routing and caching strategies. ', ' via model routing and caching. ')
 
+    # Contact line: the phone number was black and the rest dark gray (333333). Make it one color.
+    from docx.shared import RGBColor
+    contact = next(p for p in doc.paragraphs if '@' in text_of(p) and 'linkedin' in text_of(p))
+    for run in contact.runs:
+        run.font.color.rgb = RGBColor(0, 0, 0)
+
     # GPA is 3.9 (the source file splits '3.95' across two runs).
     retext('GPA:', '5 | ', ' | ')
 
