@@ -91,7 +91,7 @@ const Home = () => {
   const spotlight = getSpotlightProject();
   const others = getFeaturedProjects().filter((p) => p !== spotlight).slice(0, 4);
   const baseUrl = import.meta.env.BASE_URL;
-  const resumeUrl = `${baseUrl}resume.pdf?v=4`;
+  const resumeUrl = `${baseUrl}resume.pdf?v=5`;
 
   return (
     <Sheet>

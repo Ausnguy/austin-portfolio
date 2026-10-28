@@ -85,7 +85,14 @@ def fill(par, segments, protos, doc):
             run = make_run(protos['r'], par, text)
             u = OxmlElement('w:u')
             u.set(qn('w:val'), 'single')
-            run.find(qn('w:rPr')).append(u)
+            # w:u has a fixed place in w:rPr's sequence; appending it last makes Word "repair" the file.
+            rpr = run.find(qn('w:rPr'))
+            after_u = ('effect', 'bdr', 'shd', 'fitText', 'vertAlign', 'rtl', 'cs', 'em', 'lang', 'eastAsianLayout', 'specVanish', 'oMath')
+            nxt = next((c for c in rpr if c.tag.split('}')[1] in after_u), None)
+            if nxt is not None:
+                nxt.addprevious(u)
+            else:
+                rpr.append(u)
             link.append(run)
             par._p.append(link)
         else:
