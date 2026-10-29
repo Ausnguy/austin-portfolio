@@ -165,7 +165,7 @@ const CaseRow = ({ n, label, formula, children }) => (
 
 // Long prose becomes a short list: one point per sentence (three or more sentences), plain text otherwise.
 const Bullets = ({ text }) => {
-  const parts = text.split(/(?<=[.!?])\s+(?=[A-Z])/);
+  const parts = text.split(/(?<=[.!?])\s+(?=[A-Z0-9$])/);
   if (parts.length < 3) return <p className="body-copy max-w-3xl">{text}</p>;
   return (
     <ul className="max-w-3xl space-y-2.5">
