@@ -145,9 +145,9 @@ export const projects = [
     slug: 'casequest-2026',
     role: 'Team of 5',
     tldr: [
-      'Lone Mesa Energy lost about 6,599 hours to unplanned stops in 2025, and 24% of it was machines waiting for spare parts.',
-      'A failure-prediction model, a 3D operations console and an engineer phone app that share one live state.',
-      'The model warned before 90 of 91 mechanical failures on unseen data; the parts program is modeled at about 968 hours a year saved.',
+      'Lone Mesa Energy lost about 6,599 hours to unplanned machine stops in 2025, and 24% of it was machines waiting for a spare part.',
+      'A failure-warning model, a 3D operations console and an engineer phone app that all share one live set of data.',
+      'The model warned before 90 of 91 mechanical failures on data it had never seen. The parts program is modeled to save about 968 hours a year.',
     ],
     // Drawn by src/components/Architecture.jsx: zones hold nodes, edges are the arrows between nodes.
     architecture: {
@@ -181,40 +181,40 @@ export const projects = [
     // Plain-language layer shown first on the project page: the case, the solution, and what was built.
     story: {
       case: {
-        headline: 'Lone Mesa Energy lost about 6,599 hours to unplanned stops in 2025.',
+        headline: 'Lone Mesa Energy lost about 6,599 hours to unplanned machine stops in 2025.',
         points: [
-          'Six oil sites with eighteen pumps and compressors.',
-          'About $5.6M in modeled lost contribution.',
-          '24% of the lost time was machines waiting for a spare part.',
+          'It runs six oil sites with 18 pumps and compressors.',
+          'The downtime cost about $5.6M in modeled lost contribution (revenue minus the direct cost of producing it).',
+          'A quarter of it (24%) was machines sitting idle, waiting for a spare part.',
         ],
-        note: 'The competition asked us, acting as consultants, to pick the one problem that matters most and recommend one practical fix.',
+        note: 'Our job in the competition: act as consultants, pick the one problem that matters most, and recommend one practical fix, backed by the data and a working prototype.',
       },
       solution: {
-        headline: 'A critical spare-parts program, backed by an early-warning system for failures.',
+        headline: 'Stock the critical spare parts, and warn 3 days before a machine fails.',
         points: [
-          'Keep critical parts in stock, but only at sites whose overdue safety actions are closed.',
-          'A model flags machines likely to fail within 3 days, so the right parts and engineer are ready.',
-          'Modeled at about 968 hours a year of downtime avoided.',
+          'Keep critical parts on hand, but only at sites that have closed their overdue safety actions.',
+          'A model flags machines likely to fail within 3 days, so the right parts and an engineer are ready.',
+          'We modeled it at about 968 fewer downtime hours a year.',
         ],
       },
       built: [
-        { title: 'Failure model', who: 'For the planner', body: 'Reads daily vibration, temperature and inspection notes, and flags machines likely to have a bearing or seal failure within 3 days.' },
-        { title: 'Ops console', who: 'For the manager', body: 'A 3D map of the sites, a parts warehouse and dispatch that refuses to send an engineer without every kit.' },
-        { title: 'Phone app', who: 'For the field engineer', body: 'Take the job, travel to the site and report which kits were fitted, on the same live state as the console.' },
+        { title: 'Failure model', who: 'For the planner', body: 'Reads each machine’s daily vibration, temperature and inspection notes, and flags likely bearing or seal failures 3 days out.' },
+        { title: 'Ops console', who: 'For the manager', body: 'A 3D map of the sites with parts stock and dispatch. It won’t send an engineer unless every needed kit is on the shelf.' },
+        { title: 'Phone app', who: 'For the field engineer', body: 'The engineer takes the job, travels to the site and reports which kits were fitted. It shares live data with the console.' },
       ],
     },
     decisions: [
       {
-        title: 'Predict 3 days out from a 2-day window',
-        why: 'The data set the window: 91% of mechanical failures show vibration above 1.3× normal two days out, and only 1% three days out.',
+        title: 'Predict 3 days out, using a 2-day window',
+        why: 'The data chose the window. 91% of mechanical failures show vibration above 1.3× normal two days before, and only 1% show it three days before.',
       },
       {
         title: 'One alert level, not two',
-        why: 'A lower “watch” band was tried and dropped, because its days failed less often than average.',
+        why: 'We tried a lower “watch” level and dropped it. The days it flagged failed less often than an average day.',
       },
       {
         title: 'Score only on readings already received',
-        why: 'Late-arriving readings are excluded, so every score is what a planner could really have seen that day. A test checks this.',
+        why: 'Late readings are left out, so every score is what a planner could really have seen that day. A test checks this.',
       },
     ],
     title: 'Parvius: Parts Readiness System (CaseQuest 2026)',
@@ -222,7 +222,7 @@ export const projects = [
     date: 'Oct 2026',
     highlight: 'Model warned before 90 of 91 equipment failures on unseen data',
     description:
-      'A failure-prediction model, a 3D operations console and a field engineer phone app that share one live state, built for a ConocoPhillips-sponsored case competition.',
+      'A system that warns when oil-field machines are about to fail, and sends the right engineer with the right parts. Built for CaseQuest 2026, a ConocoPhillips-sponsored case competition.',
     category: 'Full-Stack',
     tags: ['Machine Learning', 'Full-Stack', 'Mobile', 'Case Competition'],
     tools: ['Python', 'NumPy', 'TypeScript', 'Redis', 'Vercel', 'Expo', 'React Native', 'WebGPU'],
@@ -249,45 +249,45 @@ export const projects = [
       caseStudy: true,
     },
     metrics: [
-      { value: 6599, suffix: ' h', label: 'of unplanned downtime analyzed across 6 sites and 18 machines' },
+      { value: 6599, suffix: ' h', label: 'of unplanned downtime across 6 sites and 18 machines' },
       { value: 24, suffix: '%', label: 'of that downtime was machines waiting for a spare part' },
-      { value: 0.82, decimals: 2, label: 'AUC on a half-year of data the model never trained on' },
+      { value: 0.82, decimals: 2, label: 'model score (AUC) on half a year of data it never saw. 1.0 is perfect, 0.5 is a coin flip' },
       { value: 90, suffix: ' / 91', label: 'mechanical failures got at least one warning first' },
-      { value: 968, suffix: ' h/yr', label: 'of downtime the program is modeled to win back' },
+      { value: 968, suffix: ' h/yr', label: 'of downtime the parts program is modeled to avoid' },
     ],
     caseStudy: {
       problem:
-        'Lone Mesa Energy, the case company, runs six oil sites with eighteen pumps and compressors. In 2025 they lost about 6,599 hours to unplanned stops, roughly $5.6M in modeled lost contribution. The case asked us, acting as consultants, to pick the one operational problem that matters most and recommend one practical fix, backed by the provided data and a working prototype.',
+        'Lone Mesa Energy runs six oil sites with 18 pumps and compressors. In 2025 it lost about 6,599 hours to unplanned stops, a modeled $5.6M in lost contribution. The case asked us, as consultants, to pick the one operational problem that matters most and recommend one practical fix, backed by the data and a working prototype.',
       approach:
-        'We cleaned the competition workbook with logged rules and 39 automated integrity checks, then dug into where the hours went. A quarter of all downtime was machines sitting broken while someone waited for a part, so we recommended a critical spare-parts program, rolled out only at sites whose overdue safety actions are closed. To show how it would run day to day we built three connected pieces: a failure model that reads daily vibration, temperature and inspection notes and flags machines likely to have a bearing or seal failure within 3 days; Parvius, a manager console with a 3D map of the sites, a parts warehouse and dispatch; and a phone app the field engineer uses to take the job, travel to the site and report which kits were fitted. The console and phone share one live state through a small API.',
+        'We cleaned the competition workbook with logged rules and 39 automated checks, then looked for where the hours went. A quarter of all downtime was machines sitting broken while someone waited for a part. That became our recommendation: a critical spare-parts program, rolled out only at sites that have closed their overdue safety actions. To show how it would run day to day, we built three connected pieces. A failure model reads daily vibration, temperature and inspection notes and flags machines likely to have a bearing or seal failure within 3 days. A manager console shows a 3D map of the sites, the parts warehouse and dispatch. A phone app lets the field engineer take the job, travel to the site and report which kits were fitted. The console and the phone share one live set of data through a small API.',
       results:
-        'On the half of 2025 it never saw, the model scored an AUC of 0.82. 68% of alerted days were followed by a mechanical failure within 3 days, against a 9% base rate, and 90 of 91 mechanical failures got at least one warning, a median 1.5 days ahead. The spare-parts program is modeled at about 968 hours a year of downtime avoided at steady state (range 565–1,210) for $168k upfront and $18k a year. The full system is live: alerts, warehouse stock, dispatch that refuses to send an engineer without every kit, and an engineer phone app updating the same state in real time.',
+        'On the second half of 2025, data it never saw, the model scored an AUC of 0.82 (1.0 is perfect, 0.5 is a coin flip). 68% of the days it flagged were followed by a mechanical failure within 3 days, against 9% for a typical day. 90 of 91 mechanical failures got at least one warning first, a median 1.5 days ahead. The spare-parts program is modeled to avoid about 968 downtime hours a year (range 565–1,210), for $168k upfront and $18k a year. The full system works end to end: alerts, warehouse stock, dispatch that refuses to send an engineer without every kit, and a phone app that updates the same live data.',
       improvements:
-        'The data is a scenario with one reading per machine per day, so the next step is checking the model against real sensor data such as the Petrobras 3W offshore well dataset. After that comes the costed Phase 2: condition monitoring at the worst-hit site.',
+        'The data is a scenario with one reading per machine per day. Next, we would check the model against real sensor data, such as the Petrobras 3W offshore well dataset. After that comes a costed Phase 2: condition monitoring at the worst-hit site.',
       lessons: [
         {
           title: 'Let the data pick the problem',
-          body: 'We looked at every option before choosing. At each site, how often breakdowns waited on parts tracked how empty the spare shelf was almost perfectly (r ≈ −0.995). That gave our one recommendation a clear reason backed by the data.',
+          body: 'We looked at every option before choosing. At each site, how often breakdowns waited on parts closely tracked how empty the spare shelf was (correlation r ≈ −0.995, where −1 is a perfect inverse link). That gave our one recommendation a clear reason.',
         },
         {
           title: 'Only use what you would have known that day',
-          body: 'Sensor readings sometimes arrive late. We only let the model see readings already received by the end of each day, trained on January–June and tested on July–December, so the score reflects what a planner could really have acted on.',
+          body: 'Sensor readings sometimes arrive late. The model sees only readings received by the end of each day. We trained it on January to June and tested it on July to December, so the score reflects what a planner could really have acted on.',
         },
         {
-          title: 'A simple model you can explain is powerful',
-          body: 'Five plain features and a logistic regression we wrote ourselves in about 20 lines of NumPy, with no ML library, warned before 90 of 91 failures, and we can explain exactly why any alert fired.',
+          title: 'A simple model you can explain',
+          body: 'Five plain features and a logistic regression (a standard model that weighs evidence into a risk score), written by us in about 20 lines of NumPy with no ML library. It warned before 90 of 91 failures, and we can say exactly why any alert fired.',
         },
         {
-          title: 'Say clearly what it cannot do',
+          title: 'Say what it can’t do',
           body: 'Electrical trips look like normal days in the readings, so no model on this data could predict them, and we said so. Every number in the console is marked as recorded or modeled.',
         },
         {
           title: 'Put the safety rules in the software',
-          body: 'The system never starts or stops a machine, never sends anyone on its own, never dispatches without the parts and has no override for a safety hold. The rules live in code, not in a slide.',
+          body: 'The system never starts or stops a machine, never sends anyone on its own, never dispatches without the parts, and has no override for a safety hold. The rules live in code, not in a slide.',
         },
         {
           title: 'Two screens, one truth',
-          body: 'The manager console and the engineer phone both write to the same state. A compare-and-swap check in Redis stops one device from silently overwriting the other.',
+          body: 'The manager console and the engineer’s phone write to the same data. A check in Redis (compare-and-swap: save only if nobody changed it since you last read it) stops one device from silently overwriting the other.',
         },
       ],
       techStack: {
