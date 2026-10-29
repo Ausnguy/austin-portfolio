@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
 import Layout from './components/Layout';
+import ErrorBoundary from './components/ErrorBoundary';
 import { WorkbookProvider } from './components/workbook';
 import Home from './pages/Home';
 import { EASE_OUT } from './lib/motion';
@@ -40,6 +41,7 @@ function App() {
           animate={{ opacity: 1, transform: 'translateY(0px)', transitionEnd: { transform: 'none' } }}
           transition={{ duration: 0.22, ease: EASE_OUT }}
         >
+          <ErrorBoundary key={location.pathname}>
           <Suspense fallback={<SheetLoading />}>
             <Routes location={location}>
               <Route path="/" element={<Home />} />
@@ -51,6 +53,7 @@ function App() {
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
+          </ErrorBoundary>
         </motion.div>
       </Layout>
     </WorkbookProvider>

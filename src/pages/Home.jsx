@@ -7,6 +7,7 @@ import { GitHubIcon, LinkedInIcon } from '../components/icons';
 import { getFeaturedProjects, getSpotlightProject, projects } from '../data/projects';
 import { experiences } from '../data/experience';
 import ToolIcon from '../components/ToolIcon';
+import ErrorBoundary from '../components/ErrorBoundary';
 import { homeTools, metaFor } from '../data/toolIcons';
 import { profile } from '../data/profile';
 
@@ -224,12 +225,14 @@ const Home = () => {
         <Cell id="A7" span="col-span-12 lg:col-span-6" pad={false} formula="=CHART(months_per_role, 3D_COLUMN)">
           <div className="h-[320px] sm:h-[400px] lg:h-[460px] lg:sticky lg:top-[7.5rem]">
             <WhenNear fallback={<div className="h-full grid place-items-center text-sm text-muted">Loading chart…</div>}>
+              <ErrorBoundary fallback={<div className="h-full grid place-items-center px-6 text-center text-sm text-muted">The 3D chart couldn’t load here. The roles are listed beside it.</div>}>
               <Suspense fallback={<div className="h-full grid place-items-center text-sm text-muted">Loading chart…</div>}>
-                <ExperienceChart3D
-                  roles={roles}
-                  label={`3D column chart of months spent in each role: ${roles.map((r) => `${r.name} ${r.months} months`).join(', ')}`}
-                />
-              </Suspense>
+                  <ExperienceChart3D
+                    roles={roles}
+                    label={`3D column chart of months spent in each role: ${roles.map((r) => `${r.name} ${r.months} months`).join(', ')}`}
+                  />
+                </Suspense>
+              </ErrorBoundary>
             </WhenNear>
           </div>
         </Cell>

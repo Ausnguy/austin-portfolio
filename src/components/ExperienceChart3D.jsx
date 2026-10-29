@@ -183,7 +183,13 @@ const ExperienceChart3D = ({ roles, label }) => {
 
   return (
     <div ref={wrapper} role="img" aria-label={label} className="w-full h-full">
-      <Canvas frameloop="demand" dpr={[1, 2]} camera={{ position: [2.5, 3.6, 13.5], fov: 34 }} onCreated={({ camera }) => camera.lookAt(0, 0.2, 0)}>
+      <Canvas frameloop="demand" dpr={[1, 2]} camera={{ position: [2.5, 3.6, 13.5], fov: 34 }} onCreated={({ camera, gl, invalidate }) => {
+          camera.lookAt(0, 0.2, 0);
+          // The browser can drop the GPU context (tab in the background, memory pressure). Allow it to come back and redraw.
+          gl.domElement.addEventListener('webglcontextlost', (e) => e.preventDefault());
+          gl.domElement.addEventListener('webglcontextrestored', () => invalidate());
+        }}
+      >
         <Suspense fallback={null}>
           <Scene roles={roles} active={active} reduceMotion={reduceMotion} />
         </Suspense>
