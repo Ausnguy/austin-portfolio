@@ -2,7 +2,7 @@ import iconPaths from '../data/iconPaths';
 import { metaFor } from '../data/toolIcons';
 
 // Brand colors too dark to read on the dark theme fall back to the page's ink color.
-const isDark = (hex) => {
+export const isDark = (hex) => {
   const n = parseInt(hex.slice(1), 16);
   const lum = (0.2126 * (n >> 16) + 0.7152 * ((n >> 8) & 255) + 0.0722 * (n & 255)) / 255;
   return lum < 0.28;

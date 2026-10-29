@@ -419,7 +419,7 @@ const ProjectDetail = () => {
               <div role="tabpanel" id={`panel-${tab.id}`} aria-labelledby={`tab-${tab.id}`} className="p-4 sm:p-6 lg:p-8">
                 {tab.id === 'how' && (
                   <div className="space-y-6">
-                    {project.architecture ? <Architecture {...project.architecture} /> : project.pipeline && <Pipeline steps={project.pipeline} />}
+                    {project.architecture ? <Architecture spec={project.architecture.spec} caption={project.architecture.caption} label={project.architecture.label} /> : project.pipeline && <Pipeline steps={project.pipeline} />}
                     <Bullets text={caseStudy.approach} />
                   </div>
                 )}

@@ -149,36 +149,34 @@ export const projects = [
       'A failure-prediction model, a 3D operations console and an engineer phone app that share one live state.',
       'The model warned before 90 of 91 mechanical failures on unseen data; the parts program is modeled at about 968 hours a year saved.',
     ],
+    // Drawn by src/components/Architecture.jsx: zones hold nodes, edges are the arrows between nodes.
     architecture: {
-      zones: [
-        {
-          title: 'Data and model',
-          subtitle: 'Python, run offline',
-          nodes: [
-            { name: 'Case workbook', detail: 'Readings, stop events and assets for 6 sites and 18 machines.', tools: ['Excel'] },
-            { name: 'Cleaning pipeline', detail: 'Logged rules and 39 automated integrity checks.', tools: ['Python', 'pandas'] },
-            { name: 'Failure model', detail: 'Logistic regression written from scratch (Newton’s method, ridge penalty) that flags a bearing or seal failure 3 days out.', tools: ['NumPy'] },
-          ],
+      label: 'Architecture of Parvius: the case workbook is cleaned in Python and scored by a failure model; the scores go to a TypeScript dispatch API on Vercel that keeps shared state in Redis; the ops console and the engineer phone app both read and write that state.',
+      caption: 'Arrows show which way data moves. A two-way arrow means both sides read and write.',
+      spec: {
+        zones: [
+          { title: 'Data and model', subtitle: 'Python, run offline', nodes: ['workbook', 'clean', 'model'] },
+          { title: 'Shared state', subtitle: 'TypeScript on Vercel', hub: true, nodes: ['api', 'store'] },
+          { title: 'Two screens', subtitle: 'One live state', nodes: ['console', 'phone'] },
+        ],
+        nodes: {
+          workbook: { name: 'Case workbook', lines: ['Readings, stop events and assets', 'for 6 sites and 18 machines'], tools: ['Excel'] },
+          clean: { name: 'Cleaning pipeline', lines: ['Logged rules and 39 automated', 'integrity checks'], tools: ['Python', 'pandas'] },
+          model: { name: 'Failure model', lines: ['Logistic regression written from', 'scratch (Newton’s method, ridge)', 'flags a bearing or seal failure', '3 days out'], tools: ['NumPy'] },
+          api: { name: 'Dispatch API', lines: ['Serverless functions with', 'validated requests. Refuses to', 'send an engineer unless every', 'kit is in stock'], tools: ['TypeScript', 'Vercel', 'Zod'] },
+          store: { name: 'State store', lines: ['Redis with a compare-and-swap', 'check, so one device can’t', 'silently overwrite the other'], tools: ['Redis'] },
+          console: { name: 'Ops console', lines: ['Single-file web app: 3D site map', 'hand-drawn on Canvas, voice', 'input with Whisper in the', 'browser, voice output with', 'Kokoro on WebGPU'], tools: ['HTML Canvas', 'Hugging Face'], wideY: 62 },
+          phone: { name: 'Engineer phone app', lines: ['Take the job, travel to the site', 'and report the kits fitted.', 'Shake the phone to travel'], tools: ['React Native', 'Expo'] },
         },
-        {
-          title: 'Shared state',
-          subtitle: 'TypeScript on Vercel',
-          hub: true,
-          nodes: [
-            { name: 'Dispatch API', detail: 'Serverless functions with validated requests. Refuses to send an engineer unless every kit is in stock.', tools: ['TypeScript', 'Vercel', 'Zod'] },
-            { name: 'State store', detail: 'Redis with a compare-and-swap check, so one device can’t silently overwrite the other.', tools: ['Redis'] },
-          ],
-        },
-        {
-          title: 'Two screens',
-          subtitle: 'One live state',
-          nodes: [
-            { name: 'Ops console', detail: 'Single-file web app: a hand-drawn 3D site map on Canvas, voice input with Whisper in the browser, voice output with Kokoro on WebGPU.', tools: ['HTML Canvas', 'Hugging Face'] },
-            { name: 'Engineer phone app', detail: 'Take the job, travel to the site and report the kits fitted. Shake the phone to travel.', tools: ['React Native', 'Expo'] },
-          ],
-        },
-      ],
-      links: [{ label: 'model output' }, { label: 'both read and write the same state', both: true }],
+        edges: [
+          { from: 'workbook', to: 'clean' },
+          { from: 'clean', to: 'model' },
+          { from: 'model', to: 'api', label: 'model output', labelCenter: true, toAt: 0.35 },
+          { from: 'api', to: 'store', both: true, label: 'compare-and-swap' },
+          { from: 'api', to: 'console', both: true, fromAt: 0.35, lane: 0 },
+          { from: 'api', to: 'phone', both: true, fromAt: 0.8, lane: 1 },
+        ],
+      },
     },
     // Plain-language layer shown first on the project page: the case, the solution, and what was built.
     story: {
