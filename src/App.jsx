@@ -1,26 +1,40 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { motion, useReducedMotion } from 'framer-motion';
 import Layout from './components/Layout';
 import ErrorBoundary from './components/ErrorBoundary';
 import { WorkbookProvider } from './components/workbook';
 import Home from './pages/Home';
-import { EASE_OUT } from './lib/motion';
 
 // The Summary loads with the app; every other sheet is its own chunk, fetched when opened.
-const Projects = lazy(() => import('./pages/Projects'));
-const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
-const Experience = lazy(() => import('./pages/Experience'));
-const Skills = lazy(() => import('./pages/Skills'));
-const Ask = lazy(() => import('./pages/Ask'));
-const NotFound = lazy(() => import('./pages/NotFound'));
+const loaders = {
+  Projects: () => import('./pages/Projects'),
+  ProjectDetail: () => import('./pages/ProjectDetail'),
+  Experience: () => import('./pages/Experience'),
+  Skills: () => import('./pages/Skills'),
+  Ask: () => import('./pages/Ask'),
+  NotFound: () => import('./pages/NotFound'),
+};
+const Projects = lazy(loaders.Projects);
+const ProjectDetail = lazy(loaders.ProjectDetail);
+const Experience = lazy(loaders.Experience);
+const Skills = lazy(loaders.Skills);
+const Ask = lazy(loaders.Ask);
+const NotFound = lazy(loaders.NotFound);
+
+// Once the first screen is up, fetch the other sheets in the background so switching tabs never waits on the network.
+const prefetchSheets = () => Object.values(loaders).forEach((load) => load().catch(() => {}));
 
 // Full-height placeholder so nothing below (like the footer) jumps when the sheet arrives.
 const SheetLoading = () => <div className="min-h-screen bg-paper border-x border-grid" aria-busy="true" />;
 
 function App() {
   const location = useLocation();
-  const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    const idle = window.requestIdleCallback ?? ((fn) => setTimeout(fn, 1500));
+    const handle = idle(prefetchSheets);
+    return () => (window.cancelIdleCallback ?? clearTimeout)(handle);
+  }, []);
 
   // New sheet starts at the top, or at the element named in the hash.
   useEffect(() => {
@@ -34,13 +48,8 @@ function App() {
   return (
     <WorkbookProvider>
       <Layout>
-        {/* Each sheet fades in on navigation so content doesn't teleport. */}
-        <motion.div
-          key={location.pathname}
-          initial={{ opacity: 0, transform: reduceMotion ? 'none' : 'translateY(6px)' }}
-          animate={{ opacity: 1, transform: 'translateY(0px)', transitionEnd: { transform: 'none' } }}
-          transition={{ duration: 0.22, ease: EASE_OUT }}
-        >
+        {/* Switching sheets is a frequent action, so it swaps instantly: no fade from blank, which read as a flash. */}
+        <div>
           <ErrorBoundary key={location.pathname}>
           <Suspense fallback={<SheetLoading />}>
             <Routes location={location}>
@@ -54,7 +63,7 @@ function App() {
             </Routes>
           </Suspense>
           </ErrorBoundary>
-        </motion.div>
+        </div>
       </Layout>
     </WorkbookProvider>
   );
