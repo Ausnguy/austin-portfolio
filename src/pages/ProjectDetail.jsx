@@ -4,6 +4,7 @@ import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 import workerSrc from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
 import ProjectCard, { StatusBadge } from '../components/ProjectCard';
 import Pipeline from '../components/Pipeline';
+import Architecture from '../components/Architecture';
 import { Sheet, Row, Cell, useSheet } from '../components/workbook';
 import { ChevronLeft, GitHubIcon } from '../components/icons';
 import { getProjectBySlug, getFeaturedProjects } from '../data/projects';
@@ -418,8 +419,8 @@ const ProjectDetail = () => {
               <div role="tabpanel" id={`panel-${tab.id}`} aria-labelledby={`tab-${tab.id}`} className="p-4 sm:p-6 lg:p-8">
                 {tab.id === 'how' && (
                   <div className="space-y-6">
+                    {project.architecture ? <Architecture {...project.architecture} /> : project.pipeline && <Pipeline steps={project.pipeline} />}
                     <Bullets text={caseStudy.approach} />
-                    {project.pipeline && <Pipeline steps={project.pipeline} />}
                   </div>
                 )}
                 {tab.id === 'decisions' && (

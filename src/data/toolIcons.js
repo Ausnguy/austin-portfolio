@@ -34,6 +34,14 @@ export const toolMeta = {
   pytest: { slug: 'pytest', label: 'pytest' },
   Vitest: { slug: 'vitest', label: 'Vitest' },
   Databricks: { slug: 'databricks', label: 'Databricks' },
+  Python: { slug: 'python', label: 'Python' },
+  TypeScript: { slug: 'typescript', label: 'TypeScript' },
+  Vercel: { slug: 'vercel', label: 'Vercel' },
+  Redis: { slug: 'redis', label: 'Redis' },
+  Zod: { slug: 'zod', label: 'Zod' },
+  'Hugging Face': { slug: 'huggingface', label: 'Hugging Face' },
+  'React Native': { slug: 'react', label: 'React Native' },
+  Expo: { slug: 'expo', label: 'Expo' },
   HackerRank: { slug: 'hackerrank', label: 'HackerRank' },
 };
 

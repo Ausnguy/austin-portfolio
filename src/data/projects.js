@@ -149,6 +149,37 @@ export const projects = [
       'A failure-prediction model, a 3D operations console and an engineer phone app that share one live state.',
       'The model warned before 90 of 91 mechanical failures on unseen data; the parts program is modeled at about 968 hours a year saved.',
     ],
+    architecture: {
+      zones: [
+        {
+          title: 'Data and model',
+          subtitle: 'Python, run offline',
+          nodes: [
+            { name: 'Case workbook', detail: 'Readings, stop events and assets for 6 sites and 18 machines.', tools: ['Excel'] },
+            { name: 'Cleaning pipeline', detail: 'Logged rules and 39 automated integrity checks.', tools: ['Python', 'pandas'] },
+            { name: 'Failure model', detail: 'Logistic regression written from scratch (Newton’s method, ridge penalty) that flags a bearing or seal failure 3 days out.', tools: ['NumPy'] },
+          ],
+        },
+        {
+          title: 'Shared state',
+          subtitle: 'TypeScript on Vercel',
+          hub: true,
+          nodes: [
+            { name: 'Dispatch API', detail: 'Serverless functions with validated requests. Refuses to send an engineer unless every kit is in stock.', tools: ['TypeScript', 'Vercel', 'Zod'] },
+            { name: 'State store', detail: 'Redis with a compare-and-swap check, so one device can’t silently overwrite the other.', tools: ['Redis'] },
+          ],
+        },
+        {
+          title: 'Two screens',
+          subtitle: 'One live state',
+          nodes: [
+            { name: 'Ops console', detail: 'Single-file web app: a hand-drawn 3D site map on Canvas, voice input with Whisper in the browser, voice output with Kokoro on WebGPU.', tools: ['HTML Canvas', 'Hugging Face'] },
+            { name: 'Engineer phone app', detail: 'Take the job, travel to the site and report the kits fitted. Shake the phone to travel.', tools: ['React Native', 'Expo'] },
+          ],
+        },
+      ],
+      links: [{ label: 'model output' }, { label: 'both read and write the same state', both: true }],
+    },
     // Plain-language layer shown first on the project page: the case, the solution, and what was built.
     story: {
       case: {
