@@ -10,7 +10,7 @@ const ALLOWED_ORIGINS = ['https://ausnguy.github.io'];
 const LOCALHOST = /^http:\/\/localhost:\d+$/;
 const MAX_QUESTION = 300;
 const MAX_FACTS = 6;
-const KINDS = new Set(['pv', 'click']);
+const KINDS = new Set(['pv', 'new', 'click']);
 const NAME = /^[a-z0-9/_:.-]{1,60}$/;
 const REF = /^[a-z0-9._-]{1,30}$/;
 
@@ -71,31 +71,34 @@ async function stats(url, env) {
   const { results } = await env.DB.prepare('SELECT day, kind, name, ref, n FROM counts WHERE day >= ? ORDER BY day').bind(since).all();
 
   const pv = results.filter((r) => r.kind === 'pv');
+  const fresh = results.filter((r) => r.kind === 'new');
   const clicks = results.filter((r) => r.kind === 'click');
   const visits = total(pv);
+  const unique = total(fresh);
   const clickTotal = total(clicks);
 
-  if (url.searchParams.get('format') === 'json') return json({ days, visits, clicks: clickTotal, rows: results }, 200);
+  if (url.searchParams.get('format') === 'json') return json({ days, visits, unique, clicks: clickTotal, rows: results }, 200);
 
   const bySource = sum(pv, (r) => r.ref).map(([ref, v]) => {
     const c = total(clicks.filter((x) => x.ref === ref));
-    return [ref, v, c, `${v ? Math.round((c / v) * 100) : 0}%`];
+    return [ref, v, total(fresh.filter((x) => x.ref === ref)), c, `${v ? Math.round((c / v) * 100) : 0}%`];
   });
   const byDay = [...new Set(results.map((r) => r.day))]
     .reverse()
-    .map((d) => [d, total(pv.filter((r) => r.day === d)), total(clicks.filter((r) => r.day === d))]);
+    .map((d) => [d, total(pv.filter((r) => r.day === d)), total(fresh.filter((r) => r.day === d)), total(clicks.filter((r) => r.day === d))]);
   const html = `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
 <title>Portfolio stats</title>
 <style>body{font:16px/1.5 system-ui,sans-serif;max-width:760px;margin:32px auto;padding:0 16px;color:#1d2329}h1{font-size:26px}h2{margin-top:32px;font-size:18px}
-.big{display:flex;gap:16px;margin:16px 0}.big div{flex:1;border:1px solid #e2e5e9;border-radius:6px;padding:12px 16px}.big b{display:block;font-size:34px}
+.big{display:flex;flex-wrap:wrap;gap:16px;margin:16px 0}.big div{flex:1 1 130px;border:1px solid #e2e5e9;border-radius:6px;padding:12px 16px}.big b{display:block;font-size:34px}
 table{width:100%;border-collapse:collapse;margin-top:8px}th,td{border:1px solid #e2e5e9;padding:6px 10px;text-align:left}th{background:#f3f5f7;font-size:13px}td.n{text-align:right;font-variant-numeric:tabular-nums}small{color:#636b75}</style>
 <h1>Portfolio stats</h1><small>Last ${days} days. Anonymous counts only: no cookies, IPs or personal data.</small>
-<div class="big"><div><b>${visits}</b>visits</div><div><b>${clickTotal}</b>link clicks</div><div><b>${visits ? Math.round((clickTotal / visits) * 100) : 0}%</b>clicks per visit</div></div>
+<div class="big"><div><b>${visits}</b>visits</div><div><b>${unique}</b>unique visitors</div><div><b>${clickTotal}</b>link clicks</div><div><b>${visits ? Math.round((clickTotal / visits) * 100) : 0}%</b>clicks per visit</div></div>
 <h2>Where visitors came from</h2><small>Add ?ref=linkedin to the link you post so LinkedIn traffic is counted exactly.</small>
-${table(['Source', 'Visits', 'Clicks', 'Clicks per visit'], bySource)}
+${table(['Source', 'Visits', 'Unique', 'Clicks', 'Clicks per visit'], bySource)}
+<small>Unique = a browser's first-ever visit, counted from when this was added. Earlier visits aren't included, and a cleared browser, private window or second device counts as new, so treat it as a close estimate.</small>
 <h2>What they clicked</h2>${table(['Link', 'Clicks'], sum(clicks, (r) => r.name))}
 <h2>Landing pages</h2>${table(['Page', 'Visits'], sum(pv, (r) => r.name))}
-<h2>By day</h2>${table(['Day', 'Visits', 'Clicks'], byDay)}`;
+<h2>By day</h2>${table(['Day', 'Visits', 'Unique', 'Clicks'], byDay)}`;
   return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' } });
 }
 

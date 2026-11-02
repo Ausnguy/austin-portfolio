@@ -1,4 +1,4 @@
-// Anonymous visit and click counts. Sends only { kind, name, ref } to the Worker: no cookies, no IDs, no IP kept.
+// Anonymous visit, new-visitor and click counts. Sends only { kind, name, ref } to the Worker: no cookies, no IDs, no IP kept.
 // Your own visits can be excluded: open the site once with ?notrack=1 (use ?notrack=0 to turn counting back on).
 import { ASK_ENDPOINT } from '../ask/constants';
 
@@ -75,7 +75,14 @@ export const initTracking = () => {
       sessionStorage.setItem('counted', '1');
     });
     const page = location.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/';
-    send('pv', page.toLowerCase().replace(/[^a-z0-9/_:.-]/g, '').slice(0, 60) || '/');
+    const landing = page.toLowerCase().replace(/[^a-z0-9/_:.-]/g, '').slice(0, 60) || '/';
+    send('pv', landing);
+    // A browser's first-ever visit also counts once as a new visitor. A flag stays in this browser, so no ID is sent or stored.
+    // If storage is blocked the flag can't be kept, so nothing is counted rather than counting every visit as new.
+    if (!safe(() => localStorage.getItem('seen'), '1')) {
+      safe(() => localStorage.setItem('seen', '1'));
+      send('new', landing);
+    }
   }
 
   document.addEventListener('click', (event) => {
