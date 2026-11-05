@@ -29,7 +29,7 @@ export const profile = {
     'Austin is currently a Data Analyst Intern on the Compensation & Equity team at Hewlett Packard Enterprise (HPE).',
     'Austin was 1 of 35 participants selected from 500+ applicants for Bloomberg’s Decoded: Data program in August 2026.',
     'Austin builds data systems end to end: data pipelines, machine learning models, dashboards and the apps around them.',
-    'Austin is interested in data analyst, business intelligence and data science roles, and is happy to talk about ML projects and e-commerce analytics.',
+    'Austin is looking for a Spring 2027 internship or a new-grad role starting Summer 2027, in data analyst, business intelligence or data science. Austin is happy to talk about ML projects and e-commerce analytics.',
     'To contact Austin: email ausnguybusiness@gmail.com, LinkedIn at linkedin.com/in/austin-nguyen-business, or GitHub at github.com/Ausnguy. Austin’s resume is linked at the top of every page.',
   ],
 };

@@ -1,4 +1,4 @@
-// Writes public/thumbs/<slug>.png for every scene in main.jsx.
+// Writes public/thumbs/<slug>.png for every scene in main.jsx. The site serves .webp copies: convert new renders (Chrome canvas toDataURL("image/webp", 0.82) works) and point projects.js at them.
 // Usage: start `npm run dev`, then `node tools/thumbnails/render.cjs <path-to-puppeteer-core> [chrome path]`
 // (set PORT if the dev server isn't on 5173). Pass slugs after the paths to render only those.
 const path = require('path');

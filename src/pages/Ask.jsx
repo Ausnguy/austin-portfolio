@@ -181,7 +181,7 @@ const Ask = () => {
           </form>
           <div className="mt-4 flex flex-wrap gap-2">
             {SUGGESTIONS.map((s) => (
-              <button key={s} type="button" onClick={() => ask(s)} disabled={busy} className="chip hover:border-accent hover:text-accent-ink transition-colors disabled:opacity-50">
+              <button key={s} type="button" onClick={() => ask(s)} disabled={busy} className="chip h-11 md:h-7 hover:border-accent hover:text-accent-ink transition-colors disabled:opacity-50">
                 {s}
               </button>
             ))}

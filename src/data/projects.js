@@ -6,7 +6,7 @@ export const projects = [
   {
     id: 7,
     slug: 'marketstreet',
-    role: 'Team of 6',
+    role: 'Team lead (team of 6): came up with the idea, managed the project and led development',
     event: 'MIS 3371 (Section 10129), University of Houston',
     team: ['Austin Nguyen', 'Sophia Musetti', 'Arya Nair', 'Benjamin Nguyen', 'Shayaan M Dawra', 'Agah Duzenli'],
     tldr: [
@@ -35,7 +35,7 @@ export const projects = [
     tags: ['Web App', 'Systems Design', 'Work in progress'],
     tools: ['HTML', 'CSS', 'JavaScript'],
     featured: false,
-    image: '/austin-portfolio/thumbs/marketstreet.png',
+    image: '/austin-portfolio/thumbs/marketstreet.webp',
     pipeline: [
       { name: 'User submits an order', detail: 'Buy or sell, stock symbol and number of shares' },
       { name: 'Browser checks the form', detail: 'Missing or non-numeric input is blocked and nothing is recorded' },
@@ -96,7 +96,7 @@ export const projects = [
     tags: ['Streaming', 'Data Engineering', 'Networking', 'Work in progress'],
     tools: ['Python', 'Kafka', 'Spark', 'PostgreSQL', 'FastAPI', 'Docker', 'React'],
     featured: true,
-    image: '/austin-portfolio/thumbs/interdomain.png',
+    image: '/austin-portfolio/thumbs/interdomain.webp',
     pipeline: [
       { name: 'RIPE RIS Live', detail: 'Public stream of BGP updates from route collectors worldwide' },
       { name: 'Python ingestion', detail: 'WebSocket client normalizes updates into route events and writes them in 5K-record batches' },
@@ -143,7 +143,7 @@ export const projects = [
   {
     id: 5,
     slug: 'casequest-2026',
-    role: 'Team of 5',
+    role: 'Team of 5: built the front end and the failure-prediction model',
     tldr: [
       'Lone Mesa Energy lost about 6,599 hours to unplanned machine stops in 2025, and 24% of it was machines waiting for a spare part.',
       'A failure-warning model, a 3D operations console and an engineer phone app that all share one live set of data.',
@@ -336,7 +336,7 @@ export const projects = [
     tags: ['Machine Learning', 'Web App'],
     tools: ['Python', 'PyTorch'],
     featured: false,
-    image: '/austin-portfolio/thumbs/mnist-digit-recognition.png',
+    image: '/austin-portfolio/thumbs/mnist-digit-recognition.webp',
     links: {
       github: null, // add your real repo link when ready
       demo: null,   // add your real deployed link when ready
@@ -372,7 +372,7 @@ export const projects = [
     tags: ['Analytics', 'AI Infrastructure'],
     tools: ['Python', 'Pandas', 'Matplotlib'],
     featured: true,
-    image: '/austin-portfolio/thumbs/ai-efficiency-modeling.png',
+    image: '/austin-portfolio/thumbs/ai-efficiency-modeling.webp',
     pdf: 'bny-ai-optimization.pdf',
     pdfPoster: 'bny-first-slide.png',
     links: {
@@ -400,18 +400,18 @@ export const projects = [
     tldr: [
       'An Amazon store needs fast visibility into what sells, what is stuck and where profit comes from.',
       'Sales and ROI tracking with dashboards that guided pricing, sourcing and restocking.',
-      '$75K+ revenue in the first year at 30%+ profit margins.',
+      '$75K+ revenue at 30%+ profit margins.',
     ],
     title: 'E-Commerce Sales Analytics (ToolAndMore)',
     shortTitle: 'ToolAndMore analytics',
     date: 'Nov 2023 – Apr 2024',
-    highlight: '$75K+ first-year revenue at 30%+ margins',
+    highlight: '$75K+ revenue at 30%+ margins',
     description: 'Dashboards and analysis used to track sales, inventory, and profitability',
     category: 'Dashboard',
     tags: ['Business Intelligence', 'Analytics'],
     tools: ['Power BI', 'Excel', 'Python'],
     featured: true,
-    image: '/austin-portfolio/thumbs/sales-analytics-dashboard.png',
+    image: '/austin-portfolio/thumbs/sales-analytics-dashboard.webp',
     links: {
       github: null,
       demo: null,
@@ -423,7 +423,7 @@ export const projects = [
       approach:
         'Tracked sales and ROI trends over time and built dashboards to monitor performance. Used analysis to guide pricing and sourcing decisions.',
       results:
-        'Generated $75K+ revenue in the first year while keeping profit margins above 30%, using ROI, profitability, sourcing and pricing analysis to decide what to buy and when to restock.',
+        'Generated $75K+ revenue while keeping profit margins above 30%, using ROI, profitability, sourcing and pricing analysis to decide what to buy and when to restock.',
       improvements:
         'Add competitor price tracking and forecasting to better plan inventory buys.',
       techStack: 'Power BI, Excel, Python',
@@ -446,7 +446,7 @@ export const projects = [
     tags: ['Economics', 'Time Series'],
     tools: ['Python', 'Excel'],
     featured: true,
-    image: '/austin-portfolio/thumbs/fed-oil-price-analysis.png',
+    image: '/austin-portfolio/thumbs/fed-oil-price-analysis.webp',
     pdf: 'bp-energy-policy.pdf',
     pdfPoster: 'bp-first-slide.png',
     links: {

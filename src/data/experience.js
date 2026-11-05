@@ -83,7 +83,7 @@ export const experiences = [
     location: 'Pittsburgh, PA',
     description: 'Applied analytics and machine learning to business and public-sector datasets',
     highlights: [
-      'Proposed an AI infrastructure model for BNY Mellon projected to cut compute-related energy costs by 69%',
+      'Proposed an AI infrastructure model for BNY Mellon projected to cut compute-related energy costs by about 70%',
       'Built decision tree and random forest models in Python to predict customer churn',
       'Built Tableau dashboards to visualize U.S. criminal justice data trends',
     ],
@@ -119,7 +119,7 @@ export const experiences = [
     shortName: 'ToolAndMore',
     logo: null,
     item: 'drill',
-    summary: 'Ran an Amazon store to $75K+ first-year revenue at 30%+ margins.',
+    summary: 'Ran an Amazon store to $75K+ revenue at 30%+ margins.',
     role: 'Owner & Operator',
     period: 'November 2023 – April 2024',
     start: '2023-11',
@@ -127,7 +127,7 @@ export const experiences = [
     location: 'Houston, TX',
     description: 'Amazon FBA e-commerce business specializing in tools and hardware',
     highlights: [
-      'Generated $75K+ revenue in the first year by launching and scaling an Amazon e-commerce business focused on power tools, hardware, and niche high-margin products.',
+      'Generated $75K+ revenue by launching and scaling an Amazon e-commerce business focused on power tools, hardware, and niche high-margin products.',
       'Maintained 30%+ profit margins by conducting ROI, profitability, sourcing, and pricing analysis to evaluate product economics, guide purchasing decisions, and optimize inventory restocking.',
     ],
     skills: ['Pricing Analytics', 'E-commerce', 'Sales Data'],

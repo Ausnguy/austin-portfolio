@@ -32,7 +32,7 @@ const ProjectFilters = ({
               type="button"
               aria-pressed={selected}
               onClick={() => onCategoryChange(category)}
-              className={`shrink-0 h-9 px-3 rounded text-sm font-medium border transition-[transform,background-color,color,border-color] duration-150 ease-out active:scale-[0.97] ${
+              className={`shrink-0 h-11 md:h-9 px-3 rounded text-sm font-medium border transition-[transform,background-color,color,border-color] duration-150 ease-out active:scale-[0.97] ${
                 selected
                   ? 'bg-accent text-white border-accent'
                   : 'bg-paper text-ink-soft border-grid hover:border-muted hover:text-ink'

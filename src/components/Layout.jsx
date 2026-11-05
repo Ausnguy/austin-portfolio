@@ -31,7 +31,7 @@ const ThemeToggle = () => {
       onClick={toggle}
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       title={isDark ? 'Light mode' : 'Dark mode'}
-      className="w-9 h-9 grid place-items-center rounded text-white/90 hover:text-white hover:bg-white/10 transition-colors"
+      className="w-11 h-11 md:w-9 md:h-9 grid place-items-center rounded text-white hover:bg-white/10 transition-colors"
     >
       {isDark ? (
         <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="2">
@@ -110,7 +110,7 @@ const Layout = ({ children }) => {
                   end={sheet.end}
                   className={({ isActive }) =>
                     `px-2.5 h-8 inline-flex items-center rounded transition-colors ${
-                      isActive ? 'bg-white/15 text-white font-semibold' : 'text-white/80 hover:text-white hover:bg-white/10'
+                      isActive ? 'bg-black/20 text-white font-semibold' : 'text-white hover:bg-white/10'
                     }`
                   }
                 >
@@ -124,7 +124,7 @@ const Layout = ({ children }) => {
                 href={resumeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="h-8 px-3 inline-flex items-center rounded bg-white text-[#0B5A2F] text-sm font-semibold hover:bg-white/90 transition-colors"
+                className="h-10 md:h-8 px-3 inline-flex items-center rounded bg-white text-[#0B5A2F] text-sm font-semibold hover:bg-white/90 transition-colors"
               >
                 Resume
               </a>

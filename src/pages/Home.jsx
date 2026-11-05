@@ -110,6 +110,7 @@ const Home = () => {
             <strong className="font-semibold text-ink">decide what to do next</strong>.
           </p>
           <p className="mt-5 text-[15px] text-muted">MIS at the University of Houston · Data Analyst Intern at HPE · {profile.location}</p>
+          <p className="mt-2 text-[15px] font-semibold text-accent-ink">Open to Spring 2027 internships and new-grad roles from Summer 2027</p>
           {/* One primary action; GitHub and LinkedIn are icon-only so the buttons don't compete. */}
           <div className="mt-7 flex flex-wrap items-center gap-2.5">
             <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">View resume</a>
@@ -262,8 +263,8 @@ const Home = () => {
         <Cell id="A8" formula={`=HYPERLINK("mailto:${profile.email}")`} className="lg:!p-10">
           <h2 className="font-sans text-3xl sm:text-4xl font-bold tracking-tight text-ink">Let’s build something.</h2>
           <p className="mt-3 body-copy max-w-2xl">
-            I’m interested in data analyst, business intelligence and data science roles, and always up for talking
-            about ML projects or e-commerce analytics.
+            I’m looking for a Spring 2027 internship or a new-grad role from Summer 2027 in data analytics, business
+            intelligence or data science, and always up for talking about ML projects or e-commerce analytics.
           </p>
           <a href={`mailto:${profile.email}`} className="link mt-6 inline-block text-xl sm:text-3xl break-all">{profile.email}</a>
           <p className="mt-6 text-[13.5px] text-muted">
