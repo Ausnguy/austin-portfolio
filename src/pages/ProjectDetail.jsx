@@ -277,13 +277,14 @@ const ProjectDetail = () => {
       {/* The case and the solution, in plain language, before anything technical */}
       {project.story && (
         <Row>
-          <Cell id="A2" span="col-span-12 md:col-span-6" formula="=CASE()" className="border-t-4 border-t-ink-soft">
-            <div className="text-[13px] font-bold text-ink-soft">The case</div>
+          <Cell id="A2" span="col-span-12 md:col-span-6" formula="=CASE()" className="border-t-4 border-t-[#C27C0E] bg-[#FCF4E3] dark:bg-[#2A2417]">
+            {/* Amber marks the problem: it draws the eye and pairs with the green solution beside it, without red's alarm. */}
+            <div className="text-[13px] font-bold text-[#8A5A00] dark:text-[#F2C14E]">The case</div>
             <h2 className="mt-2 font-sans text-xl sm:text-2xl font-bold leading-snug text-ink">{project.story.case.headline}</h2>
             <ul className="mt-4 space-y-2">
               {project.story.case.points.map((pt) => (
                 <li key={pt} className="relative pl-5 text-[16px] leading-snug text-ink-soft">
-                  <span aria-hidden="true" className="absolute left-0 top-[0.55em] h-1.5 w-1.5 rounded-full bg-ink-soft" />
+                  <span aria-hidden="true" className="absolute left-0 top-[0.55em] h-1.5 w-1.5 rounded-full bg-[#C27C0E]" />
                   {pt}
                 </li>
               ))}

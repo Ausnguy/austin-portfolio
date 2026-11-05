@@ -1,6 +1,7 @@
 import { Link, NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import { useWorkbook } from './workbook';
+import SwarmIntro from './SwarmIntro';
 
 export const SHEETS = [
   { to: '/', label: 'Summary', end: true },
@@ -81,9 +82,11 @@ const SheetTab = ({ sheet, compact = false }) => (
 
 const Layout = ({ children }) => {
   const resumeUrl = `${import.meta.env.BASE_URL}resume.pdf?v=7`;
+  const [status, setStatus] = useState('Ready');
 
   return (
     <div className="min-h-screen flex flex-col md:pb-[4.75rem]">
+      <SwarmIntro onStatus={setStatus} />
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:px-4 focus:py-2 focus:rounded focus:bg-paper focus:text-ink text-sm font-semibold"
@@ -154,7 +157,7 @@ const Layout = ({ children }) => {
         </nav>
         <div className="bg-[#107C41] text-white/90 text-[12px]">
           <div className="page h-7 px-3 sm:px-4 flex items-center justify-between">
-            <span>Ready</span>
+            <span>{status}</span>
             <span>© 2026 Austin Nguyen · anonymous visit counts, no cookies</span>
           </div>
         </div>

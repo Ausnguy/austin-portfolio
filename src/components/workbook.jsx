@@ -6,6 +6,8 @@ const WorkbookContext = createContext(null);
 export const WorkbookProvider = ({ children }) => {
   const [sheetDefault, setSheetDefault] = useState({ ref: 'A1', formula: '' });
   const [selected, setSelected] = useState(null);
+  // What the formula bar shows for a moment without selecting anything (the first-load intro uses it).
+  const [peek, setPeek] = useState(null);
 
   const select = useCallback((ref, formula) => setSelected({ ref, formula }), []);
   const resetSheet = useCallback((ref, formula) => {
@@ -14,8 +16,8 @@ export const WorkbookProvider = ({ children }) => {
   }, []);
 
   const value = useMemo(
-    () => ({ active: selected ?? sheetDefault, selectedRef: selected?.ref ?? null, select, resetSheet }),
-    [selected, sheetDefault, select, resetSheet],
+    () => ({ active: peek ?? selected ?? sheetDefault, selectedRef: selected?.ref ?? null, select, resetSheet, setPeek }),
+    [peek, selected, sheetDefault, select, resetSheet],
   );
   return <WorkbookContext.Provider value={value}>{children}</WorkbookContext.Provider>;
 };
@@ -74,6 +76,8 @@ export const Cell = ({ id, formula, span = 'col-span-12', pad = true, className 
   return (
     <Tag
       {...rest}
+      data-cell={id}
+      data-formula={formula}
       onClick={onSelect}
       onFocus={onSelect}
       className={`cell ${span} ${pad ? 'cell-pad' : ''} ${isSelected ? 'is-selected' : ''} ${className}`}

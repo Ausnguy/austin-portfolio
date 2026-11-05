@@ -31,6 +31,17 @@
         }
       })();
 
+      // First load of a session: start cells faint so the build-in intro (src/components/SwarmIntro.jsx) can bring them in.
+      // Removed after 4s whatever happens, so a script failure can never leave the page faint.
+      (function () {
+        try {
+          if (sessionStorage.getItem('built') || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        } catch (e) { return; }
+        var root = document.documentElement;
+        root.classList.add('swarm');
+        setTimeout(function () { root.classList.remove('swarm'); }, 4000);
+      })();
+
       // GitHub Pages deep links: public/404.html sends /austin-portfolio/x/y here as ?/x/y.
       (function (l) {
         if (l.search[1] === '/') {
