@@ -328,10 +328,30 @@ html.swarm .cell.is-built > * {
 }
 
 /* Guided tour (src/components/Tour.jsx): the selected cell's outline follows the page, and the note reads like an Excel comment. */
+.tour-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  z-index: 30;
+  pointer-events: none;
+}
 .tour-box {
+  view-transition-name: tour-box;
   transition: left 0.3s cubic-bezier(0.23, 1, 0.32, 1), top 0.3s cubic-bezier(0.23, 1, 0.32, 1), width 0.3s cubic-bezier(0.23, 1, 0.32, 1), height 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 }
+.tour-box.is-crossing {
+  transition: none;
+}
+.tour-step {
+  animation: tour-step-in 0.28s cubic-bezier(0.23, 1, 0.32, 1);
+}
+@keyframes tour-step-in {
+  from { opacity: 0; transform: translateY(4px); }
+}
 .tour-note {
+  view-transition-name: tour-note;
   position: fixed;
   z-index: 50;
   left: 12px;
@@ -352,7 +372,33 @@ html.swarm .cell.is-built > * {
     width: 400px;
   }
 }
+/* Sheet-to-sheet moves in the tour: the page crossfades while the outline and the note glide. */
+/* The title bar and sheet tabs have their own names, so they hold still while the sheet underneath changes. */
+::view-transition-old(root) {
+  animation: vt-out 0.16s ease-out both;
+}
+::view-transition-new(root) {
+  animation: vt-in 0.32s cubic-bezier(0.23, 1, 0.32, 1) 0.06s both;
+}
+@keyframes vt-out {
+  to { opacity: 0; }
+}
+@keyframes vt-in {
+  from { opacity: 0; transform: translateY(10px); }
+}
+/* The note keeps its place and only resizes; its new text fades in on its own. */
+::view-transition-old(tour-note) {
+  display: none;
+}
+::view-transition-new(tour-note) {
+  animation: none;
+}
+::view-transition-group(tour-box),
+::view-transition-group(tour-note) {
+  animation-duration: 0.45s;
+  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+}
 @media (prefers-reduced-motion: reduce) {
   .tour-box { transition: none; }
-  .tour-note { animation: none; }
+  .tour-note, .tour-step { animation: none; }
 }

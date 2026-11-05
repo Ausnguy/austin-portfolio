@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal, flushSync } from 'react-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useWorkbook } from './workbook';
 import { profile } from '../data/profile';
@@ -49,9 +50,31 @@ export const startTour = () => window.dispatchEvent(new Event('tour:start'));
 
 const findCell = (selector) => document.querySelector(selector)?.closest('[data-cell]') ?? null;
 
+// Waits (up to 2s) for a step's cell to exist, since a sheet may still be loading.
+const waitForCell = (selector) =>
+  new Promise((resolve) => {
+    let tries = 0;
+    const look = () => {
+      const cell = findCell(selector);
+      if (cell || ++tries > 40) resolve(cell);
+      else setTimeout(look, 50);
+    };
+    look();
+  });
+
+// The outline lives in page coordinates, so it scrolls with its cell instead of chasing it.
+const pageRect = (cell) => {
+  const r = cell.getBoundingClientRect();
+  return { left: r.left + window.scrollX, top: r.top + window.scrollY, width: r.width, height: r.height };
+};
+
+const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 const Tour = () => {
   const [step, setStep] = useState(null);
   const [rect, setRect] = useState(null);
+  // True while a page-to-page move runs as a view transition, which animates the outline itself.
+  const [crossing, setCrossing] = useState(false);
   const cellRef = useRef(null);
   const headingRef = useRef(null);
   const navigate = useNavigate();
@@ -69,6 +92,8 @@ const Tour = () => {
   useEffect(() => {
     const start = () => {
       trackEvent('tour');
+      // Load every sheet the tour visits now, so no stop waits on the network.
+      [import('../pages/Projects'), import('../pages/Experience'), import('../pages/Skills'), import('../pages/Ask')].forEach((p) => p.catch(() => {}));
       setStep(0);
     };
     window.addEventListener('tour:start', start);
@@ -80,14 +105,13 @@ const Tour = () => {
   useEffect(() => {
     if (step === null) return undefined;
     const s = STEPS[step];
-    setRect(null);
     if (pathname !== s.path) {
       navigate(s.path);
       return undefined;
     }
     let tries = 0;
     let timer;
-    const measure = () => cellRef.current && setRect(cellRef.current.getBoundingClientRect());
+    const measure = () => cellRef.current && setRect(pageRect(cellRef.current));
     const locate = () => {
       const cell = findCell(s.target);
       if (!cell) {
@@ -95,32 +119,58 @@ const Tour = () => {
         return;
       }
       cellRef.current = cell;
-      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      cell.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
+      cell.scrollIntoView({ block: 'center', behavior: reducedMotion() ? 'auto' : 'smooth' });
       setPeek({ ref: cell.dataset.cell, formula: `=TOUR(${step + 1}, ${STEPS.length})` });
       measure();
       headingRef.current?.focus({ preventScroll: true });
     };
     locate();
-    window.addEventListener('scroll', measure, { passive: true });
+    // Images and charts can still be settling, so measure again once they have.
+    const settle = setTimeout(measure, 700);
     window.addEventListener('resize', measure);
     return () => {
       clearTimeout(timer);
-      window.removeEventListener('scroll', measure);
+      clearTimeout(settle);
       window.removeEventListener('resize', measure);
     };
   }, [step, pathname, navigate, setPeek]);
+
+  // Moving to another sheet runs as a view transition: the page crossfades while the outline and the note glide
+  // to their new place. Same-sheet moves scroll smoothly and the outline slides on its own.
+  const goTo = useCallback(
+    (i) => {
+      const next = STEPS[i];
+      if (next.path === pathname || reducedMotion() || !document.startViewTransition) {
+        setStep(i);
+        return;
+      }
+      setCrossing(true);
+      const transition = document.startViewTransition(async () => {
+        flushSync(() => {
+          setStep(i);
+          navigate(next.path);
+        });
+        const cell = await waitForCell(next.target);
+        if (!cell) return;
+        cellRef.current = cell;
+        cell.scrollIntoView({ block: 'center', behavior: 'instant' });
+        flushSync(() => setRect(pageRect(cell)));
+      });
+      transition.finished.finally(() => setCrossing(false));
+    },
+    [pathname, navigate],
+  );
 
   useEffect(() => {
     if (step === null) return undefined;
     const onKey = (e) => {
       if (e.key === 'Escape') close();
-      if (e.key === 'ArrowRight' && step < STEPS.length - 1) setStep(step + 1);
-      if (e.key === 'ArrowLeft' && step > 0) setStep(step - 1);
+      if (e.key === 'ArrowRight' && step < STEPS.length - 1) goTo(step + 1);
+      if (e.key === 'ArrowLeft' && step > 0) goTo(step - 1);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [step, close]);
+  }, [step, close, goTo]);
 
   if (step === null) return null;
   const s = STEPS[step];
@@ -128,24 +178,28 @@ const Tour = () => {
 
   return (
     <>
-      {rect && (
-        <div className="swarm-layer" aria-hidden="true">
-          <div
-            className="swarm-box tour-box"
-            style={{ '--c': '#107C41', left: rect.left, top: rect.top, width: rect.width, height: rect.height }}
-          >
-            <span>Tour {step + 1}/{STEPS.length}</span>
-          </div>
-        </div>
-      )}
+      {rect &&
+        createPortal(
+          <div className="tour-layer" aria-hidden="true">
+            <div
+              className={`swarm-box tour-box ${crossing ? 'is-crossing' : ''}`}
+              style={{ '--c': '#107C41', left: rect.left, top: rect.top, width: rect.width, height: rect.height }}
+            >
+              <span>Tour {step + 1}/{STEPS.length}</span>
+            </div>
+          </div>,
+          document.body,
+        )}
       <div role="dialog" aria-label="Site tour" className="tour-note">
         <div className="flex items-center gap-2.5">
           <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#107C41] text-[11px] font-bold text-white" aria-hidden="true">AN</span>
           <span className="text-[13px] font-semibold text-ink">Austin Nguyen</span>
           <span className="ml-auto font-mono text-[12px] text-muted">{step + 1} / {STEPS.length}</span>
         </div>
-        <h2 ref={headingRef} tabIndex={-1} className="mt-3 font-sans text-[17px] font-bold text-ink focus:outline-none">{s.title}</h2>
-        <p className="mt-1 text-[15px] leading-relaxed text-ink-soft">{s.body}</p>
+        <div key={step} className="tour-step">
+          <h2 ref={headingRef} tabIndex={-1} className="mt-3 font-sans text-[17px] font-bold text-ink focus:outline-none">{s.title}</h2>
+          <p className="mt-1 text-[15px] leading-relaxed text-ink-soft">{s.body}</p>
+        </div>
         <div className="mt-4 flex flex-wrap items-center gap-2">
           {last ? (
             <>
@@ -155,8 +209,8 @@ const Tour = () => {
             </>
           ) : (
             <>
-              <button type="button" onClick={() => setStep(step + 1)} className="btn btn-primary h-11 md:h-10">Next</button>
-              {step > 0 && <button type="button" onClick={() => setStep(step - 1)} className="btn btn-secondary h-11 md:h-10">Back</button>}
+              <button type="button" onClick={() => goTo(step + 1)} className="btn btn-primary h-11 md:h-10">Next</button>
+              {step > 0 && <button type="button" onClick={() => goTo(step - 1)} className="btn btn-secondary h-11 md:h-10">Back</button>}
               <button type="button" onClick={close} className="ml-auto h-11 md:h-10 px-2 text-[14px] font-medium text-muted hover:text-ink">End tour</button>
             </>
           )}

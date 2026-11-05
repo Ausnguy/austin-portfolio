@@ -96,7 +96,7 @@ const Layout = ({ children }) => {
         Skip to content
       </a>
 
-      <header className="sticky top-0 z-40">
+      <header className="sticky top-0 z-40 [view-transition-name:sheet-top]">
         {/* Title bar */}
         <div className="bg-[#107C41] text-white">
           <div className="page h-12 px-3 sm:px-4 flex items-center gap-4">
@@ -151,7 +151,7 @@ const Layout = ({ children }) => {
       <footer className="md:hidden px-4 py-6 text-center text-[13px] text-muted">© 2026 Austin Nguyen · anonymous visit counts, no cookies</footer>
 
       {/* Desktop: sheet tabs and status bar, pinned like Excel's */}
-      <div className="hidden md:block fixed bottom-0 inset-x-0 z-40 bg-head border-t border-grid">
+      <div className="hidden md:block fixed bottom-0 inset-x-0 z-40 bg-head border-t border-grid [view-transition-name:sheet-bottom]">
         <nav aria-label="Sheet tabs" className="page flex overflow-x-auto">
           {SHEETS.map((sheet) => (
             <SheetTab key={sheet.to} sheet={sheet} />
