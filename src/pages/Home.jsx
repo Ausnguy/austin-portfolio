@@ -10,6 +10,7 @@ import ToolIcon from '../components/ToolIcon';
 import ErrorBoundary from '../components/ErrorBoundary';
 import { homeTools, metaFor } from '../data/toolIcons';
 import { profile } from '../data/profile';
+import { startTour } from '../components/Tour';
 
 const ExperienceChart3D = lazy(() => import('../components/ExperienceChart3D'));
 
@@ -118,6 +119,9 @@ const Home = () => {
             <a href={profile.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub" className="btn btn-secondary !px-3"><GitHubIcon /></a>
             <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn" className="btn btn-secondary !px-3"><LinkedInIcon /></a>
           </div>
+          <button type="button" onClick={startTour} className="link mt-5 inline-flex min-h-11 items-center text-[15px] font-semibold md:min-h-0">
+            New here? Take the 60-second tour
+          </button>
         </Cell>
         <Cell id="I1" span="col-span-12 lg:col-span-4" formula='=ASK("anything about Austin")' className="bg-accent-wash/40 flex flex-col">
           <div className="cell-ref text-ink-soft">I1</div>

@@ -331,6 +331,10 @@ export const projects = [
     shortTitle: 'MNIST classifier',
     date: 'Jan – Feb 2026',
     highlight: '~96–98% test accuracy on 10,000 held-out images',
+    metrics: [
+      { display: '~96–98%', label: 'accuracy on 10,000 test images the model never trained on' },
+      { display: '70,000', label: 'handwritten digit images in the MNIST dataset' },
+    ],
     description: 'A PyTorch neural network that classifies handwritten digits, with an interactive draw-a-digit web demo in progress',
     category: 'Web',
     tags: ['Machine Learning', 'Web App'],
@@ -367,6 +371,10 @@ export const projects = [
     shortTitle: 'BNY AI efficiency',
     date: 'May 2025',
     highlight: '~70% less modeled energy use, latency 611 ms → 276 ms',
+    metrics: [
+      { display: '~70%', label: 'less modeled AI energy use, by routing simple requests to lightweight models' },
+      { display: '611 → 276 ms', label: 'modeled inference latency, about 55% lower' },
+    ],
     description: 'A distributed inference strategy that cuts the modeled energy use and latency of AI workloads',
     category: 'Research',
     tags: ['Analytics', 'AI Infrastructure'],
@@ -406,6 +414,10 @@ export const projects = [
     shortTitle: 'ToolAndMore analytics',
     date: 'Nov 2023 – Apr 2024',
     highlight: '$75K+ revenue at 30%+ margins',
+    metrics: [
+      { display: '$75K+', label: 'revenue from the Amazon store' },
+      { display: '30%+', label: 'profit margins, from ROI and sourcing analysis' },
+    ],
     description: 'Dashboards and analysis used to track sales, inventory, and profitability',
     category: 'Dashboard',
     tags: ['Business Intelligence', 'Analytics'],

@@ -2,6 +2,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import { useWorkbook } from './workbook';
 import SwarmIntro from './SwarmIntro';
+import Tour from './Tour';
 
 export const SHEETS = [
   { to: '/', label: 'Summary', end: true },
@@ -87,6 +88,7 @@ const Layout = ({ children }) => {
   return (
     <div className="min-h-screen flex flex-col md:pb-[4.75rem]">
       <SwarmIntro onStatus={setStatus} />
+      <Tour />
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:px-4 focus:py-2 focus:rounded focus:bg-paper focus:text-ink text-sm font-semibold"

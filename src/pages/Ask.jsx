@@ -8,6 +8,7 @@ import { askHosted } from '../ask/hosted';
 import { trackEvent } from '../lib/track';
 import { MODEL_LABEL } from '../ask/constants';
 import { profile } from '../data/profile';
+import JobFit from '../components/JobFit';
 
 export const SUGGESTIONS = [
   'What has Austin built?',
@@ -88,6 +89,7 @@ const Ask = () => {
             Written answers come from {MODEL_LABEL} and are checked against the workbook before you see them. Your question is
             sent to that service to write the answer and isn’t stored by this site.
           </p>
+          <a href="#fit" className="link mt-3 inline-block text-[15px] font-semibold">Hiring? Check a job description against Austin’s work</a>
         </Cell>
       </Row>
 
@@ -188,6 +190,8 @@ const Ask = () => {
           </div>
         </Cell>
       </Row>
+
+      <JobFit row={entries.length + 3} />
     </Sheet>
   );
 };

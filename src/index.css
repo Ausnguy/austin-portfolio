@@ -326,3 +326,33 @@ html.swarm .cell.is-built > * {
   html.swarm .cell > * { opacity: 1; }
   .swarm-layer { display: none; }
 }
+
+/* Guided tour (src/components/Tour.jsx): the selected cell's outline follows the page, and the note reads like an Excel comment. */
+.tour-box {
+  transition: left 0.3s cubic-bezier(0.23, 1, 0.32, 1), top 0.3s cubic-bezier(0.23, 1, 0.32, 1), width 0.3s cubic-bezier(0.23, 1, 0.32, 1), height 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.tour-note {
+  position: fixed;
+  z-index: 50;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  padding: 16px;
+  border: 1px solid rgb(var(--grid));
+  border-radius: 8px;
+  background: rgb(var(--paper));
+  box-shadow: 0 8px 28px rgb(0 0 0 / 0.16);
+  animation: swarm-fx-in 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+}
+@media (min-width: 768px) {
+  .tour-note {
+    left: auto;
+    right: 24px;
+    bottom: calc(4.75rem + 16px); /* above the pinned sheet tabs and status bar */
+    width: 400px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tour-box { transition: none; }
+  .tour-note { animation: none; }
+}
