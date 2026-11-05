@@ -71,7 +71,7 @@ const ProjectCard = ({ project, compact = false }) => {
           project.highlight && <p className="mt-1 md:mt-2 text-[13.5px] md:text-[14.5px] font-semibold leading-snug text-ink-soft md:text-ink">{project.highlight}</p>
         )}
         {!compact && <p className="hidden md:block mt-1.5 text-[15px] leading-relaxed text-ink-soft">{project.description}</p>}
-        <p className="hidden md:block mt-auto pt-3 font-mono text-[12.5px] text-muted">{project.tools.join(', ')}</p>
+        {!compact && <p className="hidden md:block mt-auto pt-3 font-mono text-[12.5px] text-muted">{project.tools.join(', ')}</p>}
       </div>
     </Link>
   );

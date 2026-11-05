@@ -15,9 +15,6 @@ const ExperienceChart3D = lazy(() => import('../components/ExperienceChart3D'));
 
 const HOME_FORMULA = '=TURN(messy_data, "decisions people act on")';
 
-// Spans for the cell that fills out the last row of project cards (full class names so Tailwind keeps them).
-const FILLER_SPAN = { 1: 'lg:col-span-3', 2: 'lg:col-span-6', 3: 'lg:col-span-9' };
-
 const toMonth = (ym) => {
   const [y, m] = ym.split('-').map(Number);
   return y * 12 + m - 1;
@@ -90,7 +87,7 @@ const stats = [
 const Home = () => {
   useSheet('A1', HOME_FORMULA);
   const spotlight = getSpotlightProject();
-  const others = getFeaturedProjects().filter((p) => p !== spotlight).slice(0, 4);
+  const others = getFeaturedProjects().filter((p) => p !== spotlight).slice(0, 3);
   const baseUrl = import.meta.env.BASE_URL;
   const resumeUrl = `${baseUrl}resume.pdf?v=7`;
 
@@ -113,19 +110,19 @@ const Home = () => {
             <strong className="font-semibold text-ink">decide what to do next</strong>.
           </p>
           <p className="mt-5 text-[15px] text-muted">MIS at the University of Houston · Data Analyst Intern at HPE · {profile.location}</p>
-          <div className="mt-7 flex flex-wrap gap-2.5">
+          {/* One primary action; GitHub and LinkedIn are icon-only so the buttons don't compete. */}
+          <div className="mt-7 flex flex-wrap items-center gap-2.5">
             <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">View resume</a>
             <a href={`mailto:${profile.email}`} className="btn btn-secondary">Email me</a>
-            <a href={profile.github} target="_blank" rel="noopener noreferrer" className="btn btn-secondary"><GitHubIcon />GitHub</a>
-            <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="btn btn-secondary"><LinkedInIcon />LinkedIn</a>
+            <a href={profile.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub" className="btn btn-secondary !px-3"><GitHubIcon /></a>
+            <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn" className="btn btn-secondary !px-3"><LinkedInIcon /></a>
           </div>
         </Cell>
         <Cell id="I1" span="col-span-12 lg:col-span-4" formula='=ASK("anything about Austin")' className="bg-accent-wash/40 flex flex-col">
           <div className="cell-ref text-ink-soft">I1</div>
           <h2 className="mt-1 font-sans text-xl font-bold text-ink">Ask about me</h2>
           <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">
-            Ask anything about my work. Answers come only from the facts in this workbook, and every one is fact-checked
-            before you see it.
+            Ask anything about my work. Answers come only from facts on this site.
           </p>
           <div className="mt-auto pt-5">
             <AskTeaser />
@@ -136,10 +133,10 @@ const Home = () => {
       {/* Three numbers */}
       <Row>
         {stats.map((item, i) => (
-          <Cell key={item.value} id={`${'ADG'[i]}2`} span="col-span-12 sm:col-span-4" formula={`=PROOF(${i + 1})`}>
+          <Cell key={item.value} id={`${'ADG'[i]}2`} span="col-span-4" formula={`=PROOF(${i + 1})`}>
             <Link to={item.to} className="group block">
-              <div className="font-sans text-5xl sm:text-6xl font-bold tracking-tight leading-none text-ink">{item.value}</div>
-              <p className="mt-3 text-[16px] leading-snug text-ink-soft group-hover:text-ink">{item.label}</p>
+              <div className="font-sans text-4xl sm:text-6xl font-bold tracking-tight leading-none text-ink">{item.value}</div>
+              <p className="mt-2 sm:mt-3 text-[13px] sm:text-[16px] leading-snug text-ink-soft group-hover:text-ink">{item.label}</p>
             </Link>
           </Cell>
         ))}
@@ -179,18 +176,13 @@ const Home = () => {
         {others.map((project, i) => (
           <Cell
             key={project.id}
-            id={`${'ADGJ'[i % 4]}4`}
-            span="col-span-12 md:col-span-6 lg:col-span-3"
+            id={`${'AEI'[i % 3]}4`}
+            span="col-span-12 md:col-span-4"
             formula={`=PROJECT("${project.shortTitle}")`}
           >
             <ProjectCard project={project} index={i} compact />
           </Cell>
         ))}
-        {others.length % 4 !== 0 && (
-          <Cell id="Z4" span={`col-span-12 md:col-span-6 ${FILLER_SPAN[4 - (others.length % 4)]}`} formula="=COUNTA(projects)" className="flex items-center justify-center">
-            <Link to="/projects" className="link">Open the Projects sheet</Link>
-          </Cell>
-        )}
       </Row>
       <Row>
         <Cell id="A5" formula="=COUNTA(projects)" className="!py-3 text-center">
@@ -205,7 +197,7 @@ const Home = () => {
             <h2 className="font-sans text-xl font-bold text-ink">Toolbox</h2>
             <Link to="/skills" className="text-sm link">What each tool did</Link>
           </div>
-          <div className="mt-4 grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 border-l border-t border-grid">
+          <div className="mt-4 grid grid-cols-3 sm:grid-cols-6 border-l border-t border-grid">
             {homeTools.map((name) => (
               <Link
                 key={name}

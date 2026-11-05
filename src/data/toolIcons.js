@@ -49,8 +49,5 @@ export const iconSlugs = [...new Set(Object.values(toolMeta).map((m) => m.slug).
 
 export const metaFor = (name) => toolMeta[name] ?? { mono: name.slice(0, 2), label: name, color: accent };
 
-// The twelve tools shown as logos on the home page.
-export const homeTools = [
-  'Kafka', 'Spark Structured Streaming', 'PostgreSQL', 'Docker Compose', 'PyTorch', 'pandas',
-  'FastAPI', 'React', 'TypeScript + Redis', 'Three.js / React Three Fiber', 'Vite + Tailwind CSS', 'Tableau',
-];
+// The six core data tools shown as logos on the home page; the full list lives on the Skills sheet.
+export const homeTools = ['Python', 'PostgreSQL', 'pandas', 'Spark Structured Streaming', 'Kafka', 'Power BI + DAX'];

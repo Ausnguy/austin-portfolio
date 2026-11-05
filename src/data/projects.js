@@ -335,7 +335,7 @@ export const projects = [
     category: 'Web',
     tags: ['Machine Learning', 'Web App'],
     tools: ['Python', 'PyTorch'],
-    featured: true,
+    featured: false,
     image: '/austin-portfolio/thumbs/mnist-digit-recognition.png',
     links: {
       github: null, // add your real repo link when ready

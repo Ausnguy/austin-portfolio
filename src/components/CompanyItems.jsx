@@ -63,7 +63,7 @@ const Terminal = () => {
   );
 };
 
-// USI sells employee benefits and insurance: a medical bill, with its red cross, line items and amount due.
+// USI sells employee benefits and insurance: a medical bill, with its green cross, line items and amount due.
 const MedicalBill = () => {
   const z = 0.026;
   const rows = [
@@ -87,11 +87,11 @@ const MedicalBill = () => {
       </mesh>
       <mesh position={[-0.26, 1.03, z + 0.004]}>
         <planeGeometry args={[0.1, 0.032]} />
-        <meshBasicMaterial color="#D8362B" />
+        <meshBasicMaterial color="#107C41" />
       </mesh>
       <mesh position={[-0.26, 1.03, z + 0.004]}>
         <planeGeometry args={[0.032, 0.1]} />
-        <meshBasicMaterial color="#D8362B" />
+        <meshBasicMaterial color="#107C41" />
       </mesh>
       <mesh position={[0.1, 1.06, z + 0.002]}>
         <planeGeometry args={[0.34, 0.045]} />
@@ -123,13 +123,13 @@ const MedicalBill = () => {
       </mesh>
       <mesh position={[0.22, 0.19, z]}>
         <planeGeometry args={[0.26, 0.11]} />
-        <meshBasicMaterial color="#D8362B" />
+        <meshBasicMaterial color="#107C41" />
       </mesh>
     </group>
   );
 };
 
-// Carnegie Mellon: a graduation cap with a CMU-red tassel.
+// Carnegie Mellon: a graduation cap with a gold tassel.
 const GradCap = () => (
   <group>
     <mesh position={[0, 0.2, 0]}>
@@ -142,11 +142,11 @@ const GradCap = () => (
     </mesh>
     <mesh position={[0, 0.42, 0]}>
       <sphereGeometry args={[0.04, 12, 10]} />
-      <meshStandardMaterial color="#C41230" />
+      <meshStandardMaterial color="#C9A227" />
     </mesh>
     <mesh position={[0.45, 0.24, 0.22]}>
       <boxGeometry args={[0.04, 0.3, 0.04]} />
-      <meshStandardMaterial color="#C41230" roughness={0.6} />
+      <meshStandardMaterial color="#C9A227" roughness={0.6} />
     </mesh>
   </group>
 );
@@ -170,7 +170,7 @@ const Cart = () => {
       {panel([0.03, 0.3, 0.03], [0.48, 0.78, -0.22])}
       <mesh position={[0.5, 0.92, 0]} rotation={[Math.PI / 2, 0, 0]}>
         <cylinderGeometry args={[0.035, 0.035, 0.52, 12]} />
-        <meshStandardMaterial color="#E31837" roughness={0.4} />
+        <meshStandardMaterial color="#005DAA" roughness={0.4} />
       </mesh>
       {[[-0.32, 0.2], [-0.32, -0.2], [0.32, 0.2], [0.32, -0.2]].map(([x, z]) => (
         <mesh key={`${x}${z}`} position={[x, 0.07, z]} rotation={[Math.PI / 2, 0, 0]}>
